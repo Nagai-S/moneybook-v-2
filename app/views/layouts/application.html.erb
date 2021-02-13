@@ -25,17 +25,17 @@
       <div class="menu open">×</div>
 
       <h1 class="headline">
-        <%= link_to "Money Book", "#" %>
+        <%= link_to "Money Book", root_path %>
       </h1>
 
       <div class="header_list">
         <ul>
           <li><%= link_to "トップ", "#" %></li>
           <li><%= link_to "新規入力", "#" %></li>
-          <li><%= link_to "残高", "#" %></li>
+          <li><%= link_to "残高", user_accounts_path(current_user) %></li>
           <li><%= link_to "クレジットカード", "#" %></li>
           <li><%= link_to "ジャンル", "#" %></li>
-          <li class="last"><%= link_to "登録情報", "#" %></li>
+          <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
       </div>
 
@@ -43,10 +43,10 @@
         <ul>
           <li><%= link_to "トップ", "#" %></li>
           <li><%= link_to "新規入力", "#" %></li>
-          <li><%= link_to "残高", "#" %></li>
+          <li><%= link_to "残高", user_accounts_path(current_user) %></li>
           <li><%= link_to "クレジットカード", "#" %></li>
           <li><%= link_to "ジャンル", "#" %></li>
-          <li class="last"><%= link_to "登録情報", "#" %></li>
+          <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
       </div>
 
@@ -71,7 +71,7 @@
           <ul>
             <li class="top_bold">一覧</li>
             <li><%= link_to "トップ", "#" %></li>
-            <li><%= link_to "残高", "#" %></li>
+            <li><%= link_to "残高", user_accounts_path(current_user) %></li>
             <li><%= link_to "クレジットカード", "#" %></li>
             <li><%= link_to "ジャンル", "#" %></li>
             <li><%= link_to "振替", "#" %></li>
@@ -81,7 +81,7 @@
           <ul>
             <li class="top_bold">新規作成</li>
             <li><%= link_to "新規入力", "#" %></li>
-            <li><%= link_to "アカウント", "#" %></li>
+            <li><%= link_to "アカウント", new_user_account_path(current_user) %></li>
             <li><%= link_to "クレジットカード", "#" %></li>
             <li><%= link_to "ジャンル", "#" %></li>
             <li><%= link_to "振替", "#" %></li>
@@ -92,7 +92,7 @@
             <li class="top_bold">その他</li>
             <li><%= link_to "アプリの使い方", "#" %></li>
             <li><%= link_to "検索", "#" %></li>
-            <li><%= link_to "登録情報", "#" %></li>
+            <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>
         </div>

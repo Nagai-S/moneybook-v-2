@@ -1,0 +1,72 @@
+<h1>統計情報</h1>
+
+<div class="account">
+  <% if current_user.accounts==[] %>
+  <p>まずはこちらからアカウント(銀行、現金、電子マネーなど)を追加しましょう。</p>
+  <% end %>
+  <div class="new_account">
+    <li><%= link_to "アカウント追加", new_user_account_path %></li>
+  </div>
+  <div class="account_exchange">
+    <li><%= link_to "新規振替", "#" %></li>
+    <li><%= link_to "振替履歴", "#" %></li>
+    <p>こちらではアカウント間のお金の移動ができます。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-sm-6">
+    <h2>残高</h2>
+    <div class="table_contents">
+      <div class="table-responsive">
+        <table class="table" id="table_accounts">
+          <thead>
+            <tr>
+              <th>現在残高</th>
+              <th>引き落とし後の残高</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>¥<%= current_user.total_value.to_s(:delimited) %></td>
+              <td>¥</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-6">
+    <h2>アカウント残高</h2>
+
+    <div class="table_contents">
+      <div class="table-responsive">
+        <table class="table" id="table_accounts">
+          <thead>
+            <tr>
+              <th>アカウント</th>
+              <th>金額</th>
+              <th>引き落とし後の金額</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <% @accounts.each do |account| %>
+
+            <tbody>
+              <tr>
+                <td><%= account.name %></td>
+                <td>¥<%= account.value.to_s(:delimited) %></td>
+                <td>¥</td>
+                <td><%= link_to "削除", user_account_url(current_user.id, account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+              </tr>
+            </tbody>
+
+          <% end %>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

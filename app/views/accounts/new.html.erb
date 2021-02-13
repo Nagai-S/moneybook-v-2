@@ -1,0 +1,27 @@
+<h1>新規アカウント作成</h1>
+<%= form_with model: [current_user, @account], local: true do |f| %>
+
+<div class="form_wrapper">
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :name, "名前を入力してください" %>
+    </div>
+    <div class='<%= form_class %>'>
+      <%= f.text_field :name, class: "form-control", id: "name" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :value, "初期値を入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :value, class: "form-control", id: "value" %>
+    </div>
+  </div>
+
+  <%= f.submit "アカウント作成", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>
