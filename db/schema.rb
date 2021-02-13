@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_13_073957) do
+ActiveRecord::Schema.define(version: 2021_02_13_090119) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 2021_02_13_073957) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.string "name"
+    t.boolean "iae"
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_genres_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -38,4 +47,5 @@ ActiveRecord::Schema.define(version: 2021_02_13_073957) do
   end
 
   add_foreign_key "accounts", "users"
+  add_foreign_key "genres", "users"
 end

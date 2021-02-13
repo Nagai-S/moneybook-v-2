@@ -1,0 +1,24 @@
+<%= form_with model: [current_user, @genre], local: true do |f| %>
+<div class="form_wrapper">
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :iae, "収入か支出か選択してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.select :iae, [["支出",false],["収入",true]], {selected: iae}, class: "form-control", id: "select" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :name, "名前を入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :name, value: name, class: "form-control", id: "name" %>
+    </div>
+  </div>
+
+  <%= f.submit "ジャンル作成", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>
