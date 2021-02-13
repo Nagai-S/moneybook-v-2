@@ -1,0 +1,67 @@
+<h2>登録情報変更</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<div class="form_wrapper">
+  <%= render "users/shared/error_messages", resource: resource %>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :email %><br />
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", id: "user" %>
+    </div>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+  <div>現在次のアドレスの認証を待っています <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :password %> <i>(変更しない場合は空欄にしてください)</i><br />
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id: "user" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :password_confirmation %><br />
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id: "user" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :current_password, "現在のパスワードを入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control", id: "user" %>
+    </div>
+  </div>
+
+
+  <%= f.submit "変更", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>
+
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <div class="delete_account">アカウント削除</div>
+    <div class="delete_wrapper" id="delete_close">
+      <p>
+        アカウントを削除すると全てのデータが消えますがよろしいですか？
+      </p>
+      <%= button_to "アカウント削除", registration_path(resource_name), method: :delete, data: { confirm: "本当によろしいですか？" }, class: "btn btn-primary", role: "button" %>
+    </div>
+  </div>
+</div>
+
+<div class="logout_buton">
+  <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-primary", role: "button" %>
+</div>

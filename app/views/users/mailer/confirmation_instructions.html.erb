@@ -1,0 +1,8 @@
+<h1>Welcome</h1>
+<p>MoneyBookへのご登録ありがとうございます。</p>
+<p>以下のリンクをクリックして本登録を完了させてください。</p>
+
+<p><%= link_to '本登録', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+<p>このメールに心当たりのない方は無視してください。</p>
+<p>MoneyBook運営</p>

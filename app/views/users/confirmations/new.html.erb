@@ -1,0 +1,21 @@
+<h2>アカウント認証メールを送り直す</h2>
+
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+<div class="form_wrapper">
+  <%= render "users/shared/error_messages", resource: resource %>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :email %><br />
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "form-control", id: "user" %>
+    </div>
+  </div>
+
+  <%= f.submit "認証メール再送信", class: "btn btn-primary", role: "button" %>
+
+  <%= render "users/shared/links" %>
+</div>
+
+<% end %>
