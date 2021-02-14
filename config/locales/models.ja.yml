@@ -6,3 +6,12 @@ ja:
         password: パスワード
         password_confirmation: 確認用パスワード
         remember_me: 次回から自動的にログイン
+      account:
+        name: 名前
+        value: 初期値
+      genre:
+        name: 名前
+      card:
+        name: 名前
+        pay_date: 引き落とし日
+        month_date: 締め日

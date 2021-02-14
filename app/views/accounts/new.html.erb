@@ -3,6 +3,8 @@
 
 <div class="form_wrapper">
 
+  <%= render "layouts/errors", resource: f.object %>
+
   <div class="row">
     <div class="<%= label_class %>">
       <%= f.label :name, "名前を入力してください" %>

@@ -1,4 +1,6 @@
 class GenresController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
   end
 
@@ -11,7 +13,7 @@ class GenresController < ApplicationController
     if @genre.save
       redirect_to user_genres_path(current_user.id)
     else
-      flash.now[:danger]="正しい値を入力してください"
+      flash.now[:danger]="ジャンルの作成に失敗しました。"
       render 'new'
     end
   end
@@ -30,7 +32,7 @@ class GenresController < ApplicationController
     if @genre.update(genres_params)
       redirect_to user_genres_path(params[:user_id])
     else
-      flash.now[:danger]="正しい値を入力してください"
+      flash.now[:danger]="ジャンルの編集に失敗しました。"
       render "edit"
     end
   end

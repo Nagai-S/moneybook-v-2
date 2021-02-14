@@ -1,5 +1,7 @@
 <%= form_with model: [current_user, @genre], local: true do |f| %>
 <div class="form_wrapper">
+  <%= render "layouts/errors", resource: f.object %>
+
   <div class="row">
     <div class='<%= label_class %>'>
       <%= f.label :iae, "収入か支出か選択してください" %>

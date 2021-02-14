@@ -33,7 +33,7 @@
           <li><%= link_to "トップ", "#" %></li>
           <li><%= link_to "新規入力", "#" %></li>
           <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-          <li><%= link_to "クレジットカード", "#" %></li>
+          <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
           <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
@@ -44,7 +44,7 @@
           <li><%= link_to "トップ", "#" %></li>
           <li><%= link_to "新規入力", "#" %></li>
           <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-          <li><%= link_to "クレジットカード", "#" %></li>
+          <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
           <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
@@ -72,7 +72,7 @@
             <li class="top_bold">一覧</li>
             <li><%= link_to "トップ", "#" %></li>
             <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-            <li><%= link_to "クレジットカード", "#" %></li>
+            <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
             <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
             <li><%= link_to "振替", "#" %></li>
           </ul>
@@ -82,7 +82,7 @@
             <li class="top_bold">新規作成</li>
             <li><%= link_to "新規入力", "#" %></li>
             <li><%= link_to "アカウント", new_user_account_path(current_user) %></li>
-            <li><%= link_to "クレジットカード", "#" %></li>
+            <li><%= link_to "クレジットカード", new_user_card_path(current_user) %></li>
             <li><%= link_to "ジャンル", new_user_genre_path(current_user) %></li>
             <li><%= link_to "振替", "#" %></li>
           </ul>

@@ -14,7 +14,7 @@ class AccountsController < ApplicationController
     if @account.save
       redirect_to user_accounts_path
     else
-      flash[:danger]="正しい値を入力してください"
+      flash[:danger]="アカウントの作成に失敗しました。"
       render "new"
     end
   end

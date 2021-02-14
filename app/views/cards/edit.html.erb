@@ -1,0 +1,7 @@
+<h1>クレジットカード情報編集</h1>
+<%= render partial: "form" , :locals => {
+  name: @card.name, 
+  account_id: @card.account.id, 
+  pay_day: @card.pay_date, 
+  month_day: @card.month_date
+} %>

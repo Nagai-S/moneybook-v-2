@@ -1,0 +1,45 @@
+<h1>クレジットカード一覧</h1>
+
+<div class="account">
+  <p>こちらではクレジットカードの登録<br />(連携アカウント、締め日、引き落とし日の登録)ができます。</p>
+  <div class="new_account">
+    <li><%= link_to "クレジットカード作成", new_user_card_path %></li>
+  </div>
+</div>
+
+<div class="row">
+  <div class="table_contents col-12 offset-sm-2 col-sm-8">
+    <div class="table-responsive">
+      <table class="table" id="table_accounts">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>引き落とし先アカウント</th>
+            <th>引き落とし日</th>
+            <th>締め日</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <% @cards.each do |card| %>
+
+        <tbody>
+          <tr>
+            <td><%=card.name %></td>
+            <td><%= card.account.name %></td>
+            <td><%= card.pay_date %></td>
+            <td><%= card.month_date %></td>
+            <td><%=link_to "詳細", user_card_path(params[:user_id], :id => card.id) %></td>
+            <td><%=link_to "削除", user_card_path(params[:user_id], :id => card.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+            <td><%=link_to "編集", edit_user_card_path(params[:user_id], :id => card.id) %></td>
+          </tr>
+        </tbody>
+
+        <% end %>
+
+      </table>
+    </div>
+  </div>
+</div>
