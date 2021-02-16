@@ -7,7 +7,7 @@
       <%= f.label :iae, "収入か支出か選択してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.select :iae, [["支出",false],["収入",true]], {selected: iae}, class: "form-control", id: "select" %>
+      <%= f.select :iae, [["支出",false],["収入",true]], {selected: @genre.iae}, class: "form-control", id: "select" %>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
       <%= f.label :name, "名前を入力してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.text_field :name, value: name, class: "form-control", id: "name" %>
+      <%= f.text_field :name, value: @genre.name, class: "form-control", id: "name" %>
     </div>
   </div>
 

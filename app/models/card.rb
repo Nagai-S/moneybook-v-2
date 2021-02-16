@@ -1,6 +1,7 @@
 class Card < ApplicationRecord
   belongs_to :user
   belongs_to :account
+  has_many :events
 
   validates :name, presence: {message: "は１文字以上入力してください。"}, 
   uniqueness: { scope: :user, message: "「%{value}」と同じ名前のカードが存在します。" }

@@ -15,3 +15,7 @@ ja:
         name: 名前
         pay_date: 引き落とし日
         month_date: 締め日
+      event:
+        date: 日付
+        value: 金額
+        pay_date: 引き落とし日

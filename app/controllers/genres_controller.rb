@@ -1,5 +1,6 @@
 class GenresController < ApplicationController
   before_action :authenticate_user!
+  before_action :select_genre, only: [:destroy, :edit, :update]
   
   def index
   end
@@ -19,16 +20,14 @@ class GenresController < ApplicationController
   end
   
   def destroy
-    Genre.find_by(:user_id => params[:user_id], :id => params[:id]).destroy
+    @genre.destroy
     redirect_to user_genres_path(params[:user_id])
   end
   
   def edit
-    @genre=Genre.find_by(:user_id => params[:user_id], :id => params[:id])
   end
 
   def update
-    @genre=Genre.find_by(:user_id => params[:user_id], :id => params[:id])
     if @genre.update(genres_params)
       redirect_to user_genres_path(params[:user_id])
     else
@@ -41,4 +40,9 @@ class GenresController < ApplicationController
     def genres_params
       params.require(:genre).permit(:name, :iae)
     end
+
+    def select_genre
+      @genre=Genre.find_by(:user_id => params[:user_id], :id => params[:id])
+    end
+    
 end

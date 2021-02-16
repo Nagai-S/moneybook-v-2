@@ -1,0 +1,51 @@
+<h1>履歴</h1>
+<div class="table_contents">
+  <div class="table-responsive">
+    <table class="table" id="table_events">
+      <%= paginate @events %>
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>ジャンル</th>
+          <th>アカウント</th>
+          <th>メモ</th>
+          <th>金額</th>
+          <th>引き落とし日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <% a=0 %>
+      <% @events.each do |event| %>
+      <tbody>
+        <tr class="<%= iae(event) %>">
+          <td><%= l event.date unless event.date==a %></td>
+
+          <td><%= event.genre.name %></td>
+          <td><%= account_or_card_name(event) %></td>
+
+          <td><%= event.memo if event.memo %></td>
+
+          <td>
+            ¥<%= plus_minus(event)%><%= event.value.to_s(:delimited) %>
+          </td>
+
+          <td>
+            <%= l event.pay_date if event.pay_date %>
+          </td>
+
+          <td>
+            <%= link_to "削除", user_event_path(params[:user_id], event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
+          </td>
+          <td>
+            <%= link_to "編集", edit_user_event_path(params[:user_id], event.id) %>
+          </td>
+          <% a=event.date %>
+        </tr>
+      </tbody>
+      <% end %>
+    </table>
+  </div>
+</div>
+<%= paginate @events %>

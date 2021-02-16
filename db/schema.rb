@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_13_093641) do
+ActiveRecord::Schema.define(version: 2021_02_15_020440) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
@@ -33,9 +33,28 @@ ActiveRecord::Schema.define(version: 2021_02_13_093641) do
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.date "date"
+    t.date "pay_date"
+    t.string "memo"
+    t.integer "value"
+    t.boolean "iae", default: false
+    t.boolean "pon", default: false
+    t.integer "user_id", null: false
+    t.integer "genre_id"
+    t.integer "account_id"
+    t.integer "card_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_events_on_account_id"
+    t.index ["card_id"], name: "index_events_on_card_id"
+    t.index ["genre_id"], name: "index_events_on_genre_id"
+    t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
   create_table "genres", force: :cascade do |t|
     t.string "name"
-    t.boolean "iae"
+    t.boolean "iae", default: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -61,5 +80,6 @@ ActiveRecord::Schema.define(version: 2021_02_13_093641) do
   add_foreign_key "accounts", "users"
   add_foreign_key "cards", "accounts"
   add_foreign_key "cards", "users"
+  add_foreign_key "events", "users"
   add_foreign_key "genres", "users"
 end

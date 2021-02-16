@@ -1,0 +1,21 @@
+<h1>イベント編集</h1>
+
+<%= render 'form_tab' %>
+
+<div class="tab-content">
+  <%= render 'form', {
+    active: active_is_ex_or_in[:ex],
+    tab_id: "tab_ex",
+    backcolor: "",
+    iae: false,
+    edit: true,
+  } %>
+
+  <%= render 'form', {
+    active: active_is_ex_or_in[:in],
+    tab_id: "tab_in",
+    backcolor: "income",
+    iae: true,
+    edit: true,
+  } %>
+</div>

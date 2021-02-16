@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :genres, dependent: :destroy
   has_many :cards, dependent: :destroy
+  has_many :events, dependent: :destroy
 
   def total_value
     sum=0

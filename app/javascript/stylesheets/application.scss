@@ -16,6 +16,13 @@ h1,h2,h3{
   }
 }
 
+// kaminari
+.pagination{
+  justify-content: center;
+  margin: 5px;
+}
+
+
 body{
    font-family: -apple-system,BlinkMacSystemFont,sans-serif;
    text-align: center;
@@ -427,6 +434,26 @@ header .headline{
 /* ------------------------------ */
 
 /* form */
+.nav-tabs{
+  border-bottom: none;
+}
+
+#card-account .active{
+  background-color: #F0F8FF;
+  color: blue;
+  border-radius: 20px;
+}
+
+#card-account .nav-link{
+  border: none;
+}
+
+#card-account a{
+  color: #3E3E3E;
+  margin-left: 7px;
+  margin-bottom: 5px;
+}
+
 .form_wrapper{
   border: solid 1px #E8E8E8;
   background-color: #E8E8E8;
@@ -512,21 +539,6 @@ form .btn{
   font-weight: normal;
   color: rgb(245,245,247);
   font-size: 16px;
-}
-
-.nav-tabs > li, .nav-pills > li {
-    float:none;
-    display:inline-block;
-    *display:inline;
-     zoom:1;
-}
-
-.nav-tabs, .nav-pills {
-  text-align:center;
-}
-
-.nav-tabs{
-  border: none;
 }
 
 .logout_buton{

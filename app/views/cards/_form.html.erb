@@ -7,7 +7,7 @@
       <%= f.label :name, "カードの名前を入力してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.text_field :name, value: name, class: "form-control", id: "name" %>
+      <%= f.text_field :name, value: @card.name, class: "form-control", id: "name" %>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
       <%= f.label :account, "引き落とし先のアカウントを選択してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.collection_select :account, current_user.accounts, :id, :name, {selected: account_id}, {class: "form-control"} %>
+      <%= f.collection_select :account, current_user.accounts, :id, :name, {selected: account_id_for_new_card}, {class: "form-control"} %>
     </div>
   </div>
 
@@ -25,7 +25,7 @@
       <%= f.label :pay_date, "引き落とし日を選択してください", class: "date_label" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.select :pay_date, options_for_select((1..31).to_a, pay_day), {}, class: "form-control", id: "select" %>
+      <%= f.select :pay_date, options_for_select((1..31).to_a, @card.pay_date), {}, class: "form-control", id: "select" %>
     </div>
   </div>
 
@@ -34,7 +34,7 @@
       <%= f.label :month_date, "締め日を選択してください", class: "date_label" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.select :month_date, options_for_select((1..31).to_a, month_day), {}, class: "form-control", id: "select" %>
+      <%= f.select :month_date, options_for_select((1..31).to_a, @card.month_date), {}, class: "form-control", id: "select" %>
     </div>
   </div>
 

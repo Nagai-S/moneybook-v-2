@@ -1,5 +1,6 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
+  before_action :select_card, only: [:destroy, :edit, :update, :show,]
   
   def index
     @cards=current_user.cards
@@ -15,27 +16,23 @@ class CardsController < ApplicationController
     if @card.save
       redirect_to user_cards_path
     else
-      flash[:danger]="クレジットカードの作成に失敗しました。"
+      flash.now[:danger]="クレジットカードの作成に失敗しました。"
       render "new"
     end
   end
   
   def destroy
-    @card=Card.find_by(:user_id => params[:user_id], :id => params[:id])
     @card.destroy
     redirect_to user_cards_path(params[:user_id])
   end
   
   def show
-    @card=Card.find_by(:user_id => params[:user_id], :id => params[:id])
   end
   
   def edit
-    @card=Card.find_by(:user_id => params[:user_id], :id => params[:id])
   end
 
   def update
-    @card=Card.find_by(:user_id => params[:user_id], :id => params[:id])
     if @card.update(cards_params)
       redirect_to user_cards_path(params[:user_id])
     else
@@ -47,6 +44,10 @@ class CardsController < ApplicationController
   private
     def cards_params
       params.require(:card).permit(:name, :pay_date, :month_date)
+    end
+
+    def select_card
+      @card=Card.find_by(:user_id => params[:user_id], :id => params[:id])
     end
     
 end

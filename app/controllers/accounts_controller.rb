@@ -14,7 +14,7 @@ class AccountsController < ApplicationController
     if @account.save
       redirect_to user_accounts_path
     else
-      flash[:danger]="アカウントの作成に失敗しました。"
+      flash.now[:danger]="アカウントの作成に失敗しました。"
       render "new"
     end
   end
@@ -32,7 +32,7 @@ class AccountsController < ApplicationController
       @account.destroy
       redirect_to user_accounts_path
     else
-      flash[:danger]="このアカウントに連携したクレジットカードが存在するためこのアカウントは削除できません"
+      flash.now[:danger]="このアカウントに連携したクレジットカードが存在するためこのアカウントは削除できません"
       redirect_to user_accounts_path
     end
   end

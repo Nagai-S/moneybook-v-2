@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   belongs_to :user
+  has_many :events
 
   default_scope -> {order(value: :desc)}
 
@@ -10,4 +11,10 @@ class Account < ApplicationRecord
     message: "は半角数字で入力してください。", 
     only_integer: {message: "は整数で入力してください。"}
   }
+
+  def plus(value)
+    now_value=self.value
+    self.update(value: now_value+value)
+  end
+  
 end
