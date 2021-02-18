@@ -1,6 +1,9 @@
 class Account < ApplicationRecord
   belongs_to :user
-  has_many :events
+  has_many :cards
+  has_many :events, dependent: :destroy
+  has_many :account_exchanges, foreign_key: :to_id
+  has_many :account_exchanges, foreign_key: :source_id
 
   default_scope -> {order(value: :desc)}
 
@@ -15,6 +18,15 @@ class Account < ApplicationRecord
   def plus(value)
     now_value=self.value
     self.update(value: now_value+value)
+  end
+  
+  def after_pay_value
+    not_pay_value=0
+    self.cards.includes(:events, :account_exchanges).each do |card|
+      not_pay_value+=card.events.where(pon: false).sum(:value)
+      not_pay_value+=card.account_exchanges.where(pon: false).sum(:value)
+    end
+    return self.value-not_pay_value
   end
   
 end

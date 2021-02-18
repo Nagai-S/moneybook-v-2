@@ -1,0 +1,38 @@
+<h1>月ごとの収支</h1>
+<div class="table_contents">
+  <div class="table-responsive">
+    <table class="table" id="pm">
+      <thead>
+        <tr>
+          <th>年</th>
+          <th class="border-right">月</th>
+          <th>収入</th>
+          <th class="border-right">支出</th>
+          <th>収支</th>
+        </tr>
+      </thead>
+
+      <% a=0 %>
+      <% current_user.how_long_months_years[:months].times do |i| %>
+
+      <tbody>
+        <tr>
+          <td><%= prev_month_event_date(i).year unless a==prev_month_event_date(i) %>年</td>
+          <td class="border-right"><%= prev_month_event_date(i).month %>月</td>
+          <td>
+            ¥<%= each_value_for_month(prev_month_event_date(i))[:in].to_s(:delimited) %>
+          </td>
+          <td class="border-right">
+            ¥-<%= each_value_for_month(prev_month_event_date(i))[:ex].to_s(:delimited) %>
+          </td>
+          <td>
+            ¥<%= each_value_for_month(prev_month_event_date(i))[:plus_minus].to_s(:delimited) %>
+          </td>
+        </tr>
+      </tbody>
+
+      <% a=prev_month_event_date(i).year %>
+      <% end %>
+    </table>
+  </div>
+</div>

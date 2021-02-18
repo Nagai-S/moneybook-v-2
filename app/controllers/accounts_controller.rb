@@ -1,8 +1,13 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
+  before_action :to_explanation, only: :month_index
   
   def index
+    current_user.make_sure_pay_date_and_pon
     @accounts=current_user.accounts
+  end
+
+  def month_index
   end
 
   def new
@@ -21,18 +26,15 @@ class AccountsController < ApplicationController
   
   def destroy
     @account=Account.find_by(:user_id => params[:user_id], :id => params[:id])
-    a=true
-    # current_user.credits.each do |credit|
-    #   if credit.account==@account.name
-    #     a=false
-    #     break
-    #   end
-    # end
-    if a
-      @account.destroy
-      redirect_to user_accounts_path
+    @accounts=current_user.accounts
+    if @account.cards.exists?
+      flash.now[:danger]="このアカウントに連携したクレジットカードが存在するため削除できません"
+      render "index"
+    elsif @account.account_exchanges.exists? 
+      flash.now[:danger]="このアカウントを使用した振り替えがあるため削除できません。"
+      render "index"
     else
-      flash.now[:danger]="このアカウントに連携したクレジットカードが存在するためこのアカウントは削除できません"
+      @account.destroy
       redirect_to user_accounts_path
     end
   end

@@ -1,1 +1,77 @@
 <h1><%= @card.name %></h1>
+
+<% if @card.events.where(pon: false).exists? || @card.account_exchanges.where(pon: false).exists? %>
+<p class="explanation"><%= @card.name %>での未引き落としのイベントは以下です</p>
+<% @card.months_count_for_not_pay.times do |i| %>
+<h2 class="credit-title">
+  引き落とし日 <%= l prev_pay_date(i) %>
+</h2>
+<p class="explanation2">合計で¥<%= @card.not_pay_value(prev_pay_date(i)).to_s(:delimited) %>引き落とされます</p>
+<div class="table_contents row">
+  <div class="table-responsive col-xs-12 col-md-6">
+    <table class="table" id="table_accounts">
+      <caption>
+        イベント
+      </caption>
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>ジャンル</th>
+          <th>メモ</th>
+          <th>金額</th>
+        </tr>
+      </thead>
+
+      <% if @card.events.where(pon: false, pay_date: prev_pay_date(i)).exists? %>
+
+      <% @card.events.where(pon: false, pay_date: prev_pay_date(i)).each do |not_pay_event| %>
+      <tbody>
+        <tr>
+          <td><%= l not_pay_event.date %></td>
+          <td><%= not_pay_event.genre.name %></td>
+          <td><%= not_pay_event.memo if not_pay_event.memo %></td>
+          <td>¥<%= not_pay_event.value.to_s(:delimited) %></td>
+        </tr>
+      </tbody>
+      <% end %>
+
+      <% end %>
+    </table>
+    <p><%= "イベントで未引き落としのものはありません" unless @card.events.where(pon: false, pay_date: prev_pay_date(i)).exists? %></p>
+  </div>
+
+  <div class="table-responsive col-xs-12 col-md-6">
+    <table class="table" id="table_accounts">
+      <caption>
+        振替
+      </caption>
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>振替先アカウント</th>
+          <th>金額</th>
+        </tr>
+      </thead>
+
+      <% if @card.account_exchanges.where(pon: false, pay_date: prev_pay_date(i)).exists? %>
+
+      <% @card.account_exchanges.where(pon: false, pay_date: prev_pay_date(i)).each do |not_pay_ax| %>
+
+      <tbody>
+        <tr>
+          <td><%= l not_pay_ax.date %></td>
+          <td><%= not_pay_ax.to_account.name %></td>
+          <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
+        </tr>
+      </tbody>
+      <% end %>
+
+      <% end %>
+    </table>
+    <p><%= "イベントで未引き落としのものはありません" unless @card.account_exchanges.where(pon: false, pay_date: prev_pay_date(i)).exists? %></p>
+  </div>
+</div>
+<% end %>
+<% else %>
+<p>このクレジットカードを使用した未引き落としイベントはありません</p>
+<% end %>

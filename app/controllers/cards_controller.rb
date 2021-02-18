@@ -1,6 +1,7 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
   before_action :select_card, only: [:destroy, :edit, :update, :show,]
+  before_action :to_explanation, only: [:show, :index, :new]
   
   def index
     @cards=current_user.cards
@@ -22,11 +23,19 @@ class CardsController < ApplicationController
   end
   
   def destroy
-    @card.destroy
-    redirect_to user_cards_path(params[:user_id])
+    if @card.events.exists?(pon: false) || @card.account_exchanges.exists?(pon: false)
+      @cards=current_user.cards
+      flash.now[:danger]="このカードを使用したイベントまたは振替が存在するため削除できません。"
+      render "index"
+    else
+      @card.before_destroy_action
+      @card.destroy
+      redirect_to user_cards_path(params[:user_id])
+    end
   end
   
   def show
+    current_user.make_sure_pay_date_and_pon
   end
   
   def edit
@@ -36,7 +45,7 @@ class CardsController < ApplicationController
     if @card.update(cards_params)
       redirect_to user_cards_path(params[:user_id])
     else
-      flash.now[:danger]="ジャンルの編集に失敗しました。"
+      flash.now[:danger]="クレジットカードの編集に失敗しました。"
       render "edit"
     end
   end

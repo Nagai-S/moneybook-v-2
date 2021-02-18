@@ -1,0 +1,82 @@
+<%= form_with model: [current_user, @ax], local: true do |f| %>
+<div class="form_wrapper">
+
+  <%= render "layouts/errors", resource: f.object %>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :date, "日付を選択してください", class: "date_label"%>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.date_select :date, {selected: date_for_new(@ax)}, class: "form-control", id: "date" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :source, "振替元アカウントを選択してください" %>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs <%= label_class %>" id="card-account">
+    <li class="nav-item">
+      <a class="nav-link <%= active_is_account_or_card(@ax)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= active_is_account_or_card(@ax)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+    </li>
+  </ul>
+
+  <%= f.select :account_or_card, [["account",0],["card",1]], {selected: active_is_account_or_card(@ax)[:number]}, style: "display:none", id: "account_or_card" %>
+
+  <div class="tab-content">
+    <div class="tab-pane <%= active_is_account_or_card(@ax)[:account] %>" id="tab_account">
+      <div class="row">
+        <div class="<%= form_class %>">
+          <%= f.collection_select :source_account, current_user.accounts, :id, :name, {selected: account_id_for_ax}, {class: "form-control", id: "select"} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane <%= active_is_account_or_card(@ax)[:card] %>" id="tab_card">
+      <div class="row">
+        <div class="<%= form_class %>">
+          <%= f.collection_select :card, current_user.cards, :id, :name, {selected: card_id_for_ax}, {class: "form-control", id: "select"} %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :to_account, "振替先アカウントを入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.collection_select :to_account, current_user.accounts, :id, :name, {selected: to_id_for_new_ax}, {class: "form-control", id: "select"} %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :value, "振替金額を入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :value, value: @ax.value, class: "form-control", id: "value" %>
+    </div>
+  </div>
+
+  <% if @ax.card && edit %>
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :pay_date, "引き落とし月を選択してください", class: "date_label" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.date_select :pay_date, {discard_day:true, selected: @ax.pay_date}, class: "form-control", id: "date" %>
+    </div>
+  </div>
+  <% end %>
+
+  <%= f.submit "振替を登録", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>

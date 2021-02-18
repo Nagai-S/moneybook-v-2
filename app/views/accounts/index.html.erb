@@ -8,8 +8,8 @@
     <li><%= link_to "アカウント追加", new_user_account_path %></li>
   </div>
   <div class="account_exchange">
-    <li><%= link_to "新規振替", "#" %></li>
-    <li><%= link_to "振替履歴", "#" %></li>
+    <li><%= link_to "新規振替", new_user_account_exchange_path(current_user) %></li>
+    <li><%= link_to "振替履歴", user_account_exchanges_path(current_user) %></li>
     <p>こちらではアカウント間のお金の移動ができます。</p>
   </div>
 </div>
@@ -28,8 +28,8 @@
           </thead>
           <tbody>
             <tr>
-              <td>¥<%= current_user.total_value.to_s(:delimited) %></td>
-              <td>¥</td>
+              <td>¥<%= current_user.accounts.sum(:value).to_s(:delimited) %></td>
+              <td>¥<%= current_user.after_pay_value.to_s(:delimited) %></td>
             </tr>
           </tbody>
         </table>
@@ -54,19 +54,108 @@
 
           <% @accounts.each do |account| %>
 
-            <tbody>
-              <tr>
-                <td><%= account.name %></td>
-                <td>¥<%= account.value.to_s(:delimited) %></td>
-                <td>¥</td>
-                <td><%= link_to "削除", user_account_url(current_user.id, account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
-              </tr>
-            </tbody>
+          <tbody>
+            <tr>
+              <td><%= account.name %></td>
+              <td>¥<%= account.value.to_s(:delimited) %></td>
+              <td>¥<%= account.after_pay_value.to_s(:delimited) %></td>
+              <td><%= link_to "削除", user_account_url(current_user.id, account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+            </tr>
+          </tbody>
 
           <% end %>
 
         </table>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-sm-6">
+    <h2>月ごとの収支</h2>
+
+    <% if current_user.events.exists? %>
+
+    <div class="table_contents">
+      <div class="table-responsive">
+        <table class="table" id="pm">
+          <thead>
+            <tr>
+              <th>年</th>
+              <th class="border-right">月</th>
+              <th>収入</th>
+              <th class="border-right">支出</th>
+              <th>収支</th>
+            </tr>
+          </thead>
+
+          <% a=0 %>
+          <% month_count.times do |i| %>
+
+          <tbody>
+            <tr>
+              <td><%= prev_month_event_date(i).year unless a==prev_month_event_date(i) %>年</td>
+              <td class="border-right"><%= prev_month_event_date(i).month %>月</td>
+              <td>
+                ¥<%= each_value_for_month(prev_month_event_date(i))[:in].to_s(:delimited) %>
+              </td>
+              <td class="border-right">
+                ¥-<%= each_value_for_month(prev_month_event_date(i))[:ex].to_s(:delimited) %>
+              </td>
+              <td>
+                ¥<%= each_value_for_month(prev_month_event_date(i))[:plus_minus].to_s(:delimited) %>
+              </td>
+            </tr>
+          </tbody>
+
+          <% a=prev_month_event_date(i).year %>
+          <% end %>
+        </table>
+        <%= link_to "もっと見る", user_account_month_path(current_user) %>
+      </div>
+    </div>
+
+    <% else %>
+
+    <p>まだイベントがありません</p>
+    <% end %>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <h2>年ごとの収支</h2>
+    <% if current_user.events.exists? %>
+    <div class="table_contents">
+      <div class="table-responsive">
+        <table class="table" id="pm">
+          <thead>
+            <tr>
+              <th class="border-right">年</th>
+              <th>収入</th>
+              <th class="border-right">支出</th>
+              <th>収支</th>
+            </tr>
+          </thead>
+
+          <% current_user.how_long_months_years[:years].times do |i| %>
+          <tbody>
+            <tr>
+              <td class="border-right"><%= prev_year_event_date(i).year %>年</td>
+              <td>¥<%= each_value_for_year(prev_year_event_date(i))[:in].to_s(:delimited) %></td>
+              <td class="border-right">¥-<%= each_value_for_year(prev_year_event_date(i))[:ex].to_s(:delimited) %></td>
+              <td>¥<%= each_value_for_year(prev_year_event_date(i))[:plus_minus].to_s(:delimited) %></td>
+            </tr>
+          </tbody>
+          <% end %>
+        </table>
+      </div>
+
+    </div>
+
+    <% else %>
+
+    <p>まだイベントがありません</p>
+
+    <% end %>
   </div>
 </div>

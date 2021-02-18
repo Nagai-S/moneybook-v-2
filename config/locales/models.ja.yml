@@ -19,3 +19,8 @@ ja:
         date: 日付
         value: 金額
         pay_date: 引き落とし日
+      account_exchange:
+        date: 日付
+        value: 金額
+        pay_date: 引き落とし日
+        source_id: 振替元アカウント

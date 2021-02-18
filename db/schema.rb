@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_020440) do
+ActiveRecord::Schema.define(version: 2021_02_16_055600) do
+
+  create_table "account_exchanges", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "date"
+    t.integer "value"
+    t.boolean "pon"
+    t.date "pay_date"
+    t.integer "card_id"
+    t.integer "source_id"
+    t.integer "to_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["card_id"], name: "index_account_exchanges_on_card_id"
+    t.index ["source_id"], name: "index_account_exchanges_on_source_id"
+    t.index ["to_id"], name: "index_account_exchanges_on_to_id"
+    t.index ["user_id"], name: "index_account_exchanges_on_user_id"
+  end
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
@@ -77,6 +94,9 @@ ActiveRecord::Schema.define(version: 2021_02_15_020440) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "account_exchanges", "accounts", column: "source_id"
+  add_foreign_key "account_exchanges", "accounts", column: "to_id"
+  add_foreign_key "account_exchanges", "users"
   add_foreign_key "accounts", "users"
   add_foreign_key "cards", "accounts"
   add_foreign_key "cards", "users"

@@ -1,0 +1,23 @@
+<div class="table_contents">
+  <div class="table-responsive">
+    <table class="table" id="genres">
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <% current_user.genres.where(iae: iae).each do |genre| %>
+      <tbody>
+        <tr>
+          <td><%= genre.name %></td>
+          <td><%= link_to "編集", edit_user_genre_path(current_user, genre.id) %></td>
+          <td><%= link_to "削除", user_genre_path(current_user, genre.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false}  %></td>
+        </tr>
+      </tbody>
+      <% end %>
+    </table>
+  </div>
+</div>

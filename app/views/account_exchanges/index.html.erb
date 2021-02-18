@@ -1,0 +1,34 @@
+<h1>振替履歴一覧</h1>
+
+<div class="table_contents row">
+  <div class="table-responsive col-xs-12 col-sm-8 offset-sm-2">
+    <table class="table" id="account_exchanges">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>振替元アカウント</th>
+          <th>振替先アカウント</th>
+          <th>金額</th>
+          <th>引き落とし日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <% @axs.each do |ax| %>
+      <tbody>
+        <tr>
+          <td><%= l ax.date %></td>
+          <td><%= account_or_card_name(ax)  %></td>
+          <td><%= ax.to_account.name %></td>
+          <td>¥<%= ax.value.to_s(:delimited) %></td>
+          <td><%= l ax.pay_date if ax.pay_date %></td>
+          <td><%= link_to "削除", user_account_exchange_path(params[:user_id], ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          <td><%= link_to "編集", edit_user_account_exchange_path(params[:user_id], ax.id) %></td>
+        </tr>
+      </tbody>
+      <% end %>
+      <%= paginate @axs %>
+    </table>
+  </div>
+</div>

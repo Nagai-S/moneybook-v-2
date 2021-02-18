@@ -11,61 +11,12 @@
 
 <div class="row">
  <div class="col-12 col-sm-6">
-
     <h2>支出</h2>
-    <div class="table_contents">
-      <div class="table-responsive">
-        <table class="table" id="genres">
-          <thead>
-            <tr>
-              <th>名前</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <% current_user.expense_genres.each do |genre| %>
-          <tbody>
-            <tr>
-              <td><%= genre.name %></td>
-              <td><%= link_to "編集", edit_user_genre_path(current_user, genre.id) %></td>
-              <td><%= link_to "削除", user_genre_path(current_user, genre.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false}  %></td>
-            </tr>
-          </tbody>
-          <% end %>
-        </table>
-      </div>
-    </div>
-
+    <%= render "genre_table", iae: false %>
   </div>
 
   <div class="col-12 col-sm-6">
-
     <h2>収入</h2>
-    <div class="table_contents">
-      <div class="table-responsive">
-        <table class="table" id="genres">
-          <thead>
-            <tr>
-              <th>名前</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <% current_user.income_genres.each do |genre| %>
-          <tbody>
-            <tr>
-              <td><%= genre.name %></td>
-              <td><%= link_to "編集", edit_user_genre_path(params[:user_id], genre.id) %></td>
-              <td><%= link_to "削除", user_genre_path(params[:user_id], genre.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false}  %></td>
-            </tr>
-          </tbody>
-          <% end %>
-        </table>
-      </div>
-    </div>
-
+    <%= render "genre_table", iae: true %>
   </div> 
-
 </div>

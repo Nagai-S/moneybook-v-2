@@ -74,7 +74,7 @@
             <li><%= link_to "残高", user_accounts_path(current_user) %></li>
             <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
             <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
-            <li><%= link_to "振替", "#" %></li>
+            <li><%= link_to "振替", user_account_exchanges_path(current_user) %></li>
           </ul>
         </div>
         <div class="index2">
@@ -84,7 +84,7 @@
             <li><%= link_to "アカウント", new_user_account_path(current_user) %></li>
             <li><%= link_to "クレジットカード", new_user_card_path(current_user) %></li>
             <li><%= link_to "ジャンル", new_user_genre_path(current_user) %></li>
-            <li><%= link_to "振替", "#" %></li>
+            <li><%= link_to "振替", new_user_account_exchange_path(current_user) %></li>
           </ul>
         </div>
         <div class="index3">
