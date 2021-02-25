@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
     get "account_month" => "accounts#month_index"
     get "explanation" => "homepages#explanation"
+    get "search" => "events#search"
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

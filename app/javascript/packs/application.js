@@ -116,7 +116,7 @@ $(function () {
   $("#select_js4").change(function () {
     // 選択されているvalue属性値を取り出す
     var val = $("#select_js4").val();
-    if (val != "0") {
+    if (val != "") {
       $("#select_js1").val("0");
     }
   });

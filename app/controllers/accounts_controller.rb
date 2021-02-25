@@ -26,7 +26,7 @@ class AccountsController < ApplicationController
   
   def destroy
     @account=Account.find_by(:user_id => params[:user_id], :id => params[:id])
-    @accounts=current_user.accounts
+    index
     if @account.cards.exists?
       flash.now[:danger]="このアカウントに連携したクレジットカードが存在するため削除できません"
       render "index"

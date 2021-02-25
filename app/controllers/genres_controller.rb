@@ -21,6 +21,7 @@ class GenresController < ApplicationController
   
   def destroy
     if @genre.events.exists?
+      index
       flash.now[:danger]="このジャンルを使用したイベントがあるので削除できません。"
       render "index"
     else

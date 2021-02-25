@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+  require "search"
+  include Search
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
@@ -9,6 +11,18 @@ class EventsController < ApplicationController
 
   def new
     @event=current_user.events.build
+  end
+
+  def search
+    events=current_user.events
+    events=search_iae(events)
+    events=search_genre(events)
+    events=search_account(events)
+    events=search_memo(events)
+    events=search_money(events)
+    events=search_date(events)
+
+    @events=events.page(params[:page])
   end
 
   def create
@@ -47,10 +61,6 @@ class EventsController < ApplicationController
       render "new"
     end
   end
-
-  def search
-    
-  end
   
   private
     def events_params
@@ -69,5 +79,5 @@ class EventsController < ApplicationController
         @event.update(card_id: params[:event][:card], account_id: nil)
       end
     end
-    
 end
+    

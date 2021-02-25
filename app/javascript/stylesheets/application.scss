@@ -631,48 +631,29 @@ form .btn{
   flex-direction: column;
 }
 
-.iae_search{
-  display: flex;
-  justify-content: center;
+.search_row{
   margin-bottom: 10px;
   width: 100%;
-  margin: auto;
-}
-
-.iae_search label{
-  align-self: flex-end;
-  margin-right: 10px;
-}
-
-.date_search{
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.date_or_not{
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  margin-bottom: 10px;
-}
-
-.date_or_not label{
-  align-self: flex-end;
-  margin-right: 10px
-}
-
-.date_or_not select{
-  width: 20%;
+  text-align: left;
+  padding-left: 20px;
 }
 
 .date_area_none{
   display: none;
-  font-size: 16px
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 .date_area_block{
   display: block;
   font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.date_area label{
+  width: 100%;
+  text-align: left;
+  margin-left: 20px;
 }
 
 #i{
@@ -685,44 +666,8 @@ form .btn{
   display: block;
 }
 
-.account_search{
-  margin-bottom: 10px
-}
-
-.search-memo{
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.search-memo label{
-  margin-right: 10px;
-  align-self: flex-end;
-}
-
 .search_input input{
   flex-basis: 80%;
-}
-
-.money_search{
-  margin-bottom: 10px;
-}
-
-.money_or_not{
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  margin-bottom: 10px;
-}
-
-.money_or_not label{
-  align-self: flex-end;
-  margin-right: 10px
-}
-
-.money_or_not select{
-  width: 20%;
 }
 
 .money_area_none{
@@ -733,10 +678,16 @@ form .btn{
   display: block;
 }
 
+.money_area label{
+  width: 100%;
+  text-align: left;
+  margin-left: 20px;
+}
+
 .money_inline{
   display: flex;
-  width: 90%;
-  margin: auto;
+  width: 95%;
+  margin-left: 20px;
 }
 
 .search_btn{

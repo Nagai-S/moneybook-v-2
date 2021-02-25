@@ -32,7 +32,7 @@ module EventsHelper
     end
   end
 
-  def iae(event)
+  def which_iae(event)
     event.iae ? "true" : "false"
   end
 

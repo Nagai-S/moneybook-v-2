@@ -24,7 +24,7 @@ class CardsController < ApplicationController
   
   def destroy
     if @card.events.exists?(pon: false) || @card.account_exchanges.exists?(pon: false)
-      @cards=current_user.cards
+      index
       flash.now[:danger]="このカードを使用したイベントまたは振替が存在するため削除できません。"
       render "index"
     else

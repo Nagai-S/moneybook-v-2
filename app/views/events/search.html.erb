@@ -1,0 +1,23 @@
+<h1>検索結果</h1>
+
+<div class="search-h">検索する</div>
+<div class="search_wrapper_const" id="search_close">
+  <%= render "search", {
+    iae: @iae,
+    genre: @genre,
+    account: @account,
+    money1: @small_value,
+    money2: @large_value,
+    date1: @early_date,
+    date2: @late_date,
+    memo: @memo,
+    date_or_not: @date_or_not,
+    money_or_not: @money_or_not,
+    css_date: @css_date,
+    css_money: @css_money
+  } %>
+</div>
+
+<%= render "event_table" %>
+
+<div class="search_total">合計収支　¥<%= @events.sum(:value).to_s(:delimited) %></div>
