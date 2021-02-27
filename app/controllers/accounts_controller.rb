@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
     if @account.cards.exists?
       flash.now[:danger]="このアカウントに連携したクレジットカードが存在するため削除できません"
       render "index"
-    elsif @account.account_exchanges.exists? 
+    elsif @account.account_exchanges_to.exists? || @account.account_exchanges_source.exists?
       flash.now[:danger]="このアカウントを使用した振り替えがあるため削除できません。"
       render "index"
     else

@@ -22,10 +22,10 @@ class Card < ApplicationRecord
 
   def before_destroy_action
     self.events.each do |event|
-      event.update(card_id: nil, account_id: self.account.id)
+      event.update(card_id: nil, account_id: self.account.id, pay_date: nil)
     end
     self.account_exchanges.each do |ax|
-      ax.update(card_id: nil, source_id: self.account.id)
+      ax.update(card_id: nil, source_id: self.account.id, pay_date: nil)
     end
   end
 
@@ -59,6 +59,18 @@ class Card < ApplicationRecord
     ax=self.account_exchanges.where(pon: false, pay_date: pay_date).sum(:value)
     return event+ax
   end
+
+  def before_update_action
+    self.events.each do |event|
+      event.update(pay_date: event.decide_pay_day)
+      event.change_pon
+    end
+    self.account_exchanges.each do |ax|
+      ax.update(pay_date: ax.decide_pay_day)
+      ax.change_pon
+    end
+  end
+  
 
   private
     def pay_not_equal_to_month

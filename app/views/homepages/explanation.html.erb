@@ -7,10 +7,16 @@
     <li><%= link_to "アカウント追加", new_user_account_path %></li>
   </div>
   <% end %>
-  <% unless current_user.genres.exists? %>
-  <p>こちらからジャンル(食費、給料など)を追加しましょう。</p>
+  <% unless current_user.genres.exists?(iae: false) %>
+  <p>こちらから支出のジャンル(食費など)を追加しましょう。</p>
   <div class="new_account">
-    <li><%= link_to "ジャンル追加", new_user_genre_path %></li>
+    <li><%= link_to "ジャンル追加", new_user_genre_path(iae: false) %></li>
+  </div>
+  <% end %>
+  <% unless current_user.genres.exists?(iae: true) %>
+  <p>こちらから収入のジャンル(給料など)を追加しましょう。</p>
+  <div class="new_account">
+    <li><%= link_to "ジャンル追加", new_user_genre_path(iae: true) %></li>
   </div>
   <% end %>
 </div>

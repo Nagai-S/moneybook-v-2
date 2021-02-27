@@ -2,8 +2,8 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :cards
   has_many :events, dependent: :destroy
-  has_many :account_exchanges, foreign_key: :to_id
-  has_many :account_exchanges, foreign_key: :source_id
+  has_many :account_exchanges_to, class_name:"AccountExchange", foreign_key: :to_id
+  has_many :account_exchanges_source, class_name:"AccountExchange", foreign_key: :source_id
 
   default_scope -> {order(value: :desc)}
 

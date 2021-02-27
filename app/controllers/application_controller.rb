@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
   def to_explanation
-    unless current_user.accounts.exists? && current_user.genres.exists?
+    unless current_user.accounts.exists? && current_user.genres.exists?(iae: false) && current_user.genres.exists?(iae: true)
       redirect_to user_explanation_path(current_user)
     end
   end

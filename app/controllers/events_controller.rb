@@ -18,6 +18,7 @@ class EventsController < ApplicationController
     events=search_iae(events)
     events=search_genre(events)
     events=search_account(events)
+    events=search_card(events)
     events=search_memo(events)
     events=search_money(events)
     events=search_date(events)

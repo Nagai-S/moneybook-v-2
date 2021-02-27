@@ -37,6 +37,13 @@
     </div>
   </div>
 
+  <div class="search_row row">
+    <div class="col-12 col-sm-5">カード</div>
+    <div class="col-12 col-sm-5">
+      <%= f.collection_select :card, current_user.cards, :id, :name, {include_blank: "全て", selected: card}, {class: "form-control", id: "select"} %>
+    </div>
+  </div>
+
 
   <div class="search_row row">
     <div class="col-12 col-sm-5">メモで検索</div>

@@ -25,7 +25,7 @@ class CardsController < ApplicationController
   def destroy
     if @card.events.exists?(pon: false) || @card.account_exchanges.exists?(pon: false)
       index
-      flash.now[:danger]="このカードを使用したイベントまたは振替が存在するため削除できません。"
+      flash.now[:danger]="このカードを使用した未引き落としのイベントまたは振替が存在するため削除できません。"
       render "index"
     else
       @card.before_destroy_action
@@ -42,7 +42,9 @@ class CardsController < ApplicationController
   end
 
   def update
+    @card.update(account_id: params[:card][:account])
     if @card.update(cards_params)
+      @card.before_update_action
       redirect_to user_cards_path(params[:user_id])
     else
       flash.now[:danger]="クレジットカードの編集に失敗しました。"

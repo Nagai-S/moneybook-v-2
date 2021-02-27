@@ -14,6 +14,11 @@ module Search
     @account=params[:account]
     return @account=="" ? events : events.where(account_id: @account)
   end
+
+  def search_card(events)
+    @card=params[:card]
+    return @card=="" ? events : events.where(card_id: @card)
+  end
   
   def search_memo(events)
     @memo=params[:memo]

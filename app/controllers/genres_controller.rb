@@ -6,7 +6,7 @@ class GenresController < ApplicationController
   end
 
   def new
-    @genre=current_user.genres.build
+    @genre=current_user.genres.build(iae: params[:iae])
   end
 
   def create
