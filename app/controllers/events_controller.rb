@@ -49,9 +49,9 @@ class EventsController < ApplicationController
   end
 
   def update
-    association_model_update
-
     before_inf=@event.before_change_action
+
+    association_model_update
     if @event.update(events_params)
       before_inf[:account].plus(before_inf[:value])
       @event.after_change_action(@event.pay_date)

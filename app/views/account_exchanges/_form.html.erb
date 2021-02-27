@@ -18,6 +18,7 @@
     </div>
   </div>
 
+  <% if current_user.cards.exists? %>
   <ul class="nav nav-tabs <%= label_class %>" id="card-account">
     <li class="nav-item">
       <a class="nav-link <%= active_is_account_or_card(@ax)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
@@ -26,6 +27,7 @@
       <a class="nav-link <%= active_is_account_or_card(@ax)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
     </li>
   </ul>
+  <% end %>
 
   <%= f.select :account_or_card, [["account",0],["card",1]], {selected: active_is_account_or_card(@ax)[:number]}, style: "display:none", id: "account_or_card" %>
 

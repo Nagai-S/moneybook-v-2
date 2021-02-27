@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <% unless iae %>
+    <% if !iae && current_user.cards.exists? %>
     <ul class="nav nav-tabs <%= label_class %>" id="card-account">
       <li class="nav-item">
         <a class="nav-link <%= active_is_account_or_card(@event)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>

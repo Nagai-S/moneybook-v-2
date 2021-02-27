@@ -37,9 +37,9 @@ class AccountExchangesController < ApplicationController
   end
 
   def update
-    association_model_update
     before_source_inf=@ax.before_change_action
     before_to_inf=@ax.before_change_for_toAccount
+    association_model_update
     if @ax.update(ax_params)
       before_source_inf[:account].plus(before_source_inf[:value])
       before_to_inf[:account].plus(before_to_inf[:value])

@@ -8,7 +8,7 @@ module FunctionForChange
       self.account.plus(value)
     elsif self.card
       if selected_pay_date
-        pay_day=selected_pay_date
+        pay_day=Date.new(selected_pay_date.year,selected_pay_date.month,self.card.pay_date)
       else
         pay_day=self.decide_pay_day
       end
