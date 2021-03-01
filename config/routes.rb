@@ -1,11 +1,21 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => {
-   :registrations => 'users/registrations',
-   :confirmations => 'users/confirmations',
-   :sessions => 'users/sessions',
-   :passwords => 'users/passwords'
+    :registrations => 'users/registrations',
+    :confirmations => 'users/confirmations',
+    :sessions => 'users/sessions',
+    :passwords => 'users/passwords'
   }
 
+  namespace :api do
+    scope :v1 do
+      mount_devise_token_auth_for 'User', at: 'auth'
+
+      resources :users do
+        resources :events, only: :create
+      end
+    end
+  end
+  
   resources :users do
     resources :accounts, only: [:new, :create, :index, :destroy]
     resources :genres, only: [:index, :create, :new, :edit, :update, :destroy]

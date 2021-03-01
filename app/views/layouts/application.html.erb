@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>MoneybookV2</title>
+  <title>Moneybook</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -90,8 +90,8 @@
         <div class="index3">
           <ul>
             <li class="top_bold">その他</li>
-            <li><%= link_to "アプリの使い方", "#" %></li>
-            <li><%= link_to "検索", "#" %></li>
+            <li><%= link_to "アプリの使い方", user_explanation_path(root: true, user_id: current_user.id) %></li>
+            <li><%= link_to "検索", user_search_path(current_user) %></li>
             <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>
@@ -102,7 +102,7 @@
         <ul>
           <li><%= link_to "プライバシーポリシー", "https://kiyac.app/plivacypolicy/WYqhMfQeu1bYTZi2ta2A", target: :_blank %></li>
           <li><%= link_to "お問い合わせ", "https://docs.google.com/forms/d/e/1FAIpQLSfzP9iZYG32mfQXEHrdiLlpFTSBy7zJ-ct3f1VwkwkUJPzL7Q/viewform", target: :_blank %></li>
-          <li class="last"><%= link_to "管理者情報", "#" %></li>
+          <li class="last"><%= link_to "アプリトップ", root_path %></li>
         </ul>
       </div>
       <p>© All rights reserved by S.N.</p>

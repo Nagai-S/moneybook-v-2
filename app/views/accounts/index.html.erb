@@ -56,7 +56,11 @@
 
           <tbody>
             <tr>
-              <td><%= account.name %></td>
+              <td>
+                <%= link_to account.name, user_search_path(
+                  account: account.id
+                ) %>
+              </td>
               <td>¥<%= account.value.to_s(:delimited) %></td>
               <td>¥<%= account.after_pay_value.to_s(:delimited) %></td>
               <td><%= link_to "削除", user_account_url(current_user.id, account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
@@ -95,8 +99,18 @@
 
           <tbody>
             <tr>
-              <td><%= prev_month_event_date(i).year unless a==prev_month_event_date(i) %>年</td>
-              <td class="border-right"><%= prev_month_event_date(i).month %>月</td>
+              <td><%= "#{prev_month_event_date(i).year}年" unless a==prev_month_event_date(i).year %></td>
+              <td class="border-right">
+                <%= link_to "#{prev_month_event_date(i).month}月", user_search_path(
+                  date_or_not: "1",
+                  "date1(1i)": prev_month_event_date(i).year,
+                  "date1(2i)": prev_month_event_date(i).month,
+                  "date1(3i)": "1",
+                  "date2(1i)": prev_month_event_date(i).year,
+                  "date2(2i)": prev_month_event_date(i).month,
+                  "date2(3i)": "31",
+                ) %>
+              </td>
               <td>
                 ¥<%= each_value_for_month(prev_month_event_date(i))[:in].to_s(:delimited) %>
               </td>
@@ -140,7 +154,17 @@
           <% current_user.how_long_months_years[:years].times do |i| %>
           <tbody>
             <tr>
-              <td class="border-right"><%= prev_year_event_date(i).year %>年</td>
+              <td class="border-right">
+                <%= link_to "#{prev_year_event_date(i).year}年", user_search_path(
+                  date_or_not: "1",
+                  "date1(1i)": prev_year_event_date(i).year,
+                  "date1(2i)": "1",
+                  "date1(3i)": "1",
+                  "date2(1i)": prev_year_event_date(i).year,
+                  "date2(2i)": "12",
+                  "date2(3i)": "31",
+                ) %>
+              </td>
               <td>¥<%= each_value_for_year(prev_year_event_date(i))[:in].to_s(:delimited) %></td>
               <td class="border-right">¥-<%= each_value_for_year(prev_year_event_date(i))[:ex].to_s(:delimited) %></td>
               <td>¥<%= each_value_for_year(prev_year_event_date(i))[:plus_minus].to_s(:delimited) %></td>

@@ -27,8 +27,16 @@
 
         <tbody>
           <tr>
-            <td><%=card.name %></td>
-            <td><%= card.account.name %></td>
+            <td>
+              <%= link_to card.name, user_search_path(
+                card: card.id
+              ) %>
+            </td>
+            <td>
+              <%= link_to card.account.name, user_search_path(
+                account: card.account.id
+              ) %>
+            </td>
             <td><%= card.pay_date %></td>
             <td><%= card.month_date %></td>
             <td><%=link_to "詳細", user_card_path(params[:user_id], :id => card.id) %></td>

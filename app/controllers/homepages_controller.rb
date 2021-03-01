@@ -3,5 +3,6 @@ class HomepagesController < ApplicationController
   end
 
   def explanation
+    @root= params[:root]
   end
 end

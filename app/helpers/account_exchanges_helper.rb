@@ -1,6 +1,10 @@
 module AccountExchangesHelper
   def to_id_for_new_ax
-    @ax.to_account.id if @ax.to_account
+    if @ax.to_account
+      @ax.to_account.id
+    elsif current_user.account_exchanges.exists?
+      current_user.account_exchanges.first.to_account.id
+    end
   end
 
   def card_id_for_ax
@@ -19,5 +23,18 @@ module AccountExchangesHelper
     end
   end
   
+  def active_is_account_or_card_for_ax
+    if @ax.card
+      return {account: "", card: "active", number: 1}
+    elsif current_user.account_exchanges.exists?
+      if current_user.account_exchanges.first.card
+        return {account: "", card: "active", number: 1}
+      elsif current_user.account_exchanges.first.account
+        return {account: "active", card: "", number: 0}
+      end
+    else
+      return {account: "active", card: "", number: 0}
+    end
+  end
   
 end

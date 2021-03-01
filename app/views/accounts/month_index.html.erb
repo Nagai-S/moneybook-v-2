@@ -18,7 +18,17 @@
       <tbody>
         <tr>
           <td><%= prev_month_event_date(i).year unless a==prev_month_event_date(i) %>年</td>
-          <td class="border-right"><%= prev_month_event_date(i).month %>月</td>
+          <td class="border-right">
+            <%= link_to "#{prev_month_event_date(i).month}月", user_search_path(
+              date_or_not: "1",
+              "date1(1i)": prev_month_event_date(i).year,
+              "date1(2i)": prev_month_event_date(i).month,
+              "date1(3i)": 1,
+              "date2(1i)": prev_month_event_date(i).year,
+              "date2(2i)": prev_month_event_date(i).month,
+              "date2(3i)": 31,
+            ) %>
+          </td>
           <td>
             ¥<%= each_value_for_month(prev_month_event_date(i))[:in].to_s(:delimited) %>
           </td>

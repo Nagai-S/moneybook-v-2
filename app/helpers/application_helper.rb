@@ -7,14 +7,6 @@ module ApplicationHelper
     "col-12 col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 text-left"
   end
 
-  def active_is_account_or_card(object)
-    if object.card
-      return {account: "", card: "active", number: 1}
-    else
-      return {account: "active", card: "", number: 0}
-    end
-  end
-
   def date_for_new(object)
     object.date ? object.date : Date.today
   end

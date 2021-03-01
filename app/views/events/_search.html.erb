@@ -14,7 +14,7 @@
       日付
     </div>
     <div class="col-12 col-sm-5">
-      <%= f.select :date_or_not, [["選択しない","0"],["選択する","1"]], {selected: date_or_not},class: "form-control", id: "select_js2" %>
+      <%= f.select :date_or_not, [["指定しない","0"],["指定する","1"]], {selected: date_or_not},class: "form-control", id: "select_js2" %>
     </div>
   </div>
   <div class="date_area_<%= css_date %> date_area">
@@ -55,7 +55,7 @@
   <div class="search_row row">
     <div class="col-12 col-sm-5">金額</div>
     <div class="col-12 col-sm-5">
-      <%= f.select :money_or_not, [["選択しない","0"],["選択する","1"]], {selected: money_or_not}, class: "form-control", id: "select_js3" %>
+      <%= f.select :money_or_not, [["指定しない","0"],["指定する","1"]], {selected: money_or_not}, class: "form-control", id: "select_js3" %>
     </div>
   </div>
   <div class=" money_area_<%= css_money %> money_area">

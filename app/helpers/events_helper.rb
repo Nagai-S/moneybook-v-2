@@ -1,9 +1,9 @@
 module EventsHelper
-  def genre_id_for_new_event
+  def genre_id_for_event(iae)
     if @event.genre
       @event.genre.id
-    elsif current_user.events.exists?
-      current_user.events.first.genre.id
+    else
+      current_user.events.where(iae: iae).first.genre.id if current_user.events.where(iae: iae).exists?
     end
   end
 
@@ -15,14 +15,27 @@ module EventsHelper
     end
   end
 
-  def account_id_for_event
+  def account_id_for_event(iae)
     if @event.account
       @event.account.id
-    elsif current_user.events.where.not(account_id: nil).exists?
-      current_user.events.where.not(account_id: nil).first.account.id
+    else
+      current_user.events.where.not(account_id: nil).where(iae: iae).first.account.id if current_user.events.where.not(account_id: nil).where(iae: iae).exists?
     end
   end
   
+  def active_is_account_or_card_for_event
+    if @event.card
+      return {account: "", card: "active", number: 1}
+    elsif current_user.events.exists?
+      if current_user.events.first.card
+        return {account: "", card: "active", number: 1}
+      elsif current_user.events.first.account
+        return {account: "active", card: "", number: 0}
+      end
+    else
+      return {account: "active", card: "", number: 0}
+    end
+  end
 
   def active_is_ex_or_in
     if @event.iae
