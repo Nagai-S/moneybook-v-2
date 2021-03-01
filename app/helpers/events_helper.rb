@@ -23,9 +23,9 @@ module EventsHelper
     end
   end
   
-  def active_is_account_or_card_for_event
-    if @event.card
-      return {account: "", card: "active", number: 1}
+  def active_is_account_or_card_for_event(iae)
+    if iae
+      return {account: "active", card: "", number: 0}
     elsif current_user.events.exists?
       if current_user.events.first.card
         return {account: "", card: "active", number: 1}
