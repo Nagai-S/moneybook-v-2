@@ -14,6 +14,6 @@
 * webから会員登録して、POST /api/v1/auth/sign_inでbodyとして{email: "youremail", password: "yourpassword"}でリクエストを送って返ってきた
 headerのうち"accesstoken"と"client"と"uid"をheaderに載せてリクエストを送信することで、apiとして扱える。apiの情報については今後doc/内に載せていく予定。
 
-# 実際のサイト
+### 実際のサイト
 https://moneybook-moneybook.herokuapp.com
 に公開しています。
