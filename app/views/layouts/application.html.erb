@@ -11,6 +11,8 @@
 
   <%= stylesheet_pack_tag 'application', media: 'all' %>
   <%= javascript_pack_tag 'application' %>
+
+  <%= favicon_link_tag 'favicon.png'%>
 </head>
 
 <body>
@@ -25,7 +27,7 @@
       <div class="menu open">×</div>
 
       <h1 class="headline">
-        <%= link_to "Money Book", user_events_path(current_user) %>
+        <%= link_to image_tag("logo.png", height: "55"), user_events_path(current_user) %>
       </h1>
 
       <div class="header_list">
@@ -51,7 +53,7 @@
       </div>
 
       <% else %>
-      <h1 class="headline"><%= link_to "Money Book", root_path %></h1>
+      <h1 class="headline"><%= link_to image_tag("logo.png", height: "60"), root_path %></h1>
       <% end %>
     </header>
 

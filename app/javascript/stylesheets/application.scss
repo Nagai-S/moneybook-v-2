@@ -65,21 +65,11 @@ header {
 header .headline{
   float: left;
   font-size: 25px;
-  padding-top: 30px;
-  margin-left: 30px;
+  padding-top: 12px;
   margin-top:0;
   margin-bottom: 0;
   position: absolute;
   top: 0px;
-}
-
-.headline a{
-  color: rgb(245,245,247);
-}
-
-.headline a:hover{
-  text-decoration: none;
-  color: white;
 }
 
 .menu{
