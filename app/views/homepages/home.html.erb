@@ -1,7 +1,131 @@
-<h2>MoneyBookへようこそ</h2>
-<ul class="home">
-  <p>今すぐ</p>
-  <li><%= link_to "新規会員登録", new_user_registration_path %></li>
-  <p>既にお済みの方は</p>
-  <li><%= link_to "ログイン", new_user_session_path %></li>
-</ul>
+<h1>MoneyBookへようこそ</h1>
+<div class="row">
+  <div class="col-10 offset-1 col-sm-3 offset-sm-9 lp_header_list">
+    <li><%= link_to "ログイン", new_user_session_path %></li>
+    <li><%= link_to "新規会員登録", new_user_registration_path, class: "regist" %></li>
+  </div>
+</div>
+<div class=" lp_content">
+  <div class="row lp_ex_1">
+    <div class="col-12 col-sm-6 order-1 order-sm-0">
+      <%= image_tag "img_account.png", class: "img img-fluid" %>
+    </div>
+    <div class="col-12 col-sm-6 lp_ex_2 order-0 order-sm-1">
+      <h3>
+        アカウント管理機能
+      </h3>
+      <p>
+        現金や、銀行口座、電子マネーなど複数のアカウントを登録することができて、
+        一目でそれぞれの残高を確認できます。</br>
+        また、アカウント間での振替も簡単に行えます。
+      </p>
+    </div>
+  </div>
+
+  <div class="row lp_ex_1">
+    <div class="col-12 col-sm-6 order-1 order-sm-1">
+      <%= image_tag "img_card.png", class: "img img-fluid" %>
+    </div>
+    <div class="col-12 col-sm-6 lp_ex_2  order-0 order-sm-0">
+      <h3>
+        クレジットカード機能
+      </h3>
+      <p>
+        連携アカウント、締め日、引き落とし日を登録することで、クレジットカードを用いた記録を登録することができるようになります。</br>
+        また、クレジットカードからアカウントへの振替も可能なので、
+        クレジットカードから電子マネーへのチャージなども簡単に記録できます。
+      </p>
+    </div>
+  </div>
+
+  <div class="row lp_ex_1">
+    <div class="col-11 col-sm-6 order-1 order-sm-0">
+      <%= image_tag "img_not_pay.png", class: "img img-fluid" %>
+    </div>
+    <div class="col-11 col-sm-6 lp_ex_2  order-0 order-sm-1">
+      <h3>
+        ２通りの残高
+      </h3>
+      <p>
+        クレジットカードの連携アカウントで現在の残高とクレジットカード分を引き落とした後の残高を確認できます。</br>
+      </p>
+      <p>
+        また、簡単に該当月のクレジットカードでの未引き落としの一覧を確認することもできます。
+      </p>
+    </div>
+  </div>
+
+  <div class="row lp_ex_1">
+    <div class="col-11 col-sm-6 order-1 order-sm-1">
+      <%= image_tag "security.png", width: "300", height: "300", class: "img img-fluid" %>
+    </div>
+    <div class="col-11 col-sm-6 lp_ex_2 order-0 order-sm-0">
+      <h3>
+        絶対的セキュリティー
+      </h3>
+      <p>
+        <span class="strong">銀行口座やクレジットカードは実際のものと連携しない</span>ので、絶対に情報が漏洩することはありません。</br>
+        実際のものと連携する他のサービスはたくさんありますが、それが怖いという方におすすめです。</br>
+      </p>
+      <p class="strong">
+        連携せずに、クレジットカードでの支出を記録できるのが、このアプリの強みです！！
+      </p>
+    </div>
+  </div>
+
+  <div class="row lp_ex_1">
+    <div class="col-11 col-sm-6 order-1 order-sm-0">
+      <%= image_tag "img_search.png",width: "500", height: "300", class: "img img-fluid" %>
+    </div>
+    <div class="col-11 col-sm-6 lp_ex_2 order-0 order-sm-1">
+      <h3>
+        洗練された検索機能
+      </h3>
+      <p>
+        さまざまな方法で全記録から検索ができるので、あなたが得たい情報をすぐに得ることができます。
+      </p>
+      <p>
+        また検索結果全体の収支も確認できるので、旅行の全日程で使用した金額などをすぐに確認できます。
+      </p>
+    </div>
+  </div>
+
+  <div class="lp_ex_1">
+    <div class="lp_ex_2">
+      <h3>
+        はじめかた
+      </h3>
+      <div class="row">
+        <div class="col-12 col-sm-3">
+          <h4>STEP1</h4>
+          <p><%= link_to "会員登録", new_user_registration_path %>します。</p>
+        </div>
+        <div class="col-12 col-sm-3">
+          <h4>STEP2</h4>
+          <p>
+            銀行や現金などのアカウントを登録します。
+            食費や、給料などのジャンルを登録します。
+          </p>
+        </div>
+        <div class="col-12 col-sm-3">
+          <h4>STEP3</h4>
+          <p>
+            クレジットカードをお持ちの場合は登録します。
+          </p>
+        </div>
+        <div class="col-12 col-sm-3">
+          <h4>STEP4</h4>
+          <p>
+            お金を使用するごとに、①日付②ジャンル③アカウントもしくはカード④金額を指定して記録していきます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp_ex_2">
+    <div class="lp_ad">
+      近日中にモバイルアプリ版公開予定！
+    </div>
+  </div>
+</div>

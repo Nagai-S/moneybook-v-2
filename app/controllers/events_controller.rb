@@ -6,7 +6,7 @@ class EventsController < ApplicationController
   before_action :to_explanation, only: [:index, :new]
 
   def index
-    @events=current_user.events.page(params[:page])
+    @events=current_user.events.page(params[:page]).per(80)
   end
 
   def new

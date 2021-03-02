@@ -309,7 +309,7 @@ header .headline{
 }
 
 .account p{
-  font-size: 18px;
+  font-size: 14px;
   text-align: left;
   padding-left: 20%;
   padding-right: 20%;
@@ -369,10 +369,6 @@ header .headline{
   text-align: center;
 }
 
-.table .true{
-  background-color: #F0F8FF;
-}
-
 .border-right{
   border-right: 1px solid #ddd
 }
@@ -430,6 +426,63 @@ header .headline{
 .explanation2{
   text-align: left;
   margin-left: 11%;
+}
+
+// event_table and ax_table
+.table_head{
+  border-bottom: 1px solid #3E3E3E;
+  padding-bottom: 5px;
+  li{
+    list-style: none;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.table_body{
+  padding-top: 5px;
+  border-bottom: 2px solid #dee2e6;
+  padding: 12px;
+  li{
+    list-style: none;
+  }
+}
+
+.true{
+  background-color: #F0F8FF;
+}
+
+.mobile_th{
+  display: none;
+  height: 0;
+  padding: 0;
+}
+
+@media (max-width: 670px){
+  .table_head{
+    display: none;
+  }
+  .mobile_date{
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    background-color: #ddd;
+    margin-bottom: 5px;
+  }
+  .mobile_th{
+    font-size: 8px;
+    font-weight: lighter;
+    display: block;
+    text-align: center;
+  }
+  .mobile_value{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .table_body{
+    li{
+      padding: 10px;
+    }
+  }
 }
 /* ------------------------------ */
 
@@ -885,6 +938,16 @@ footer p{
   right: 10px;
 }
 
+.for_developer{
+  text-align: right;
+  font-size: 12px;
+  color: rgb(134,134,139);
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+}
+
 @media (max-width: 800px) {
   footer .footer_menu{
     width: 100%;
@@ -911,4 +974,80 @@ footer p{
     font-size: 8px;
   }
 }
+@media (max-width: 1000px){
+  .for_developer{
+    display: none;
+  }
+}
 /* ------------------------------ */
+// landing page
+
+.lp_header_list{
+  display: flex;
+  justify-content: center;
+  border-radius: 15px;
+  padding: 5px 10px;
+  li{
+    margin-top: 5px;
+    list-style: none;
+    padding: 10px;
+    .regist{
+      border: 1px solid #3E3E3E;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    a{
+      color: #3E3E3E;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    a:hover{
+      font-weight: 700;
+      text-decoration: none;
+    }
+  }
+}
+
+.lp_content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+.lp_ex_1{
+  margin-bottom: 150px;
+  align-items: center;
+}
+
+.lp_ex_2{
+  text-align: left;
+  h3{
+    border-bottom: 1px solid #666666;
+    padding-bottom: 5px;
+  }
+  h4{
+    font-size: 20px;
+    font-weight: bold;
+  }
+  p{
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.75;
+    font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "Meiryo", "メイリオ", "MS PGothic", "Osaka", arial, helvetica, clean, sans-serif;
+  }
+  .strong{
+    font-weight: bold;
+    color: #3E3E3E;
+  }
+  .lp_ad{
+    text-align: center;
+    font-size: 30px;
+  }
+}
+
+.img{
+  border: 2px solid #E8E8E8;
+  border-radius: 15px;
+}
