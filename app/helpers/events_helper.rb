@@ -27,9 +27,9 @@ module EventsHelper
     if iae
       return {account: "active", card: "", number: 0}
     elsif current_user.events.exists?
-      if current_user.events.first.card
+      if current_user.events.where(iae: false).first.card
         return {account: "", card: "active", number: 1}
-      elsif current_user.events.first.account
+      elsif current_user.events.where(iae: false).first.account
         return {account: "active", card: "", number: 0}
       end
     else
