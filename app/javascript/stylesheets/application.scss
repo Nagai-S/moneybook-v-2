@@ -448,15 +448,23 @@ header .headline{
   padding: 0;
 }
 
+.mobile_date{
+  display: none;
+}
+
 @media (max-width: 670px){
   .table_head{
     display: none;
   }
   .mobile_date{
+    display: block;
     border: 1px solid #dee2e6;
     border-radius: 10px;
     background-color: #ddd;
     margin-bottom: 5px;
+  }
+  .pc_date{
+    display: none;
   }
   .mobile_th{
     font-size: 8px;
@@ -1041,4 +1049,51 @@ footer p{
 .img{
   border: 2px solid #E8E8E8;
   border-radius: 15px;
+}
+
+// explanation
+.ex_content{
+  width: 90%;
+  margin: auto;
+  h3{
+    border-bottom: 1px solid #666666;
+    padding-bottom: 5px;
+  }
+  p{
+    text-align: left;
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.75;
+    font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "Meiryo", "メイリオ", "MS PGothic", "Osaka", arial, helvetica, clean, sans-serif;
+  }
+  .ditail{
+    font-size: 13px;
+    color: #666666;
+    opacity: 0.8;
+
+  }
+  .color-normal{
+    background-color: #fafafa;
+  }
+  .color-blue{
+    background-color: #F0F8FF;
+  }
+  .color-step3{
+    background-color: #F0F8FF;
+  }
+  .color-step4{
+    background-color: #fafafa;
+  }
+}
+
+@media (max-width: 670px){
+  .ex_content{
+    width: 100%;
+    .color-step4{
+      background-color: #F0F8FF;
+    }
+    .color-step3{
+      background-color: #fafafa;
+    }
+  }
 }

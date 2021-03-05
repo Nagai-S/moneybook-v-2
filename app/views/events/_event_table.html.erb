@@ -1,4 +1,3 @@
-
 <div class="table_contents">
   <%= paginate @events %>
   <div class="table_head row">
@@ -10,9 +9,11 @@
     <li class="col-sm-2">引き落とし日</li>
   </div>
 
+  <% a=0 %>
   <% @events.each do |event| %>
   <div class="table_body row  <%= which_iae(event) %>">
-    <li class="col-8 offset-2 col-sm-2 offset-sm-0 mobile_date"><%= l event.date %></li>
+    <li class="col-8 offset-2 mobile_date"><%= l event.date %></li>
+    <li class="col-sm-2 offset-sm-0  pc_date"><%= l event.date unless a==event.date %></li>
     <div class="col-6 col-sm-1">
       <div class="mobile_th">ジャンル</div>
       <li><%= event.genre.name %></li>
@@ -40,6 +41,7 @@
       <%= link_to "編集", edit_user_event_path(params[:user_id], event.id) %>
     </li>
   </div>
+  <% a=event.date %>
   <% end %>
   <%= paginate @events %>
 </div>

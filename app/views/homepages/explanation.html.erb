@@ -1,22 +1,60 @@
-<h1>ようこそ</h1>
+<h1>アプリの使い方</h1>
 
-<div class="account">
-  <% if !current_user.accounts.exists? || @root %>
-  <p>まずはこちらからアカウント(銀行、現金、電子マネーなど)を追加しましょう。</p>
-  <div class="new_account">
-    <li><%= link_to "アカウント追加", new_user_account_path %></li>
+<div class="ex_content row">
+  <div class="ex_body col-12 col-sm-6 color-normal">
+    <h3>STEP1：アカウント登録</h3>
+    <p>
+      銀行や現金、電子マネーなどの名前と初期残高を入力してアカウントを登録しましょう。
+      <%= link_to "こちらから", new_user_account_path %>
+    </p>
   </div>
-  <% end %>
-  <% if !current_user.genres.exists?(iae: false) || @root %>
-  <p>こちらから支出のジャンル(食費など)を追加しましょう。</p>
-  <div class="new_account">
-    <li><%= link_to "ジャンル追加", new_user_genre_path(iae: false) %></li>
+  <div class="ex_body col-12 col-sm-6 color-blue">
+    <h3>STEP2：ジャンル登録</h3>
+    <p>
+      食費や、給料などのジャンルを支出、収入それぞれ登録しましょう。
+      <%= link_to "こちらから", new_user_genre_path %>
+    </p>
   </div>
-  <% end %>
-  <% if !current_user.genres.exists?(iae: true) || @root %>
-  <p>こちらから収入のジャンル(給料など)を追加しましょう。</p>
-  <div class="new_account">
-    <li><%= link_to "ジャンル追加", new_user_genre_path(iae: true) %></li>
+  <div class="ex_body col-12 col-sm-6 color-step3">
+    <h3>STEP3：クレジットカード登録</h3>
+    <p>
+      連携アカウント、締め日、引き落とし日を指定してクレジットカードを登録しましょう。
+      <%= link_to "こちらから", new_user_card_path %>
+    </p>
+    <p class="ditail">
+      連携アカウントとは：そのクレジットカードの利用分が引き落とされる口座のことです。</br>
+      締め日とは：そのクレジットカードの一ヶ月の利用の最後の日付のことです。</br>
+      引き落とし日とは：そのクレジットカードの一ヶ月の利用が引き落とされる日付のことです。</br>
+      （例）締め日が10日引き落とし日が28日の場合</br>
+      2021/2/11〜2021/3/10までの利用分が2021/3/28に引き落とされます。
+    </p>
   </div>
-  <% end %>
+  <div class="ex_body col-12 col-sm-6 color-step4">
+    <h3>STEP4：記録開始！</h3>
+    <p>
+      ①日付</br>
+      ②ジャンル</br>
+      ③アカウントまたはカード</br>
+      ④メモ（必要あれば）</br>
+      ⑤金額</br>
+      を指定して、お金を利用するたびに記録をつけましょう。
+      <%= link_to "こちらから", new_user_event_path %>
+    </p>
+  </div>
+  <div class="ex_body col-12 col-sm-6 color-normal">
+    <h3>STEP5：振替</h3>
+    <p>
+      銀行からお金を引き落とした時や、クレジットカードから電子マネーにお金をチャージした際に
+      振替元アカウントや、振替元カードと振替先アカウントを指定して、お金の振り替えを行えます。
+      <%= link_to "こちらから", new_user_account_exchange_path %>
+    </p>
+  </div>
+  <div class="ex_body col-12 col-sm-6 color-blue">
+    <h3>STEP6：クレジット履歴確認</h3>
+    <p>
+      <%= link_to "こちらから", user_cards_path %>クレジットカードの詳細ページにいくと、
+      次の引き落とし日での、トータル引き落とし金額と、使用履歴の一覧を確認できます。</br>
+      実際のカード会社が提供している使用履歴一覧と比較することで、不正利用などを防ぐことができます。
+    </p>
+  </div>
 </div>
