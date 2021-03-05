@@ -1,6 +1,25 @@
 <h1>アプリの使い方</h1>
-
 <div class="ex_content row">
+  <% if !current_user.accounts.exists? || !current_user.genres.where(iae: false).exists? || !current_user.genres.where(iae: true).exists? %>
+  <div class="must_menu col-12">
+    <h4>必須アクション</h4>
+    <% unless current_user.accounts.exists? %>
+    <li>
+      <%= link_to "アカウントを追加してください。", new_user_account_path %>
+    </li>
+    <% end %>
+    <% unless current_user.genres.where(iae: false).exists? %>
+    <li>
+      <%= link_to "支出のジャンルを追加してください。", new_user_genre_path(iae: false) %>
+    </li>
+    <% end %>
+    <% unless current_user.genres.where(iae: true).exists? %>
+    <li>
+      <%= link_to "収入のジャンルを追加してください。", new_user_genre_path(iae: true) %>
+    </li>
+    <% end %>
+  </div>
+  <% end %>
   <div class="ex_body col-12 col-sm-6 color-normal">
     <h3>STEP1：アカウント登録</h3>
     <p>

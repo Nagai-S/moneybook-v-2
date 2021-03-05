@@ -17,7 +17,7 @@
 
       <tbody>
         <tr>
-          <td><%= prev_month_event_date(i).year unless a==prev_month_event_date(i) %>年</td>
+          <td><%= "#{prev_month_event_date(i).year}年" unless a==prev_month_event_date(i).year %></td>
           <td class="border-right">
             <%= link_to "#{prev_month_event_date(i).month}月", user_search_path(
               date_or_not: "1",

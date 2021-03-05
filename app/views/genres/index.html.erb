@@ -1,16 +1,12 @@
 <h1>ジャンル一覧</h1>
-
-<div class="account">
-  <% if current_user.genres==[] %>
-  <p>まずはこちらからジャンル(食費、給料など)の追加をしましょう。</p>
-  <% end %>
-  <div class="new_account">
-    <li><%= link_to "ジャンル追加", new_user_genre_path(current_user) %></li>
+<div class="row">
+  <div class="col-10 offset-1 col-sm-6 offset-sm-6 col-md-4 offset-md-8 page_top_menu">
+    <li><%= link_to "ジャンル追加", new_user_genre_path, class: "square" %></li>
   </div>
 </div>
 
 <div class="row">
- <div class="col-12 col-sm-6">
+  <div class="col-12 col-sm-6">
     <h2>支出</h2>
     <%= render "genre_table", iae: false %>
   </div>
@@ -18,5 +14,5 @@
   <div class="col-12 col-sm-6">
     <h2>収入</h2>
     <%= render "genre_table", iae: true %>
-  </div> 
+  </div>
 </div>

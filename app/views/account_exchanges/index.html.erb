@@ -1,5 +1,11 @@
 <h1>振替履歴一覧</h1>
 
+<div class="row">
+  <div class="col-10 offset-1 col-sm-6 offset-sm-6 col-md-4 offset-md-8 page_top_menu">
+    <li><%= link_to "新規振替", new_user_account_exchange_path, class: "square" %></li>
+  </div>
+</div>
+
 <div class="table_contents">
   <%= paginate @axs %>
   <div class="table_head row">
@@ -10,9 +16,11 @@
     <li class="col-sm-2">引き落とし日</li>
   </div>
 
+  <% a=0 %>
   <% @axs.each do |ax| %>
   <div class="table_body row">
-    <li class="col-8 offset-2 col-sm-2 offset-sm-0 mobile_date"><%= l ax.date %></li>
+    <li class="col-8 offset-2 mobile_date"><%= l ax.date %></li>
+    <li class="col-sm-2 offset-sm-0  pc_date"><%= l ax.date unless a==ax.date %></li>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">振り替え元アカウント</div>
       <li><%= account_or_card_name(ax) %></li>
@@ -36,6 +44,7 @@
       <%= link_to "編集", edit_user_event_path(params[:user_id], ax.id) %>
     </li>
   </div>
+  <% a=ax.date %>
   <% end %>
   <%= paginate @axs %>
 </div>

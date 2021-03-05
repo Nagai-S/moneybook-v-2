@@ -264,46 +264,46 @@ header .headline{
   font-size: 20px;
 }
 
-.account{
-  position: relative;
-  width: 50%;
-  margin: auto;
-  margin-top: 30px;
-  border: solid 1px rgb(134,134,139);
-  padding: 20px 0;
-  background-color: #E8E8E8;
-  border-radius: 10px;
-}
+// .account{
+//   position: relative;
+//   width: 50%;
+//   margin: auto;
+//   margin-top: 30px;
+//   border: solid 1px rgb(134,134,139);
+//   padding: 20px 0;
+//   background-color: #E8E8E8;
+//   border-radius: 10px;
+// }
 
-.new_account li{
-  font-size: 20px;
-  list-style: none;
-  display: block;
-  border: solid 1px #E8E8E8;
-  margin-bottom: 10px;
-  background-color: lightblue;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 10px;
-}
+// .new_account li{
+//   font-size: 20px;
+//   list-style: none;
+//   display: block;
+//   border: solid 1px #E8E8E8;
+//   margin-bottom: 10px;
+//   background-color: lightblue;
+//   width: 50%;
+//   margin-left: auto;
+//   margin-right: auto;
+//   border-radius: 10px;
+// }
 
-.account a{
-  color: black;
-  display: block;
-}
+// .account a{
+//   color: black;
+//   display: block;
+// }
 
-.account a:hover{
-  text-decoration: none;
-  opacity: 0.7;
-}
+// .account a:hover{
+//   text-decoration: none;
+//   opacity: 0.7;
+// }
 
-.account p{
-  font-size: 14px;
-  text-align: left;
-  padding-left: 20%;
-  padding-right: 20%;
-}
+// .account p{
+//   font-size: 14px;
+//   text-align: left;
+//   padding-left: 20%;
+//   padding-right: 20%;
+// }
 
 .account_exchange li{
   display: inline-block;
@@ -980,7 +980,7 @@ footer p{
 /* ------------------------------ */
 // landing page
 
-.lp_header_list{
+.page_top_menu{
   display: flex;
   margin-bottom: 10px;
   justify-content: center;
@@ -990,7 +990,7 @@ footer p{
     margin-top: 5px;
     list-style: none;
     padding: 10px;
-    .regist{
+    .square{
       border: 1px solid #3E3E3E;
       border-radius: 10px;
       padding: 10px;
@@ -1055,6 +1055,7 @@ footer p{
 .ex_content{
   width: 90%;
   margin: auto;
+  margin-top: 10px;
   h3{
     border-bottom: 1px solid #666666;
     padding-bottom: 5px;
@@ -1070,7 +1071,6 @@ footer p{
     font-size: 13px;
     color: #666666;
     opacity: 0.8;
-
   }
   .color-normal{
     background-color: #fafafa;
@@ -1084,7 +1084,27 @@ footer p{
   .color-step4{
     background-color: #fafafa;
   }
+  .must_menu{
+    margin-bottom: 10px;
+    h4{
+      color: red;
+    }
+    text-align: left;
+    li{
+      list-style: decimal;
+      font-size: 16px;
+      line-height: 1.75rem;
+      a{
+        color: rgb(169, 68, 66);
+      }
+      a:hover{
+        text-decoration: none;
+        font-weight: bold;
+      }
+    }
+  }
 }
+
 
 @media (max-width: 670px){
   .ex_content{

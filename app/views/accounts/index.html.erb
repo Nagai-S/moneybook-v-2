@@ -1,16 +1,10 @@
 <h1>統計情報</h1>
 
-<div class="account">
-  <% if current_user.accounts==[] %>
-  <p>まずはこちらからアカウント(銀行、現金、電子マネーなど)を追加しましょう。</p>
-  <% end %>
-  <div class="new_account">
-    <li><%= link_to "アカウント追加", new_user_account_path %></li>
-  </div>
-  <div class="account_exchange">
-    <li><%= link_to "新規振替", new_user_account_exchange_path(current_user) %></li>
-    <li><%= link_to "振替履歴", user_account_exchanges_path(current_user) %></li>
-    <p>こちらではアカウント間のお金の移動ができます。</p>
+<div class="row">
+  <div class="col-10 offset-1 col-sm-6 offset-sm-6 col-md-4 offset-md-8 page_top_menu">
+    <li><%= link_to "アカウント追加", new_user_account_path, class: "square" %></li>
+    <li><%= link_to "振替一覧", user_account_exchanges_path %></li>
+    <li><%= link_to "新規振替", new_user_account_exchange_path %></li>
   </div>
 </div>
 
