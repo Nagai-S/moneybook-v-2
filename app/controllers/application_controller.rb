@@ -4,17 +4,12 @@ class ApplicationController < ActionController::Base
   before_action :set_host
   before_action :authenticate_user!, only: [
     :after_sign_in_path_for,
-    :after_sign_up_path_for,
     :after_sign_out_path_for,
     :to_explanation
   ]
 
   def after_sign_in_path_for(resource)
     user_events_path(current_user) # ログイン後に遷移するpathを設定
-  end
-
-  def after_sign_up_path_for(resource)
-    user_events_path(current_user) # アカウント作成後に遷移するpathを設定
   end
 
   def after_sign_out_path_for(resource)

@@ -6,7 +6,7 @@ class EventsController < ApplicationController
   before_action :to_explanation, only: [:index, :new]
 
   def index
-    @events=current_user.events.page(params[:page]).per(80)
+    @events=current_user.events.includes(:account,:card,:genre).page(params[:page]).per(80)
   end
 
   def new
@@ -23,7 +23,7 @@ class EventsController < ApplicationController
     events=search_money(events)
     events=search_date(events)
 
-    @events=events.page(params[:page])
+    @events=events.includes(:account,:card,:genre).page(params[:page])
   end
 
   def create

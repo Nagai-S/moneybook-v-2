@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   
   def index
     current_user.make_sure_pay_date_and_pon
-    @accounts=current_user.accounts
+    @accounts=current_user.accounts.includes(:cards)
   end
 
   def month_index

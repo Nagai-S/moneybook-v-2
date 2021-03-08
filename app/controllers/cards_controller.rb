@@ -4,7 +4,7 @@ class CardsController < ApplicationController
   before_action :to_explanation, only: [:show, :index, :new]
   
   def index
-    @cards=current_user.cards
+    @cards=current_user.cards.includes(:account)
   end
 
   def new

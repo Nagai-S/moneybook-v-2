@@ -4,7 +4,7 @@ class AccountExchangesController < ApplicationController
   before_action :to_explanation, only: [:index, :new]
   
   def index
-    @axs=current_user.account_exchanges.page(params[:page])
+    @axs=current_user.account_exchanges.includes(:account,:card,:to_account).page(params[:page])
   end
 
   def new
