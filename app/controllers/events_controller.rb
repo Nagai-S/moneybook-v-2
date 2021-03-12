@@ -23,7 +23,7 @@ class EventsController < ApplicationController
     events=search_money(events)
     events=search_date(events)
 
-    @events=events.includes(:account,:card,:genre).page(params[:page])
+    @events=events.includes(:account,:card,:genre).page(params[:page]).per(80)
   end
 
   def create
@@ -58,7 +58,7 @@ class EventsController < ApplicationController
       @event.after_change_action(@event.pay_date)
       redirect_to user_events_path(current_user)
     else
-      flash.now[:danger]="イベントの作成に失敗しました。"
+      flash.now[:danger]="イベントの編集に失敗しました。"
       render "new"
     end
   end
