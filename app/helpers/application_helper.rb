@@ -41,8 +41,7 @@ module ApplicationHelper
 
     def default_twitter_card
       {
-        card: image_tag("favicon.png"),
-        site: "@moneybook7"
+        card: 'summary_large_image',
       }   
     end
 end
