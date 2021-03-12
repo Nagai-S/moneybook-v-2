@@ -32,10 +32,10 @@ module ApplicationHelper
 
     def default_og
       {
-        title: :full_title,          # :full_title とすると、サイトに表示される <title> と全く同じものを表示できる
-        description: :description,   # 上に同じ
+        title: :full_title,   
+        description: :description,
         url: request.url,
-        image: image_tag("favicon.png")
+        image: "https://moneybook-moneybook.herokuapp.com/assets/favicon-173c0422671de631d1f180efe1be2ff52b8b5add1571c4b8d4209ceb0ba2ca0e.png"
       }
     end
 
