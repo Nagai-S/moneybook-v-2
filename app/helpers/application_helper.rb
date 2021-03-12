@@ -18,4 +18,31 @@ module ApplicationHelper
       event.card.name
     end
   end
+
+  def default_meta_tags
+    {
+      site: "MoneyBook",
+      reverse: true,
+      og: default_og,
+      twitter: default_twitter_card,
+    }
+  end
+
+  private
+
+    def default_og
+      {
+        title: :full_title,          # :full_title とすると、サイトに表示される <title> と全く同じものを表示できる
+        description: :description,   # 上に同じ
+        url: request.url,
+        image: image_tag("favicon.png")
+      }
+    end
+
+    def default_twitter_card
+      {
+        card: image_tag("favicon.png"),
+        site: "@moneybook7"
+      }   
+    end
 end

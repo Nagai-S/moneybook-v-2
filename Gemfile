@@ -35,6 +35,8 @@ gem 'devise-i18n'
 gem 'dotenv-rails'
 gem "kaminari"
 gem 'devise_token_auth'
+gem 'meta-tags'
+gem 'sitemap_generator'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
