@@ -313,7 +313,7 @@ RSpec.describe EventsController do
           Account.find(@card1.account.id).after_pay_value
         }.by(-100)
         expect(Event.find(event.id).pon).to eq false
-        expect(Event.find(event.id).pay_date).to eq Date.new(
+        expect(Event.find(event.id).pay_date).to eq FlexDate.return_date(
           Date.today.year, Date.today.next_month.month, @card1.pay_date
         )
       end
