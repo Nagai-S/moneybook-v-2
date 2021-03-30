@@ -26,6 +26,8 @@ module AccountExchangesHelper
   def active_is_account_or_card_for_ax
     if @ax.card
       return {account: "", card: "active", number: 1}
+    elsif @ax.account
+      return {account: "active", card: "", number: 0}
     elsif current_user.account_exchanges.exists?
       if current_user.account_exchanges.first.card
         return {account: "", card: "active", number: 1}
