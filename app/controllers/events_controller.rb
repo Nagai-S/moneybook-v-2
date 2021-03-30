@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  include Search
+  include MyFunction::Search
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]

@@ -38,10 +38,10 @@
       <li><%= l ax.pay_date if ax.pay_date %></li>
     </div>
     <li class="col-6 col-sm-1">
-      <%= link_to "削除", user_event_path(params[:user_id], ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
+      <%= link_to "削除", user_account_exchange_path(params[:user_id], ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
     </li>
     <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_user_event_path(params[:user_id], ax.id) %>
+      <%= link_to "編集", edit_user_account_exchange_path(params[:user_id], ax.id) %>
     </li>
   </div>
   <% a=ax.date %>

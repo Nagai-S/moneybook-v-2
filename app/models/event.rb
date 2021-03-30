@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  include FunctionForChange
+  include MyFunction::FunctionForChange
   
   belongs_to :user
   belongs_to :card, optional: true
