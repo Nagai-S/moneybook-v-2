@@ -8,7 +8,7 @@ namespace :monthly_mail do
           CardMailer.with(
             user: user,
             card: card,
-            pay_date: FlexDate.return_date(
+            pay_date: MyFunction::FlexDate.return_date(
               aweek_later.year,
               aweek_later.month,
               card.pay_date

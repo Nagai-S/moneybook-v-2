@@ -1,5 +1,4 @@
 class EventsController < ApplicationController
-  require "search"
   include Search
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]

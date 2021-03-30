@@ -1,5 +1,4 @@
 class Event < ApplicationRecord
-  require 'function_for_change'
   include FunctionForChange
   
   belongs_to :user

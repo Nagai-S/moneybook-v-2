@@ -61,14 +61,14 @@ module Search
   
   def search_date(events)
     @date_or_not=params[:date_or_not]
-    @early_date=FlexDate.return_date(
+    @early_date=MyFunction::FlexDate.return_date(
       params["date1(1i)"].to_i, params["date1(2i)"].to_i, params["date1(3i)"].to_i
-    ) if FlexDate.valid_date?(
+    ) if MyFunction::FlexDate.valid_date?(
       params["date1(1i)"].to_i, params["date1(2i)"].to_i, params["date1(3i)"].to_i
     )
-    @late_date=FlexDate.return_date(
+    @late_date=MyFunction::FlexDate.return_date(
       params["date2(1i)"].to_i, params["date2(2i)"].to_i, params["date2(3i)"].to_i
-    ) if FlexDate.valid_date?(
+    ) if MyFunction::FlexDate.valid_date?(
       params["date2(1i)"].to_i, params["date2(2i)"].to_i, params["date2(3i)"].to_i
     )
     @css_date= @date_or_not=="1" ? "block" : "none"
