@@ -60,14 +60,14 @@ class Card < ApplicationRecord
     return event+ax
   end
 
-  def before_update_action
-    self.events.each do |event|
+  def after_update_action
+    self.events.includes(:card, :account).each do |event|
       event.update(pay_date: event.decide_pay_day)
-      event.change_pon
+      event.change_pon(event.pon)
     end
-    self.account_exchanges.each do |ax|
+    self.account_exchanges.includes(:card, :account).each do |ax|
       ax.update(pay_date: ax.decide_pay_day)
-      ax.change_pon
+      ax.change_pon(ax.pon)
     end
   end
   

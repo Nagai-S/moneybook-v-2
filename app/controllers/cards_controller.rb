@@ -35,7 +35,6 @@ class CardsController < ApplicationController
   end
   
   def show
-    current_user.make_sure_pay_date_and_pon
   end
   
   def edit
@@ -44,7 +43,7 @@ class CardsController < ApplicationController
   def update
     @card.update(account_id: params[:card][:account])
     if @card.update(cards_params)
-      @card.before_update_action
+      @card.after_update_action
       redirect_to user_cards_path(params[:user_id])
     else
       flash.now[:danger]="クレジットカードの編集に失敗しました。"

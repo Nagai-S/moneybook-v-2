@@ -3,7 +3,6 @@ class AccountsController < ApplicationController
   before_action :to_explanation, only: :month_index
   
   def index
-    current_user.make_sure_pay_date_and_pon
     @accounts=current_user.accounts.includes(:cards)
   end
 

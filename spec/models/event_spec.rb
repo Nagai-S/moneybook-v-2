@@ -27,14 +27,35 @@ RSpec.describe Event do
     )
     @event.update(pay_date: @event.decide_pay_day)
     @event.save
+
+    @event1=@user.events.build(
+      iae: false,
+      memo: "",
+      value: 100,
+      genre_id: @genre_ex.id,
+      card_id: @card1.id,
+      date: Date.today,
+      pon: true,
+    )
+    @event1.update(pay_date: @event1.decide_pay_day)
+    @event1.save
   end
 
-  it "change_ponで変化する" do
+  it "change_ponでfalseからtrueに変化する" do
     expect{
-      @event.change_pon
+      @event.change_pon(@event.pon)
     }.to change{
       Account.find(@card1.account.id).value
     }.by(-100)
     expect(Event.find(@event.id).pon).to eq true
+  end
+
+  it "change_ponでtrueからfalseに変化する" do
+    expect{
+      @event1.change_pon(@event1.pon)
+    }.to change{
+      Account.find(@card1.account.id).value
+    }.by(100)
+    expect(Event.find(@event1.id).pon).to eq false
   end
 end

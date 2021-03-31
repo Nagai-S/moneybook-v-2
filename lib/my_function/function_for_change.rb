@@ -1,4 +1,4 @@
-# お金の変化と引き落とし日を追うアルゴリズム
+# お金の変化と引き落とし日を追うアルゴリズム  
 module MyFunction
   module FunctionForChange
     def after_change_action(selected_pay_date)
@@ -17,16 +17,17 @@ module MyFunction
   
         self.update(pay_date: pay_day)
   
-        self.change_pon
+        self.change_pon(false)
       end
     end
   
-    def change_pon
+    def change_pon(bool) #boolには変化前のaxやeventのponを入れる
       if self.pay_date<=Date.today
         self.update(pon: true)
-        self.card.account.plus(-self.value)
+        self.card.account.plus(-self.value) unless bool
       else
         self.update(pon: false)
+        self.card.account.plus(self.value) if bool
       end
     end
   

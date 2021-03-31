@@ -24,13 +24,4 @@ class User < ApplicationRecord
     return {months: months, years: years}
   end
 
-  def make_sure_pay_date_and_pon
-    self.events.where(pon: false).includes(:card, :account).each do |event|
-      event.change_pon
-    end
-    self.account_exchanges.where(pon: false).includes(:card, :account).each do |ax|
-      ax.change_pon
-    end
-  end
-  
 end
