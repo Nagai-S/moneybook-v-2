@@ -22,6 +22,12 @@ class EventsController < ApplicationController
     events=search_money(events)
     events=search_date(events)
 
+    value_array=[]
+    events.each do |event|
+      value_include_plus_minus=event.iae ? event.value : -event.value
+      value_array << value_include_plus_minus
+    end
+    @sum=value_array.sum
     @events=events.includes(:account,:card,:genre).page(params[:page]).per(80)
   end
 
