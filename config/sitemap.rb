@@ -24,4 +24,9 @@ SitemapGenerator::Sitemap.create do
   #   Article.find_each do |article|
   #     add article_path(article), :lastmod => article.updated_at
   #   end
+  add root_path
+  add new_user_session_path
+  add new_user_password_path
+  add new_user_registration_path
+  add new_user_confirmation_path
 end
