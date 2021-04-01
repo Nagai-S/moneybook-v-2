@@ -5,11 +5,11 @@ class User < ApplicationRecord
   :recoverable, :rememberable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
 
-  has_many :accounts, dependent: :destroy
-  has_many :genres, dependent: :destroy
-  has_many :cards, dependent: :destroy
-  has_many :events, dependent: :destroy
-  has_many :account_exchanges, dependent: :destroy
+  has_many :events, dependent: :delete_all
+  has_many :account_exchanges, dependent: :delete_all
+  has_many :genres, dependent: :delete_all
+  has_many :cards, dependent: :delete_all
+  has_many :accounts, dependent: :delete_all
 
   def after_pay_value
     not_pay_value=self.account_exchanges.where(pon: false).sum(:value)+self.events.where(pon: false).sum(:value)
