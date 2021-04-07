@@ -1007,22 +1007,34 @@ footer p{
   }
 }
 
+.lp_h1{
+  text-align: center;
+  font-size: 50px;
+}
+
 .lp_content{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
+  width: 100%;
   margin: auto;
 }
 
 .lp_ex_1{
-  margin-bottom: 150px;
+  padding-bottom: 75px;
+  padding-top: 75px;
   align-items: center;
+  width: 100%;
+}
+
+.lp_back{
+  background-color: #fafafa;
 }
 
 .lp_ex_2{
   text-align: left;
   h3{
+    text-align: center;
     border-bottom: 1px solid #666666;
     padding-bottom: 5px;
   }
@@ -1044,6 +1056,11 @@ footer p{
     text-align: center;
     font-size: 30px;
   }
+}
+
+.how_to_start{
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .img{
