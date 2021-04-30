@@ -10,7 +10,11 @@ module MyFunction
         self.account.plus(value)
       elsif self.card
         if selected_pay_date
-          pay_day=MyFunction::FlexDate.return_date(selected_pay_date.year,selected_pay_date.month,self.card.pay_date)
+          pay_day=MyFunction::FlexDate.return_date(
+            selected_pay_date.year,
+            selected_pay_date.month,
+            self.card.pay_date
+          )
         else
           pay_day=self.decide_pay_day
         end
@@ -23,11 +27,11 @@ module MyFunction
   
     def change_pon(bool) #boolには変化前のaxやeventのponを入れる
       if self.pay_date<=Date.today
-        self.update(pon: true)
         self.card.account.plus(-self.value) unless bool
+        self.update(pon: true)
       else
-        self.update(pon: false)
         self.card.account.plus(self.value) if bool
+        self.update(pon: false)
       end
     end
   
@@ -49,7 +53,7 @@ module MyFunction
           a=self.date.next_month
           pay_day=MyFunction::FlexDate.return_date(a.year, a.month, self.card.pay_date)
         else
-          pay_day=MyFunction::FlexDate.return_date(event_date.year, event_date.month, self.card.pay_date)
+          pay_day=MyFunction::FlexDate.return_date(self.date.year, self.date.month, self.card.pay_date)
         end
       else
         if self.card.month_date < self.date.day
@@ -60,6 +64,7 @@ module MyFunction
           pay_day=MyFunction::FlexDate.return_date(a.year, a.month, self.card.pay_date)
         end
       end
+      return pay_day
     end
     
   end
