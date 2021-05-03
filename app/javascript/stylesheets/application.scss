@@ -76,6 +76,10 @@ header .headline{
   display: none;
 }
 
+.plus{
+  display: none;
+}
+
 .header_list{
   width: 90%;
   position: absolute;
@@ -133,6 +137,25 @@ header .headline{
     left: 20px;
     bottom: 1px;
     top: 10px;
+  }
+
+  .plus{
+    display: block;
+    color: white;
+    font-size: 50px;
+    position: absolute;
+    right: 20px;
+    bottom: 1px;
+    top: 10px;
+    font-weight: 300;
+    opacity: 1;
+    line-height: 1;
+  }
+
+  .plus:hover{
+    font-weight: bolder;
+    text-decoration: none;
+    color: white;
   }
 
   .close{

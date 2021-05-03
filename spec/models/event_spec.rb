@@ -4,19 +4,16 @@ RSpec.describe Event do
   before do
     @user=create(:user)
     @user.confirm
-    @genre_ex=@user.genres.build(name: "genre_ex", iae: false)
-    @genre_ex.save
-    @account1=@user.accounts.build(name: "account1", value: 1000)
-    @account1.save
-    @card1=@user.cards.build(
+    @genre_ex=@user.genres.create(name: "genre_ex", iae: false)
+    @account1=@user.accounts.create(name: "account1", value: 1000)
+    @card1=@user.cards.create(
       name: "card1", 
       pay_date: 10, 
       month_date: 20, 
       account_id: @account1.id
     )
-    @card1.save
 
-    @event=@user.events.build(
+    @event=@user.events.create(
       iae: false,
       memo: "",
       value: 100,
@@ -26,9 +23,8 @@ RSpec.describe Event do
       pon: false,
     )
     @event.update(pay_date: @event.decide_pay_day)
-    @event.save
 
-    @event1=@user.events.build(
+    @event1=@user.events.create(
       iae: false,
       memo: "",
       value: 100,
@@ -38,7 +34,6 @@ RSpec.describe Event do
       pon: true,
     )
     @event1.update(pay_date: @event1.decide_pay_day)
-    @event1.save
   end
 
   it "change_ponでfalseからtrueに変化する" do

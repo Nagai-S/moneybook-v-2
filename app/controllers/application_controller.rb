@@ -17,7 +17,18 @@ class ApplicationController < ActionController::Base
   end
 
   def to_explanation
-    unless current_user.accounts.exists? && current_user.genres.exists?(iae: false) && current_user.genres.exists?(iae: true)
+    unless current_user.genres.exists?
+      current_user.genres.create([
+        {iae: false, name: "食費"},
+        {iae: false, name: "日用品"},
+        {iae: false, name: "交通費"},
+        {iae: false, name: "交際費"},
+        {iae: true, name: "給料"},
+        {iae: true, name: "ボーナス"},
+        {iae: true, name: "お小遣い"}
+      ])
+    end
+    unless current_user.accounts.exists?
       redirect_to user_explanation_path(current_user)
     end
   end

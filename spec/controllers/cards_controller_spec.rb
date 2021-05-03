@@ -5,24 +5,21 @@ RSpec.describe CardsController do
     @user=create(:user)
     @user.confirm
     sign_in @user
-    @genre_ex=@user.genres.build(name: "genre_ex", iae: false)
-    @genre_ex.save
-    @account1=@user.accounts.build(name: "account1", value: 1000)
-    @account1.save
-    @card1=@user.cards.build(
+    @genre_ex=@user.genres.create(name: "genre_ex", iae: false)
+    @account1=@user.accounts.create(name: "account1", value: 1000)
+    @card1=@user.cards.create(
       name: "card1", 
       pay_date: 1, 
       month_date: 20, 
       account_id: @account1.id
     )
-    @card1.save
   end
 
   describe "update" do
     it "編集して、ponがfalseからfalseでeventのpay_dateが変わる" do
       today=Date.today
       two_months_later=Date.today.next_month(2)
-      event=@user.events.build(
+      event=@user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -32,7 +29,6 @@ RSpec.describe CardsController do
         pon: false
       )
       event.update(pay_date: event.decide_pay_day)
-      event.save
 
       params={
         user_id: @user.id,
@@ -58,7 +54,7 @@ RSpec.describe CardsController do
     end
 
     it "編集して、ponがtrueからtrue" do
-      event=@user.events.build(
+      event=@user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -68,7 +64,6 @@ RSpec.describe CardsController do
         pon: true
       )
       event.update(pay_date: event.decide_pay_day)
-      event.save
 
       params={
         user_id: @user.id,
@@ -89,7 +84,7 @@ RSpec.describe CardsController do
 
     it "編集して、ponがfalseからtrue" do
       today=Date.today
-      event=@user.events.build(
+      event=@user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -99,7 +94,6 @@ RSpec.describe CardsController do
         pon: false
       )
       event.update(pay_date: event.decide_pay_day)
-      event.save
 
       params={
         user_id: @user.id,
@@ -120,7 +114,7 @@ RSpec.describe CardsController do
 
     it "編集して、ponがtrueからfalse" do
       a_month_before=Date.today.prev_month
-      event=@user.events.build(
+      event=@user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -130,7 +124,6 @@ RSpec.describe CardsController do
         pon: true
       )
       event.update(pay_date: event.decide_pay_day)
-      event.save
 
       params={
         user_id: @user.id,

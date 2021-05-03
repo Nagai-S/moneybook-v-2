@@ -39,6 +39,8 @@
       <div class="menu close">=</div>
       <div class="menu open">×</div>
 
+      <%= link_to "+", new_user_event_path(current_user), class: "plus" %>
+      
       <h1 class="headline">
         <%= link_to image_tag("logo.png", height: "55"), user_events_path(current_user) %>
       </h1>

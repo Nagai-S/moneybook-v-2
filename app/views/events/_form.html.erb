@@ -18,6 +18,7 @@
     <div class="row">
       <div class='<%= label_class %>'>
         <%= f.label :genre, "ジャンルを選択してください" %>
+        (<%= link_to "ジャンルを作成", new_user_genre_path %>)
       </div>
       <div class="<%= form_class %>">
         <%= f.collection_select :genre, current_user.genres.where(iae: iae), :id, :name, {selected: genre_id_for_event(iae)}, {class: "form-control", id: "select"} %>

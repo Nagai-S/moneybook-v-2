@@ -8,16 +8,6 @@
       <%= link_to "アカウントを追加してください。", new_user_account_path %>
     </li>
     <% end %>
-    <% unless current_user.genres.where(iae: false).exists? %>
-    <li>
-      <%= link_to "支出のジャンルを追加してください。", new_user_genre_path(iae: false) %>
-    </li>
-    <% end %>
-    <% unless current_user.genres.where(iae: true).exists? %>
-    <li>
-      <%= link_to "収入のジャンルを追加してください。", new_user_genre_path(iae: true) %>
-    </li>
-    <% end %>
   </div>
   <% end %>
   <div class="ex_body col-12 col-sm-6 color-normal">
