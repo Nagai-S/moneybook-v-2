@@ -7,12 +7,16 @@ class GenresController < ApplicationController
 
   def new
     @genre=current_user.genres.build(iae: params[:iae])
+    session[:previous_url]=request.referer
   end
 
   def create
     @genre=current_user.genres.build(genres_params)
     if @genre.save
-      redirect_to user_genres_path(current_user.id)
+      unless Rails.env.test?
+        redirect_to session[:previous_url]
+        session[:previous_url].clear
+      end
     else
       flash.now[:danger]="ジャンルの作成に失敗しました。"
       render 'new'

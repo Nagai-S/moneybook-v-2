@@ -48,10 +48,11 @@ class EventsController < ApplicationController
     before_inf=@event.before_change_action
     @event.destroy
     before_inf[:account].plus(before_inf[:value])
-    redirect_to user_events_path(current_user)
+    redirect_to request.referer unless Rails.env.test?
   end
   
   def edit
+    session[:previous_url]=request.referer
   end
 
   def update
@@ -61,10 +62,13 @@ class EventsController < ApplicationController
     if @event.update(events_params)
       before_inf[:account].plus(before_inf[:value])
       @event.after_change_action(@event.pay_date)
-      redirect_to user_events_path(current_user)
+      unless Rails.env.test?
+        redirect_to session[:previous_url]
+        session[:previous_url].clear
+      end
     else
       flash.now[:danger]="イベントの編集に失敗しました。"
-      render "new"
+      render "edit"
     end
   end
   

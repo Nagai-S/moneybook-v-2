@@ -19,6 +19,8 @@
           <th>ジャンル</th>
           <th>メモ</th>
           <th>金額</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
 
@@ -31,6 +33,8 @@
           <td><%= not_pay_event.genre.name %></td>
           <td><%= not_pay_event.memo if not_pay_event.memo %></td>
           <td>¥<%= not_pay_event.value.to_s(:delimited) %></td>
+          <td><%= link_to "削除", user_event_path(params[:user_id], not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          <td><%= link_to "編集", edit_user_event_path(params[:user_id], not_pay_event.id) %></td>
         </tr>
       </tbody>
       <% end %>
@@ -50,6 +54,8 @@
           <th>日付</th>
           <th>振替先アカウント</th>
           <th>金額</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
 
@@ -62,6 +68,8 @@
           <td><%= l not_pay_ax.date %></td>
           <td><%= not_pay_ax.to_account.name %></td>
           <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
+          <td><%= link_to "削除", user_account_exchange_path(params[:user_id], not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          <td><%= link_to "編集", edit_user_account_exchange_path(params[:user_id], not_pay_ax.id) %></td>
         </tr>
       </tbody>
       <% end %>

@@ -30,10 +30,11 @@ class AccountExchangesController < ApplicationController
     @ax.destroy
     before_source_inf[:account].plus(before_source_inf[:value])
     before_to_inf[:account].plus(before_to_inf[:value])
-    redirect_to user_account_exchanges_path(current_user)
+    redirect_to request.referer unless Rails.env.test?
   end
   
   def edit
+    session[:previous_url]=request.referer
   end
 
   def update
@@ -44,10 +45,13 @@ class AccountExchangesController < ApplicationController
       before_source_inf[:account].plus(before_source_inf[:value])
       before_to_inf[:account].plus(before_to_inf[:value])
       @ax.after_change_action(@ax.pay_date)
-      redirect_to user_account_exchanges_path(current_user)
+      unless Rails.env.test?
+        redirect_to session[:previous_url]
+        session[:previous_url].clear
+      end
     else
       flash.now[:danger]="振替の編集に失敗しました。"
-      render "new"
+      render "edit"
     end
   end
   
