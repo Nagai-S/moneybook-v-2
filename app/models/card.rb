@@ -44,7 +44,7 @@ class Card < ApplicationRecord
     end
 
     if last_date_event && last_date_ax
-      last_date= last_date_event>last_date_ax ? last_date_event : last_date_ax
+      last_date= last_date_event>last_date_ax ? last_date_ax : last_date_event
     elsif last_date_event
       last_date=last_date_event
     elsif last_date_ax

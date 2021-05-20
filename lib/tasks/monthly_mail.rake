@@ -1,7 +1,7 @@
 namespace :monthly_mail do
   desc "クレジットカードの引き落とし日の1週間前に利用額をメールする"
   task send_card_mail: :environment do
-    aweek_later=Date.today.next_day(7)
+    aweek_later=Date.today.next_day(6)
     Card.all.each do |card|
       pay_date=MyFunction::FlexDate.return_date(
         aweek_later.year,
