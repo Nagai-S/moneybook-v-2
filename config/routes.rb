@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       resources :users do
         resources :events, only: :create
       end
+
+      get "daily_email" => "auth#daily_email"
     end
   end
   

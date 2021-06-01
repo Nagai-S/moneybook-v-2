@@ -11,7 +11,7 @@ class Api::EventsController < Api::ApplicationController
       @event.after_change_action(@event.pay_date)
       render json: {message: "success"}
     else
-      render json: {messate: "error", errors: @event.errors}
+      render json: {messate: "error", errors: @event.errors}, status: 404
     end    
   end
   
