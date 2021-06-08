@@ -82,11 +82,13 @@ class EventsController < ApplicationController
     end
 
     def association_model_update
-      @event.update(genre_id: params[:event][:genre])
+      @event.genre_id=params[:event][:genre]
       if params[:event][:account_or_card]=="0"
-        @event.update(account_id: params[:event][:account], card_id: nil)
+        @event.account_id=params[:event][:account]
+        @event.card_id=nil
       elsif params[:event][:account_or_card]=="1"
-        @event.update(card_id: params[:event][:card], account_id: nil)
+        @event.card_id=params[:event][:card]
+        @event.account_id=nil
       end
     end
 end

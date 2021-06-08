@@ -13,7 +13,7 @@ class CardsController < ApplicationController
 
   def create
     @card=current_user.cards.build(cards_params)
-    @card.update(account_id: params[:card][:account])
+    @card.account_id=params[:card][:account]
     if @card.save
       redirect_to user_cards_path
     else
@@ -41,7 +41,7 @@ class CardsController < ApplicationController
   end
 
   def update
-    @card.update(account_id: params[:card][:account])
+    @card.account_id=params[:card][:account]
     if @card.update(cards_params)
       @card.after_update_action
       redirect_to user_cards_path(params[:user_id])

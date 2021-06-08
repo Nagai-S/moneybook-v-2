@@ -65,11 +65,13 @@ class AccountExchangesController < ApplicationController
     end
 
     def association_model_update
-      @ax.update(to_id: params[:account_exchange][:to_account])
+      @ax.to_id=params[:account_exchange][:to_account]
       if params[:account_exchange][:account_or_card]=="0"
-        @ax.update(source_id: params[:account_exchange][:source_account], card_id: nil)
+        @ax.source_id=params[:account_exchange][:source_account]
+        @ax.card_id=nil
       elsif params[:account_exchange][:account_or_card]=="1"
-        @ax.update(card_id: params[:account_exchange][:card], source_id: nil)
+        @ax.card_id=params[:account_exchange][:card]
+        @ax.source_id=nil
       end
     end
     
