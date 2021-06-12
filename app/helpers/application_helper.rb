@@ -16,8 +16,15 @@ module ApplicationHelper
       event.account.name
     elsif event.card
       event.card.name
+    else
+      deleted_message
     end
   end
+
+  def deleted_message
+    "削除済み"
+  end
+  
 
   def default_meta_tags
     {

@@ -30,11 +30,13 @@
       <tbody>
         <tr>
           <td><%= l not_pay_event.date %></td>
-          <td><%= not_pay_event.genre.name %></td>
+          <td><%= not_pay_event.genre ? not_pay_event.genre.name : deleted_message %></td>
           <td><%= not_pay_event.memo if not_pay_event.memo %></td>
           <td>¥<%= not_pay_event.value.to_s(:delimited) %></td>
+          <% unless not_pay_event.parents_deleted %>
           <td><%= link_to "削除", user_event_path(params[:user_id], not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
           <td><%= link_to "編集", edit_user_event_path(params[:user_id], not_pay_event.id) %></td>
+          <% end %>
         </tr>
       </tbody>
       <% end %>
@@ -66,10 +68,12 @@
       <tbody>
         <tr>
           <td><%= l not_pay_ax.date %></td>
-          <td><%= not_pay_ax.to_account.name %></td>
+          <td><%= not_pay_ax.to_account ? not_pay_ax.to_account.name : deleted_message %></td>
           <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
+          <% unless not_pay_ax.parents_deleted %>
           <td><%= link_to "削除", user_account_exchange_path(params[:user_id], not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
           <td><%= link_to "編集", edit_user_account_exchange_path(params[:user_id], not_pay_ax.id) %></td>
+          <% end %>
         </tr>
       </tbody>
       <% end %>

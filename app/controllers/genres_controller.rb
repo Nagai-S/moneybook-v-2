@@ -24,14 +24,9 @@ class GenresController < ApplicationController
   end
   
   def destroy
-    if @genre.events.exists?
-      index
-      flash.now[:danger]="このジャンルを使用したイベントがあるので削除できません。"
-      render "index"
-    else
-      @genre.destroy
-      redirect_to user_genres_path(params[:user_id])
-    end
+    @genre.before_destroy_action
+    @genre.destroy
+    redirect_to user_genres_path(params[:user_id])
   end
   
   def edit

@@ -66,6 +66,16 @@ module MyFunction
       end
       return pay_day
     end
+
+    def account_deleted
+      account_nil=self.account==nil
+      card_nil=self.card==nil
+      if card_nil && account_nil
+        return true
+      else
+        return false
+      end
+    end
     
   end
 end

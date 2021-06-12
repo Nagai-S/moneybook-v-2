@@ -27,7 +27,7 @@
     </div>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">振り替え先アカウント</div>
-      <li><%= ax.to_account.name %></li>
+      <li><%= ax.to_account ? ax.to_account.name : deleted_message %></li>
     </div>
     <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
       <div class="mobile_th">金額</div>
@@ -37,12 +37,14 @@
       <div class="mobile_th"><%= "引き落とし日" if ax.pay_date %></div>
       <li><%= l ax.pay_date if ax.pay_date %></li>
     </div>
+    <% unless ax.parents_deleted %>
     <li class="col-6 col-sm-1">
       <%= link_to "削除", user_account_exchange_path(params[:user_id], ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
     </li>
     <li class="col-6 col-sm-1">
       <%= link_to "編集", edit_user_account_exchange_path(params[:user_id], ax.id) %>
     </li>
+    <% end %>
   </div>
   <% a=ax.date %>
   <% end %>

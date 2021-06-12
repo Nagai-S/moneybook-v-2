@@ -18,5 +18,13 @@ class Event < ApplicationRecord
   def to_account
     return false
   end
+
+  def parents_deleted
+    if self.account_deleted || self.genre==nil
+      return true
+    else
+      return false
+    end
+  end
   
 end

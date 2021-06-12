@@ -24,9 +24,17 @@ class AccountExchange < ApplicationRecord
     return {account: self.to_account, value: -self.value}
   end
 
+  def parents_deleted
+    if self.account_deleted || self.to_account==nil
+      return true
+    else
+      return false
+    end
+  end
+
   private
     def source_not_equal_to_to
-      if source_id==to_id
+      if source_id==to_id && source_id!=nil && to_id!=nil
         errors.add(:source_id, "と振替先アカウントを別にしてください。")
       end
     end

@@ -3,6 +3,7 @@ class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
+  before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
 
   def index
     @events=current_user.events.includes(:account,:card,:genre).page(params[:page]).per(80)
@@ -79,6 +80,10 @@ class EventsController < ApplicationController
 
     def select_event
       @event=Event.find_by(:user_id => params[:user_id], :id => params[:id])
+    end
+
+    def confirm_parents_deleted
+      redirect_to user_events_path(current_user) if @event.parents_deleted
     end
 
     def association_model_update

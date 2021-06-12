@@ -22,10 +22,10 @@ class Card < ApplicationRecord
 
   def before_destroy_action
     self.events.each do |event|
-      event.update(card_id: nil, account_id: self.account.id, pay_date: nil)
+      event.update(card_id: nil)
     end
     self.account_exchanges.each do |ax|
-      ax.update(card_id: nil, source_id: self.account.id, pay_date: nil)
+      ax.update(card_id: nil)
     end
   end
 

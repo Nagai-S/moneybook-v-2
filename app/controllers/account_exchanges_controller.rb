@@ -2,6 +2,7 @@ class AccountExchangesController < ApplicationController
   before_action :authenticate_user!
   before_action :select_ax, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
+  before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
   
   def index
     @axs=current_user.account_exchanges.includes(:account,:card,:to_account).page(params[:page])
@@ -62,6 +63,10 @@ class AccountExchangesController < ApplicationController
 
     def select_ax
       @ax=AccountExchange.find_by(:user_id => params[:user_id], :id => params[:id])
+    end
+
+    def confirm_parents_deleted
+      redirect_to user_accounts_path(current_user) if @ax.parents_deleted
     end
 
     def association_model_update

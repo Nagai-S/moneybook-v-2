@@ -16,7 +16,7 @@
     <li class="col-sm-2 offset-sm-0  pc_date"><%= l event.date unless a==event.date %></li>
     <div class="col-6 col-sm-1">
       <div class="mobile_th">ジャンル</div>
-      <li><%= event.genre.name %></li>
+      <li><%= event.genre ? event.genre.name : deleted_message %></li>
     </div>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">アカウント</div>
@@ -34,12 +34,14 @@
       <div class="mobile_th"><%= "引き落とし日" if event.pay_date %></div>
       <li><%= l event.pay_date if event.pay_date %></li>
     </div>
+    <% unless event.parents_deleted %>
     <li class="col-6 col-sm-1">
       <%= link_to "削除", user_event_path(params[:user_id], event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
     </li>
     <li class="col-6 col-sm-1">
       <%= link_to "編集", edit_user_event_path(params[:user_id], event.id) %>
     </li>
+    <% end %>
   </div>
   <% a=event.date %>
   <% end %>

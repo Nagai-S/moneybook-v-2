@@ -1,7 +1,7 @@
 class Account < ApplicationRecord
   belongs_to :user
   has_many :cards
-  has_many :events, dependent: :destroy
+  has_many :events
   has_many :account_exchanges_to, class_name:"AccountExchange", foreign_key: :to_id
   has_many :account_exchanges_source, class_name:"AccountExchange", foreign_key: :source_id
 
@@ -27,6 +27,18 @@ class Account < ApplicationRecord
       not_pay_value+=card.account_exchanges.where(pon: false).sum(:value)
     end
     return self.value-not_pay_value
+  end
+
+  def before_destroy_action
+    self.events.each do |event|
+      event.update(account_id: nil)
+    end
+    self.account_exchanges_to.each do |ax|
+      ax.update(to_id: nil)
+    end
+    self.account_exchanges_source.each do |ax|
+      ax.update(source_id: nil)
+    end
   end
   
 end
