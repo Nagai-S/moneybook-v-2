@@ -12,15 +12,15 @@
 
 ActiveRecord::Schema.define(version: 2021_02_28_023019) do
 
-  create_table "account_exchanges", force: :cascade do |t|
-    t.integer "user_id", null: false
+  create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.date "date"
     t.integer "value"
     t.boolean "pon"
     t.date "pay_date"
-    t.integer "card_id"
-    t.integer "source_id"
-    t.integer "to_id"
+    t.bigint "card_id"
+    t.bigint "source_id"
+    t.bigint "to_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["card_id"], name: "index_account_exchanges_on_card_id"
@@ -29,38 +29,38 @@ ActiveRecord::Schema.define(version: 2021_02_28_023019) do
     t.index ["user_id"], name: "index_account_exchanges_on_user_id"
   end
 
-  create_table "accounts", force: :cascade do |t|
+  create_table "accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.integer "value"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
-  create_table "cards", force: :cascade do |t|
+  create_table "cards", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.integer "pay_date"
     t.integer "month_date"
-    t.integer "user_id", null: false
-    t.integer "account_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_cards_on_account_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.date "date"
     t.date "pay_date"
     t.string "memo"
     t.integer "value"
     t.boolean "iae", default: false
     t.boolean "pon", default: false
-    t.integer "user_id", null: false
-    t.integer "genre_id"
-    t.integer "account_id"
-    t.integer "card_id"
+    t.bigint "user_id", null: false
+    t.bigint "genre_id"
+    t.bigint "account_id"
+    t.bigint "card_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_events_on_account_id"
@@ -69,16 +69,16 @@ ActiveRecord::Schema.define(version: 2021_02_28_023019) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
-  create_table "genres", force: :cascade do |t|
+  create_table "genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.boolean "iae", default: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_genres_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
