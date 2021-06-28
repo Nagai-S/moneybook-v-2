@@ -5,7 +5,7 @@ class Api::EventsController < Api::ApplicationController
   def index
     user=currentUser
     events=user.events
-    return json: {events: events}
+    render json: {events: events}
   end
   
   def create
