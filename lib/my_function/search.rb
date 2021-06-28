@@ -47,7 +47,7 @@ module MyFunction
     end
     
     def search_money(events)
-      max_value=current_user.events.reorder(nil).order(value: :desc).first.value
+      max_value=current_user.events.reorder(nil).order(value: :desc).first.value if current_user.events.exists?
       @money_or_not=params[:money_or_not]
       @small_value=params[:money1]
       @large_value=params[:money2]=="" ? max_value : params[:money2]

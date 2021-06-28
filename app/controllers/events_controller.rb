@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   include MyFunction::Search
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]
-  before_action :to_explanation, only: [:index, :new]
+  before_action :to_explanation, only: [:index, :new, :search]
   before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
 
   def index
