@@ -2,6 +2,12 @@ class Api::EventsController < Api::ApplicationController
   before_action :authenticate_user!
   before_action :currentUser
 
+  def index
+    user=currentUser
+    events=user.events
+    return json: {events: events}
+  end
+  
   def create
     user=currentUser
     @event=user.events.build(events_params)

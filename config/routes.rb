@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
 
       resources :users do
-        resources :events, only: :create
+        resources :events, only: [:create, :index]
       end
 
       get "daily_email" => "auth#daily_email"
