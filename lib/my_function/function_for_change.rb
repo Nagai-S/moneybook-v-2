@@ -25,14 +25,13 @@ module MyFunction
       end
     end
   
-    def change_pon(bool) #boolには変化前のaxやeventのponを入れる
-      if self.pay_date<=Date.today
-        self.card.account.plus(-self.value) unless bool
-        self.update(pon: true)
-      else
-        self.card.account.plus(self.value) if bool
-        self.update(pon: false)
+    def change_pon(event_pon) #boolには変化前のaxやeventのponを入れる
+      if self.pay_date<=Date.today && !event_pon
+        self.card.account.plus(-self.value)
+      elsif self.pay_date>Date.today && event_pon
+        self.card.account.plus(self.value)
       end
+      self.pay_date<=Date.today ? self.update(pon: true) : self.update(pon: false)
     end
   
     def before_change_action

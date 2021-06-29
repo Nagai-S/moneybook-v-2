@@ -26,7 +26,7 @@ $ mysql -u root -p -h localhost -P 3306 --protocol=tcp
 
 ### dockerのshellに入るには
 ```
-$ docker-compose run rails bash
+$ docker-compose run --rm rails bash
 ```
 
 ### dockerを停止
