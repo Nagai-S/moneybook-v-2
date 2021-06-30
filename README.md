@@ -24,6 +24,8 @@ $ docker-compose run --rm rails bundle exec rails db:migrate
 $ mysql -u root -p -h localhost -P 3306 --protocol=tcp
 ```
 
+パスワードを要求されるのでpasswordと入力
+
 ### dockerのshellに入るには
 ```
 $ docker-compose run --rm rails bash
