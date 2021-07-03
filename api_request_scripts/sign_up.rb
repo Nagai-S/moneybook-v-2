@@ -10,4 +10,3 @@ uri=URI.parse("http://localhost:3000/api/v1/auth")
 response=Net::HTTP.post_form(uri, params)
 
 p response.code
-p response.body
