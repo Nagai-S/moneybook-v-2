@@ -31,13 +31,13 @@ user.genres.create(
 
 user.accounts.create(
   [
-    {name: "楽天銀行", value: "0"},
-    {name: "京都中央信用金庫", value: "0"},
+    {name: "楽天銀行", value: 272315},
+    {name: "京都中央信用金庫", value: 48887},
     {name: "メルペイ", value: "0"},
-    {name: "ゆうちょ", value: "0"},
-    {name: "現金", value: "0"},
-    {name: "PayPay", value: "0"},
-    {name: "SoftBankCard", value: "0"},
+    {name: "ゆうちょ", value: 278080},
+    {name: "現金", value: 54835},
+    {name: "PayPay", value: 216},
+    {name: "SoftBankCard", value: 111},
   ]
 )
 
