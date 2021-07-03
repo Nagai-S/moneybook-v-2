@@ -103,7 +103,7 @@ def create_ax(params, header_info)
 end
 
 def create_event(params, header_info)
-  uri=URI.parse("http://localhost:3000/api/v1/account_exchanges")
+  uri=URI.parse("http://localhost:3000/api/v1/events")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === "https"
 
@@ -115,6 +115,7 @@ def create_event(params, header_info)
   }
   
   response=http.post(uri.path, params.to_json, headers)
+  p response.body
 end
 
 def all_axs_create
@@ -238,5 +239,5 @@ end
 
 all_events_create
 p "all events create"
-all_axs_create
-p "all account exchanges create"
+# all_axs_create
+# p "all account exchanges create"

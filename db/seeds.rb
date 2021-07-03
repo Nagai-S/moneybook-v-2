@@ -39,7 +39,7 @@ user.accounts.create(
     {name: "PayPay", value: 216},
     {name: "SoftBankCard", value: 111},
     {name: "eMAXIS S&P500", value: 0},
-    {name: "楽天全米index fund" value: 0},
+    {name: "楽天全米index fund", value: 0},
   ]
 )
 
