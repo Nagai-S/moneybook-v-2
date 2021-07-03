@@ -7,17 +7,14 @@ Dockerを[インストール](https://hub.docker.com/editions/community/docker-c
 ### 手順
 1. このリポジトリをローカルにclone
 2. terminalでこのリポジトリのあるディレクトリまで移動
-3. 以下のコマンドを上から順に実行
+3. 以下のコマンドを実行
 ```
-$ docker-compose build
-$ docker-compose run --rm rails yarn install
-$ docker-compose down
-$ docker-compose up
-$ docker-compose run --rm rails bundle exec rails db:create
-$ docker-compose run --rm rails bundle exec rails db:migrate
+$ bash database_init.sh
 ```
 4. http://localhost:3000
 にアクセス
+5. email: a@gmail.com, password: asdfghjkl でログインする
+
 
 ### データベースにアクセスするには
 ```
@@ -40,6 +37,12 @@ $ docker-compose down
 ```
 $ docker-compose up
 ```
+
+### .envファイルを作成するとき
+```
+$ cp env_file_model.txt .env
+```
+で.envに必要な変数を入れていく
 
 
 

@@ -1,6 +1,6 @@
-namespace :daily_change_pon do
+namespace :daily_change do
   desc "引き落とし日をすぎていないか確認してすぎていたら変更する"
-  task check_pay_date: :environment do
+  task change_pon: :environment do
     Event.where(pon: false).each do |event|
       event.change_pon(false)
     end
