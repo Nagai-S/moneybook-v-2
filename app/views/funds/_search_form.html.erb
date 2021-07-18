@@ -1,0 +1,14 @@
+<div class="funds_search">
+  <%= form_with(url: funds_search_path, :method => :get, class: "form1", local: true) do |f| %>
+  <div class="search_row row">
+    <div class="col-12 col-sm-8 offset-sm-2">
+      <%= f.text_field(:name, value: @name, placeholder: "投資信託名を入力してください", class: "form-control", id: "name") %>
+    </div>
+
+    <div class="fund_search_btn col-12 col-sm-2">
+      <%= f.submit "検索", class: "btn btn-primary", role: "button" %>
+    </div>
+  </div>
+
+  <% end %>
+</div>

@@ -418,6 +418,14 @@ header .headline{
   margin-top: 20px;
 }
 
+#funds{
+  width: auto;
+  margin: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
 .table caption{
   text-align: center;
   font-weight: bold;
@@ -768,9 +776,19 @@ form .btn{
   margin-top: 10px;
 }
 
+.fund_search_btn{
+  width: 100%;
+}
+
 .search_btn .btn{
   margin: auto;
   width: 30%;
+}
+
+.result_num_of_funds{
+  text-align: left;
+  font-size: 25px;
+  margin-left: 5%;
 }
 
 @media (max-width: 670px) {

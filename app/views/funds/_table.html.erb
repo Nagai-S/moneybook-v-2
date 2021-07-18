@@ -1,0 +1,28 @@
+<p class="result_num_of_funds">
+検索結果：<%= @result_num %>件
+<p>
+<div class="table_contents">
+  <%= paginate @funds %>
+  <div class="table-responsive">
+    <table class="table" id="funds">
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <% @funds.each do |fund| %>
+      <tbody>
+        <tr>
+          <td>
+            <%= fund.name %>
+          </td>
+          <td><%= link_to "自分の資産に追加", "#" %></td>
+        </tr>
+      </tbody>
+      <% end %>
+    </table>
+    <%= paginate @funds %>
+  </div>
+</div>

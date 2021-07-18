@@ -20,7 +20,7 @@ echo "complete rake db:seed"
 if [ -e ".env" ]; then
   echo ".env exists"
   ruby api_request_scripts/data_registration.rb
-  docker-compose run --rm rails bundle exec rake modify_db:modify_event modify_db:modify_ax
+  docker-compose run --rm rails bundle exec rake modify_db:modify_init_db
   echo "complete all events database from production"
 fi
 

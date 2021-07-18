@@ -2,19 +2,19 @@ require 'rails_helper'
 
 RSpec.describe AccountExchangesController do
   before do
-    @user=create(:user)
+    @user = create(:user)
     @user.confirm
     sign_in @user
-    @account1=@user.accounts.create(name: "account1", value: 1000)
-    @account2=@user.accounts.create(name: "account2", value: 2000)
-    @account3=@user.accounts.create(name: "account3", value: 3000)
-    @card1=@user.cards.create(
+    @account1 = @user.accounts.create(name: "account1", value: 1000)
+    @account2 = @user.accounts.create(name: "account2", value: 2000)
+    @account3 = @user.accounts.create(name: "account3", value: 3000)
+    @card1 = @user.cards.create(
       name: "card1", 
       pay_date: 10, 
       month_date: 20, 
       account_id: @account3.id
     )
-    @card2=@user.cards.create(
+    @card2 = @user.cards.create(
       name: "card2", 
       pay_date: 20, 
       month_date: 10, 
@@ -25,7 +25,7 @@ RSpec.describe AccountExchangesController do
   describe "create" do
     describe "createに成功" do
       it "accountから振り替え" do
-        params={
+        params = {
           user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
@@ -48,7 +48,7 @@ RSpec.describe AccountExchangesController do
       end
       
       it "card未払いから振り替え" do
-        params={
+        params = {
           user_id: @user.id,
           account_exchange:{
             "date(1i)": Date.today.year,
@@ -73,7 +73,7 @@ RSpec.describe AccountExchangesController do
       end
       
       it "card支払い済みから振り替え" do
-        params={
+        params = {
           user_id: @user.id,
           account_exchange:{
             "date(1i)": Date.today.year-1,
@@ -98,7 +98,7 @@ RSpec.describe AccountExchangesController do
 
     describe "createに失敗" do
       it "accountから振り替え" do
-        params={
+        params = {
           user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
@@ -124,7 +124,7 @@ RSpec.describe AccountExchangesController do
 
   describe "destroy" do
     it "accountからの振り替えをdestroy" do
-      ax=@user.account_exchanges.create(
+      ax = @user.account_exchanges.create(
         value: 100,
         source_id: @account1.id,
         date: Date.today,
@@ -141,7 +141,7 @@ RSpec.describe AccountExchangesController do
     end
     
     it "card未払いからの振り替えをdestroy" do
-      ax=@user.account_exchanges.create(
+      ax = @user.account_exchanges.create(
         value: 100,
         card_id: @card1.id,
         date: Date.today,
@@ -161,7 +161,7 @@ RSpec.describe AccountExchangesController do
     end
     
     it "card支払い済みからの振り替えをdestroy" do
-      ax=@user.account_exchanges.create(
+      ax = @user.account_exchanges.create(
         value: 100,
         card_id: @card1.id,
         date: Date.today.prev_year(1),
@@ -196,14 +196,14 @@ RSpec.describe AccountExchangesController do
           }
         }}
         it "accountの振り替えから変更" do
-          ax=@user.account_exchanges.create(
+          ax = @user.account_exchanges.create(
             value: 100,
             source_id: @account3.id,
             date: Date.today,
             to_id: @account2.id,
             pon: true,
           )
-          params[:id]=ax.id
+          params[:id] = ax.id
           expect{
             put :update, params: params  
           }.to change{
@@ -216,7 +216,7 @@ RSpec.describe AccountExchangesController do
         end
         
         it "card未払いの振り替えから変更" do
-          ax=@user.account_exchanges.create(
+          ax = @user.account_exchanges.create(
             value: 100,
             card_id: @card1.id,
             date: Date.today,
@@ -224,7 +224,7 @@ RSpec.describe AccountExchangesController do
             pon: false,
           )
           ax.update(pay_date: ax.decide_pay_day)
-          params[:id]=ax.id
+          params[:id] = ax.id
           expect{
             put :update, params: params
           }.to change{
@@ -239,7 +239,7 @@ RSpec.describe AccountExchangesController do
         end
 
         it "card支払い済みの振り替えから変更" do
-          ax=@user.account_exchanges.create(
+          ax = @user.account_exchanges.create(
             value: 100,
             card_id: @card1.id,
             date: Date.today.prev_year(1),
@@ -247,7 +247,7 @@ RSpec.describe AccountExchangesController do
             pon: true,
           )
           ax.update(pay_date: ax.decide_pay_day)
-          params[:id]=ax.id
+          params[:id] = ax.id
           expect{
             put :update, params: params
           }.to change{
@@ -275,14 +275,14 @@ RSpec.describe AccountExchangesController do
           }
         }}
         it "別のaccountに変更" do
-          ax=@user.account_exchanges.create(
+          ax = @user.account_exchanges.create(
             value: 100,
             source_id: @account1.id,
             date: Date.today,
             to_id: @account3.id,
             pon: true,
           )
-          params[:id]=ax.id
+          params[:id] = ax.id
           expect{
             put :update, params: params  
           }.to change{
@@ -311,14 +311,14 @@ RSpec.describe AccountExchangesController do
         }
       }}
       it "振り替え元がaccountの振り替えから変更" do
-        ax=@user.account_exchanges.create(
+        ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account3.id,
           date: Date.today,
           to_id: @account2.id,
           pon: true,
         )
-        params[:id]=ax.id
+        params[:id] = ax.id
         expect{
           put :update, params: params  
         }.to change{

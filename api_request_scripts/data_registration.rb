@@ -3,51 +3,53 @@ require "json"
 require 'dotenv/load'
 
 def a_id_trans(a_id)
-  if a_id==13
-    account_id=1
-  elsif a_id==12
-    account_id=3
-  elsif a_id==15
-    account_id=9
-  elsif a_id==14
-    account_id=8
+  if a_id == 13
+    account_id = 1
+  elsif a_id == 12
+    account_id = 3
+  elsif a_id == 15
+    account_id = 9
+  elsif a_id == 14
+    account_id = 8
+  elsif a_id == 16
+    account_id = 10
   else
-    account_id=a_id
+    account_id = a_id
   end
 
   return account_id
 end
 
 def g_id_trans(g_id)
-  if g_id==18
-    genre_id=14
-  elsif g_id==20
-    genre_id=15
+  if g_id == 18
+    genre_id = 14
+  elsif g_id == 20
+    genre_id = 15
   else
-    genre_id=g_id
+    genre_id = g_id
   end
 
   return genre_id
 end
 
 def c_id_trans(c_id)
-  if c_id==7
-    card_id=3
+  if c_id == 7
+    card_id = 3
   else
-    card_id=c_id
+    card_id = c_id
   end
 
   return card_id
 end
 
 def login
-  params={
+  params = {
     "email" => "a@gmail.com",
     "password" => "asdfghjkl",
   }
 
-  uri=URI.parse("http://localhost:3000/api/v1/auth/sign_in")
-  response=Net::HTTP.post_form(uri, params)
+  uri = URI.parse("http://localhost:3000/api/v1/auth/sign_in")
+  response = Net::HTTP.post_form(uri, params)
 
   return_hash = {
     "access_token" => response["access-token"],
@@ -66,7 +68,7 @@ def get_all_axs
     "uid" => ENV['PRODUCTION_UID'],
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
-  http.use_ssl = uri2.scheme === "https"
+  http.use_ssl = uri2.scheme == "https"
   response = http.get(uri2.path, headers)
 
   return JSON.parse(response.body)["axs"]
@@ -81,40 +83,40 @@ def get_all_events
     "uid" => ENV['PRODUCTION_UID'],
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
-  http.use_ssl = uri2.scheme === "https"
+  http.use_ssl = uri2.scheme == "https"
   response = http.get(uri2.path, headers)
 
   return JSON.parse(response.body)["events"]
 end
 
 def create_ax(params, header_info)
-  uri=URI.parse("http://localhost:3000/api/v1/account_exchanges")
+  uri = URI.parse("http://localhost:3000/api/v1/account_exchanges")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = uri.scheme === "https"
+  http.use_ssl = uri.scheme == "https"
 
-  headers={
+  headers = {
     "Content-Type" => "application/json",
     "access-token" => header_info["access_token"],
     "client" => header_info["client"],
     "uid" => "a@gmail.com",
   }
   
-  response=http.post(uri.path, params.to_json, headers)
+  response = http.post(uri.path, params.to_json, headers)
 end
 
 def create_event(params, header_info)
-  uri=URI.parse("http://localhost:3000/api/v1/events")
+  uri = URI.parse("http://localhost:3000/api/v1/events")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = uri.scheme === "https"
+  http.use_ssl = uri.scheme == "https"
 
-  headers={
+  headers = {
     "Content-Type" => "application/json",
     "access-token" => header_info["access_token"],
     "client" => header_info["client"],
     "uid" => "a@gmail.com",
   }
   
-  response=http.post(uri.path, params.to_json, headers)
+  response = http.post(uri.path, params.to_json, headers)
   p response.body
 end
 
@@ -199,7 +201,7 @@ end
 def a_event_create
   header_info = login
   
-  params={
+  params = {
     event: {
       "date(1i)" => "2021",
       "date(2i)" => "7",
@@ -219,7 +221,7 @@ end
 def a_ax_create
   header_info = login
   
-  params={
+  params = {
     account_exchange: {
       "date(1i)" => "2021",
       "date(2i)" => "7",

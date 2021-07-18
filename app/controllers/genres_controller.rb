@@ -6,19 +6,19 @@ class GenresController < ApplicationController
   end
 
   def new
-    @genre=current_user.genres.build(iae: params[:iae])
-    session[:previous_url]=request.referer
+    @genre = current_user.genres.build(iae: params[:iae])
+    session[:previous_url] = request.referer
   end
 
   def create
-    @genre=current_user.genres.build(genres_params)
+    @genre = current_user.genres.build(genres_params)
     if @genre.save
       unless Rails.env.test?
         redirect_to session[:previous_url]
         session[:previous_url].clear
       end
     else
-      flash.now[:danger]="ジャンルの作成に失敗しました。"
+      flash.now[:danger] = "ジャンルの作成に失敗しました。"
       render 'new'
     end
   end
@@ -36,7 +36,7 @@ class GenresController < ApplicationController
     if @genre.update(genres_params)
       redirect_to user_genres_path(params[:user_id])
     else
-      flash.now[:danger]="ジャンルの編集に失敗しました。"
+      flash.now[:danger] = "ジャンルの編集に失敗しました。"
       render "edit"
     end
   end
@@ -47,7 +47,7 @@ class GenresController < ApplicationController
     end
 
     def select_genre
-      @genre=Genre.find_by(:user_id => params[:user_id], :id => params[:id])
+      @genre = Genre.find_by(user_id: params[:user_id], id: params[:id])
     end
     
 end

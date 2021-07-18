@@ -51,7 +51,7 @@
           <li><%= link_to "新規入力", new_user_event_path(current_user) %></li>
           <li><%= link_to "残高", user_accounts_path(current_user) %></li>
           <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
-          <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
+          <li><%= link_to "投資信託", funds_index_path %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
       </div>
@@ -62,6 +62,7 @@
           <li><%= link_to "新規入力", new_user_event_path(current_user) %></li>
           <li><%= link_to "残高", user_accounts_path(current_user) %></li>
           <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
+          <li><%= link_to "投資信託", funds_index_path %></li>
           <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
@@ -106,7 +107,7 @@
           <ul>
             <li class="top_bold">その他</li>
             <li><%= link_to "アプリの使い方", user_explanation_path(user_id: current_user.id) %></li>
-            <li><%= link_to "検索", user_search_path(current_user) %></li>
+            <li><%= link_to "検索", user_events_search_path(current_user) %></li>
             <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>

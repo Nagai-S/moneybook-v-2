@@ -2,20 +2,20 @@ require 'rails_helper'
 
 RSpec.describe EventsController do
   before do
-    @user=create(:user)
+    @user = create(:user)
     @user.confirm
     sign_in @user
-    @genre_ex=@user.genres.create(name: "genre_ex", iae: false)
-    @genre_in=@user.genres.create(name: "genre_in", iae: true)
-    @account1=@user.accounts.create(name: "account1", value: 1000)
-    @account2=@user.accounts.create(name: "account2", value: 2000)
-    @card1=@user.cards.create(
+    @genre_ex = @user.genres.create(name: "genre_ex", iae: false)
+    @genre_in = @user.genres.create(name: "genre_in", iae: true)
+    @account1 = @user.accounts.create(name: "account1", value: 1000)
+    @account2 = @user.accounts.create(name: "account2", value: 2000)
+    @card1 = @user.cards.create(
       name: "card1", 
       pay_date: 10, 
       month_date: 20, 
       account_id: @account1.id
     )
-    @card2=@user.cards.create(
+    @card2 = @user.cards.create(
       name: "card2", 
       pay_date: 20, 
       month_date: 10, 
@@ -26,7 +26,7 @@ RSpec.describe EventsController do
   describe "create" do
     describe "createに成功" do
       it "accountの収入で登録" do
-        params={
+        params = {
           user_id: @user.id,
           event:{
             iae: true,
@@ -49,7 +49,7 @@ RSpec.describe EventsController do
       end
 
       it "accountの支出で登録" do
-        params={
+        params = {
           user_id: @user.id,
           event:{
             iae: false,
@@ -68,7 +68,7 @@ RSpec.describe EventsController do
       end
 
       it "card未払いで登録" do
-        params={
+        params = {
           user_id: @user.id,
           event:{
             iae: false,
@@ -93,7 +93,7 @@ RSpec.describe EventsController do
       end
 
       it "card支払い済みで登録" do
-        params={
+        params = {
           user_id: @user.id,
           event:{
             iae: false,
@@ -114,7 +114,7 @@ RSpec.describe EventsController do
     
     describe "createに失敗" do
       it "accountで失敗" do
-        params={
+        params = {
           user_id: @user.id,
           event:{
             iae: false,
@@ -136,7 +136,7 @@ RSpec.describe EventsController do
 
   describe "destroy" do
     it "accountの支出の登録のdestroy" do
-      event=@user.events.create(
+      event = @user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -151,7 +151,7 @@ RSpec.describe EventsController do
     end
 
     it "accountの収入の登録のdestroy" do
-      event=@user.events.create(
+      event = @user.events.create(
         iae: true,
         memo: "",
         value: 100,
@@ -166,7 +166,7 @@ RSpec.describe EventsController do
     end
 
     it "card未払いの登録のdestroy" do
-      event=@user.events.create(
+      event = @user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -186,7 +186,7 @@ RSpec.describe EventsController do
     end
 
     it "card支払い済みの登録のdestroy" do
-      event=@user.events.create(
+      event = @user.events.create(
         iae: false,
         memo: "",
         value: 100,
@@ -221,7 +221,7 @@ RSpec.describe EventsController do
       }}
 
       it "accountの支出から変更" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: false,
           memo: "",
           value: 100,
@@ -230,7 +230,7 @@ RSpec.describe EventsController do
           date: Date.today,
           pon: true,
         )
-        params[:id]=event.id
+        params[:id] = event.id
         expect{put :update, params: params}.to change{
           Account.find(@account1.id).value
         }.by(100).and change{
@@ -239,7 +239,7 @@ RSpec.describe EventsController do
       end
 
       it "accountの収入から変更" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: true,
           memo: "",
           value: 100,
@@ -248,7 +248,7 @@ RSpec.describe EventsController do
           date: Date.today,
           pon: true,
         )
-        params[:id]=event.id
+        params[:id] = event.id
         expect{put :update, params: params}.to change{
           Account.find(@account1.id).value
         }.by(-100).and change{
@@ -257,7 +257,7 @@ RSpec.describe EventsController do
       end
 
       it "card未払いから変更" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: false,
           memo: "",
           value: 100,
@@ -267,7 +267,7 @@ RSpec.describe EventsController do
           pon: false,
         )
         event.update(pay_date: event.decide_pay_day)
-        params[:id]=event.id
+        params[:id] = event.id
         expect{put :update, params: params}.to change{
           Account.find(@card1.account.id).value
         }.by(0).and change{
@@ -278,7 +278,7 @@ RSpec.describe EventsController do
       end
 
       it "card支払い済みからpay_dateを指定して未払いへ変更" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: false,
           memo: "",
           value: 100,
@@ -288,11 +288,11 @@ RSpec.describe EventsController do
           pon: true,
         )
         event.update(pay_date: event.decide_pay_day)
-        params[:id]=event.id
-        params[:event][:account_or_card]="1"
-        params[:event]["pay_date(1i)"]=Date.today.year
-        params[:event]["pay_date(2i)"]=Date.today.next_month(1).month
-        params[:event]["pay_date(3i)"]=@card1.pay_date
+        params[:id] = event.id
+        params[:event][:account_or_card] = "1"
+        params[:event]["pay_date(1i)"] = Date.today.year
+        params[:event]["pay_date(2i)"] = Date.today.next_month(1).month
+        params[:event]["pay_date(3i)"] = @card1.pay_date
         expect{put :update, params: params}.to change{
           Account.find(@card1.account.id).value
         }.by(100).and change{
@@ -305,7 +305,7 @@ RSpec.describe EventsController do
       end
 
       it "card支払い済みから変更" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: false,
           memo: "",
           value: 100,
@@ -315,7 +315,7 @@ RSpec.describe EventsController do
           pon: true,
         )
         event.update(pay_date: event.decide_pay_day)
-        params[:id]=event.id
+        params[:id] = event.id
         expect{put :update, params: params}.to change{
           Account.find(@card1.account.id).value
         }.by(100).and change{
@@ -341,7 +341,7 @@ RSpec.describe EventsController do
         }
       }}
       it "accountの支出から失敗" do
-        event=@user.events.create(
+        event = @user.events.create(
           iae: false,
           memo: "",
           value: 100,
@@ -350,7 +350,7 @@ RSpec.describe EventsController do
           date: Date.today,
           pon: true,
         )
-        params[:id]=event.id
+        params[:id] = event.id
         expect{put :update, params: params}.to change{
           Account.find(@account1.id).value
         }.by(0).and change{

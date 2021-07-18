@@ -123,7 +123,7 @@ $(function () {
 
   $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
     var activated_tab = e.target; // activated tab
-    if(activated_tab.id==='account'){
+    if(activated_tab.id === 'account'){
       $("#account_or_card").val("0");
     }else{
       $("#account_or_card").val("1");

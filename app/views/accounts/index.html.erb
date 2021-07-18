@@ -51,7 +51,7 @@
           <tbody>
             <tr>
               <td>
-                <%= link_to account.name, user_search_path(
+                <%= link_to account.name, user_events_search_path(
                   account: account.id
                 ) %>
               </td>
@@ -95,7 +95,7 @@
             <tr>
               <td><%= "#{prev_month_event_date(i).year}年" unless a==prev_month_event_date(i).year %></td>
               <td class="border-right">
-                <%= link_to "#{prev_month_event_date(i).month}月", user_search_path(
+                <%= link_to "#{prev_month_event_date(i).month}月", user_events_search_path(
                   date_or_not: "1",
                   "date1(1i)": prev_month_event_date(i).year,
                   "date1(2i)": prev_month_event_date(i).month,
@@ -149,7 +149,7 @@
           <tbody>
             <tr>
               <td class="border-right">
-                <%= link_to "#{prev_year_event_date(i).year}年", user_search_path(
+                <%= link_to "#{prev_year_event_date(i).year}年", user_events_search_path(
                   date_or_not: "1",
                   "date1(1i)": prev_year_event_date(i).year,
                   "date1(2i)": "1",

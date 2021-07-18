@@ -40,6 +40,7 @@ user.accounts.create(
     {name: "SoftBankCard", value: 111},
     {name: "eMAXIS S&P500", value: 0},
     {name: "楽天全米index fund", value: 0},
+    {name: "楽天Pay", value: 0},
   ]
 )
 
@@ -50,3 +51,17 @@ user.cards.create(
     {name: "メルペイMasterCard", account_id: 3, pay_date: 1, month_date: 31},
   ]
 )
+
+if File.exist?(Rails.root+'all_funds.txt')
+  file = File.open(Rails.root+'all_funds.txt')
+  funds_array = file.readlines
+  data_length = (funds_array.length+1)/3
+  (data_length).times do |i|
+    j = i*3
+    str_id = funds_array[j]
+    name = funds_array[j+1]
+    name1 = NKF.nkf('-w -Z4', name)
+    name2 = NKF.nkf('-w -X', name1)
+    Fund.create(name: name2.delete("\n"), string_id: str_id.delete("\n"))
+  end
+end

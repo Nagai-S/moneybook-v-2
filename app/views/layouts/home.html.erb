@@ -102,7 +102,7 @@
           <ul>
             <li class="top_bold">その他</li>
             <li><%= link_to "アプリの使い方", user_explanation_path(user_id: current_user.id) %></li>
-            <li><%= link_to "検索", user_search_path(current_user) %></li>
+            <li><%= link_to "検索", user_events_search_path(current_user) %></li>
             <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>

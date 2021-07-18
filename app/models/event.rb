@@ -20,7 +20,7 @@ class Event < ApplicationRecord
   end
 
   def parents_deleted
-    if self.account_deleted || self.genre==nil
+    if self.account_deleted || self.genre == nil
       return true
     else
       return false

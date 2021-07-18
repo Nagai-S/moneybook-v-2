@@ -2,18 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Event do
   before do
-    @user=create(:user)
+    @user = create(:user)
     @user.confirm
-    @genre_ex=@user.genres.create(name: "genre_ex", iae: false)
-    @account1=@user.accounts.create(name: "account1", value: 1000)
-    @card1=@user.cards.create(
+    @genre_ex = @user.genres.create(name: "genre_ex", iae: false)
+    @account1 = @user.accounts.create(name: "account1", value: 1000)
+    @card1 = @user.cards.create(
       name: "card1", 
       pay_date: 10, 
       month_date: 20, 
       account_id: @account1.id
     )
 
-    @event=@user.events.create(
+    @event = @user.events.create(
       iae: false,
       memo: "",
       value: 100,
@@ -24,7 +24,7 @@ RSpec.describe Event do
     )
     @event.update(pay_date: @event.decide_pay_day)
 
-    @event1=@user.events.create(
+    @event1 = @user.events.create(
       iae: false,
       memo: "",
       value: 100,

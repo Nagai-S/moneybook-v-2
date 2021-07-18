@@ -1,7 +1,7 @@
 module MyFunction
   class FlexDate
     def self.valid_date?(year, month, day)
-      return Date.valid_date?(year, month, 10) && day>=1 && day<=31
+      return Date.valid_date?(year, month, 10) && day >= 1 && day <= 31
     end
   
     def self.return_date(year, month, day)

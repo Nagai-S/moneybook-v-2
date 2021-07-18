@@ -16,15 +16,15 @@ class Account < ApplicationRecord
   }
 
   def plus(value)
-    now_value=self.value
+    now_value = self.value
     self.update(value: now_value+value)
   end
   
   def after_pay_value
-    not_pay_value=0
+    not_pay_value = 0
     self.cards.includes(:events, :account_exchanges).each do |card|
-      not_pay_value+=card.events.where(pon: false).sum(:value)
-      not_pay_value+=card.account_exchanges.where(pon: false).sum(:value)
+      not_pay_value += card.events.where(pon: false).sum(:value)
+      not_pay_value += card.account_exchanges.where(pon: false).sum(:value)
     end
     return self.value-not_pay_value
   end

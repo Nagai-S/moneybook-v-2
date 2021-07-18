@@ -3,31 +3,31 @@ class AccountsController < ApplicationController
   before_action :to_explanation, only: :month_index
   
   def index
-    @accounts=current_user.accounts.includes(:cards)
+    @accounts = current_user.accounts.includes(:cards)
   end
 
   def month_index
   end
 
   def new
-    @account=current_user.accounts.build
+    @account = current_user.accounts.build
   end
 
   def create
-    @account=current_user.accounts.build(accounts_params)
+    @account = current_user.accounts.build(accounts_params)
     if @account.save
       redirect_to user_accounts_path
     else
-      flash.now[:danger]="アカウントの作成に失敗しました。"
+      flash.now[:danger] = "アカウントの作成に失敗しました。"
       render "new"
     end
   end
   
   def destroy
-    @account=Account.find_by(:user_id => params[:user_id], :id => params[:id])
+    @account = Account.find_by(user_id: params[:user_id], id: params[:id])
     index
     if @account.cards.exists?
-      flash.now[:danger]="このアカウントに連携したクレジットカードが存在するため削除できません"
+      flash.now[:danger] = "このアカウントに連携したクレジットカードが存在するため削除できません"
       render "index"
     else
       @account.before_destroy_action

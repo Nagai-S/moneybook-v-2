@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'funds/index'
+  get 'funds/search'
   devise_for :users, :controllers => {
     :registrations => 'users/registrations',
   }
@@ -22,7 +24,7 @@ Rails.application.routes.draw do
     resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
     get "account_month" => "accounts#month_index"
     get "explanation" => "homepages#explanation"
-    get "search" => "events#search"
+    get "events/search" => "events#search"
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
