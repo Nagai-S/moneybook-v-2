@@ -67,7 +67,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg'
+  # gem 'pg'
   ## aws ec2 
   gem 'unicorn'
 end
