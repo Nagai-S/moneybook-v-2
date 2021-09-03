@@ -46,7 +46,7 @@ test:
 
 # for aws-ec2
 production:
-  <<: *default
+  # <<: *default
   database: moneybook_production
   username: root
   password: <%= ENV['DATABASE_PASSWORD'] %>
