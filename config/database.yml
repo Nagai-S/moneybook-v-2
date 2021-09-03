@@ -47,6 +47,9 @@ test:
 # for aws-ec2
 production:
   # <<: *default
+  adapter: mysql2
+  encoding: utf8
+  pool: 10
   database: moneybook_production
   username: root
   password: <%= ENV['DATABASE_PASSWORD'] %>
