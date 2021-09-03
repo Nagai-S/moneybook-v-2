@@ -37,8 +37,13 @@ test:
   <<: *default
   database: moneybook_test
   
+# for heroku
+# production:
+#   <<: *default
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: 10
+
+# for aws-ec2
 production:
-  <<: *default
-  adapter: postgresql
-  encoding: unicode
-  pool: 10
+  
