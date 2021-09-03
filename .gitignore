@@ -43,3 +43,5 @@ yarn-debug.log*
 .env
 
 public/sitemap.xml.gz
+
+all_funds.txt
