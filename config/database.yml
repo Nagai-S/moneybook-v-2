@@ -45,5 +45,10 @@ test:
 #   pool: 10
 
 # for aws-ec2
-# production:
+production:
+  <<: *default
+  database: moneybook_production
+  username: root
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  socket: /var/lib/mysql/mysql.sock
   
