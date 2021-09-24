@@ -1,44 +1,8 @@
 require "net/http"
 require "json"
 require 'dotenv/load'
-
-def a_id_trans(a_id)
-  if a_id==13
-    account_id=1
-  elsif a_id==12
-    account_id=3
-  elsif a_id==15
-    account_id=9
-  elsif a_id==14
-    account_id=8
-  else
-    account_id=a_id
-  end
-
-  return account_id
-end
-
-def g_id_trans(g_id)
-  if g_id==18
-    genre_id=14
-  elsif g_id==20
-    genre_id=15
-  else
-    genre_id=g_id
-  end
-
-  return genre_id
-end
-
-def c_id_trans(c_id)
-  if c_id==7
-    card_id=3
-  else
-    card_id=c_id
-  end
-
-  return card_id
-end
+require './api_request_scripts/trans_id'
+require './api_request_scripts/get_real_data'
 
 def login
   params={
@@ -55,36 +19,6 @@ def login
   }
 
   return return_hash
-end
-
-def get_all_axs
-  uri2 = URI.parse("https://moneybook-moneybook.herokuapp.com/api/v1/account_exchanges")
-  headers = {
-    "Content-Type" => "application/json",
-    "access-token" => ENV['PRODUCTION_ACCESS_TOKEN'],
-    "client" => ENV['PRODUCTION_CLIENT'],
-    "uid" => ENV['PRODUCTION_UID'],
-  }
-  http = Net::HTTP.new(uri2.host, uri2.port)
-  http.use_ssl = uri2.scheme === "https"
-  response = http.get(uri2.path, headers)
-
-  return JSON.parse(response.body)["axs"]
-end
-
-def get_all_events
-  uri2 = URI.parse("https://moneybook-moneybook.herokuapp.com/api/v1/events")
-  headers = {
-    "Content-Type" => "application/json",
-    "access-token" => ENV['PRODUCTION_ACCESS_TOKEN'],
-    "client" => ENV['PRODUCTION_CLIENT'],
-    "uid" => ENV['PRODUCTION_UID'],
-  }
-  http = Net::HTTP.new(uri2.host, uri2.port)
-  http.use_ssl = uri2.scheme === "https"
-  response = http.get(uri2.path, headers)
-
-  return JSON.parse(response.body)["events"]
 end
 
 def create_ax(params, header_info)

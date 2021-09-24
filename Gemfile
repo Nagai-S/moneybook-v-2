@@ -67,9 +67,9 @@ group :test do
 end
 
 group :production do
-  # gem 'pg'
+  gem 'pg'
   ## aws ec2 
-  gem 'unicorn'
+  # gem 'unicorn'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

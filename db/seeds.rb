@@ -26,6 +26,7 @@ user.genres.create(
     {name: "利子", iae: true},
     {name: "売上金", iae: false},
     {name: "立替金返金", iae: false},
+    {name: "本", iae: false},
   ]
 )
 
@@ -40,6 +41,7 @@ user.accounts.create(
     {name: "SoftBankCard", value: 111},
     {name: "eMAXIS S&P500", value: 0},
     {name: "楽天全米index fund", value: 0},
+    {name: "楽天Pay", value: 0},
   ]
 )
 
