@@ -9,7 +9,7 @@ Dockerを[インストール](https://hub.docker.com/editions/community/docker-c
 2. terminalでこのリポジトリのあるディレクトリまで移動
 3. 以下のコマンドを実行
 ```
-$ bash database_init.sh
+$ bash initial.sh
 ```
 4. http://localhost:3000
 にアクセス
