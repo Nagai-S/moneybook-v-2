@@ -2,8 +2,10 @@ class EventsController < ApplicationController
   include MyFunction::Search
   before_action :authenticate_user!
   before_action :select_event, only: [:destroy, :edit, :update]
+  before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new, :search]
   before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
+  before_action :set_previous_url, only: [:new, :edit]
 
   def index
     @events = current_user.events.includes(:account,:card,:genre).page(params[:page]).per(80)
@@ -38,7 +40,7 @@ class EventsController < ApplicationController
 
     if @event.save
       @event.after_change_action(@event.pay_date)
-      redirect_to user_events_path(current_user)
+      redirect_to_previou_url
     else
       flash.now[:danger] = "イベントの作成に失敗しました。"
       render "new"
@@ -53,7 +55,6 @@ class EventsController < ApplicationController
   end
   
   def edit
-    session[:previous_url] = request.referer
   end
 
   def update
@@ -63,10 +64,7 @@ class EventsController < ApplicationController
     if @event.update(events_params)
       before_inf[:account].plus(before_inf[:value])
       @event.after_change_action(@event.pay_date)
-      unless Rails.env.test?
-        redirect_to session[:previous_url]
-        session[:previous_url].clear
-      end
+      redirect_to_previou_url
     else
       flash.now[:danger] = "イベントの編集に失敗しました。"
       render "edit"
@@ -79,11 +77,11 @@ class EventsController < ApplicationController
     end    
 
     def select_event
-      @event = Event.find_by(user_id: params[:user_id], id: params[:id])
+      @event = Event.find_by(id: params[:id])
     end
 
     def confirm_parents_deleted
-      redirect_to user_events_path(current_user) if @event.parents_deleted
+      redirect_to events_path if @event.parents_deleted
     end
 
     def association_model_update
@@ -95,6 +93,10 @@ class EventsController < ApplicationController
         @event.card_id = params[:event][:card]
         @event.account_id = nil
       end
+    end
+
+    def correct_user!
+      redirect_to root_path unless current_user == @event.user
     end
 end
     

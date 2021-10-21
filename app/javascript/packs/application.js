@@ -3,11 +3,14 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-require("@rails/ujs").start()
+require("@rails/ujs").start();
 // require("turbolinks").start()
-require("@rails/activestorage").start()
-require("channels")
-
+require("@rails/activestorage").start();
+require("channels");
+// import "chartkick/chart.js";
+// require("chartkick")
+// require("chart.js")
+require("chartkick").use(require("highcharts"));
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
@@ -21,18 +24,17 @@ import "./bootstrap_custom.js";
 
 $(function () {
   $(".menu").click(function () {
+    let element = $(".dropdown_list");
     if (document.getElementById("open")) {
-      let element = $(".dropdown_list");
-      $(".dropdown_list").slideUp("fast");
+      element.slideUp("fast");
       element.attr("id", "close");
       $(".close").css("display", "block");
       $(".open").css("display", "none");
       $(".contents").css("display", "block");
       $("footer").css("display", "block");
     } else {
-      let element = $(".dropdown_list");
       element.attr("id", "open");
-      $(".dropdown_list").slideDown();
+      element.slideDown();
       $(".close").css("display", "none");
       $(".open").css("display", "block");
       $(".contents").css("display", "none");
@@ -41,51 +43,49 @@ $(function () {
   });
 
   $(".search-h").click(function () {
+    let element = $(".search_wrapper");
     if (document.getElementById("search_open")) {
-      let element = $(".search_wrapper");
-      $(".search_wrapper").slideUp();
+      element.slideUp();
       element.attr("id", "search_close");
       $(".search-h").css("border-bottom", "solid 1px #E8E8E8");
     } else {
-      let element = $(".search_wrapper");
       element.attr("id", "search_open");
-      $(".search_wrapper").slideDown();
+      element.slideDown();
       $(".search-h").css("border-bottom", "none");
     }
   });
 
   $(document).ready(function () {
     if (document.getElementById("login_footer")) {
-      $("footer").css("height", 280 + "px");
+      $("footer").css("height", 310 + "px");
     } else {
       $("footer").css("height", 100 + "px");
     }
   });
 
   $(".delete_account").click(function () {
+    let element = $(".delete_wrapper");
     if (document.getElementById("delete_open")) {
-      let element = $(".delete_wrapper");
-      $(".delete_wrapper").slideUp();
+      element.slideUp();
       element.attr("id", "delete_close");
     } else {
-      let element = $(".delete_wrapper");
       element.attr("id", "delete_open");
-      $(".delete_wrapper").slideDown();
+      element.slideDown();
     }
   });
 
-  $("#select_js2").change(function () {
+  $("#date_select").change(function () {
     // 選択されているvalue属性値を取り出す
-    var val = $("#select_js2").val();
+    var val = $("#date_select").val();
     if (val == "0") {
       $(".date_area_none").slideUp();
     } else {
       $(".date_area_none").slideDown();
     }
   });
-  $("#select_js2").change(function () {
+  $("#date_select").change(function () {
     // 選択されているvalue属性値を取り出す
-    var val = $("#select_js2").val();
+    var val = $("#date_select").val();
     if (val == "0") {
       $(".date_area_block").slideUp();
     } else {
@@ -93,9 +93,9 @@ $(function () {
     }
   });
 
-  $("#select_js3").change(function () {
+  $("#money_select").change(function () {
     // 選択されているvalue属性値を取り出す
-    var val = $("#select_js3").val();
+    var val = $("#money_select").val();
     if (val == "0") {
       $(".money_area_none").slideUp();
     } else {
@@ -103,9 +103,9 @@ $(function () {
     }
   });
 
-  $("#select_js3").change(function () {
+  $("#money_select").change(function () {
     // 選択されているvalue属性値を取り出す
-    var val = $("#select_js3").val();
+    var val = $("#money_select").val();
     if (val == "0") {
       $(".money_area_block").slideUp();
     } else {
@@ -113,20 +113,22 @@ $(function () {
     }
   });
 
-  $("#select_js4").change(function () {
+  $("#genre_select").change(function () {
     // 選択されているvalue属性値を取り出す
-    var val = $("#select_js4").val();
+    var val = $("#genre_select").val();
     if (val != "") {
-      $("#select_js1").val("0");
+      $("#iae_select").val("0");
     }
   });
 
   $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
     var activated_tab = e.target; // activated tab
-    if(activated_tab.id === 'account'){
+    if (activated_tab.id === "account") {
       $("#account_or_card").val("0");
-    }else{
+    } else if (activated_tab.id === "card") {
       $("#account_or_card").val("1");
+    } else {
+      $("#account_or_card").val("2");
     }
   });
 });

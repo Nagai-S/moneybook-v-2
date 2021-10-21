@@ -216,7 +216,7 @@ header .headline{
 
 /* contents */
 .contents{
-  padding-bottom: 290px;
+  padding-bottom: 320px;
 }
 
 .contents h1{
@@ -433,6 +433,18 @@ header .headline{
 
 .table .total{
   border-top:  2px solid black;
+}
+
+.table .total_value{
+  font-weight: bold;
+}
+
+.gain_value{
+  color: #ff4040;
+}
+
+.loss_value{
+  color: #4eba00
 }
 
 .credit_show p{
@@ -1050,7 +1062,9 @@ footer p{
 
 .lp_h1{
   text-align: center;
-  font-size: 50px;
+  font-size: 70px;
+  margin: 40px;
+  font-family: 'Alegreya Sans SC', sans-serif;
 }
 
 .lp_content{
@@ -1173,5 +1187,10 @@ footer p{
     .color-step3{
       background-color: #fafafa;
     }
+  }
+
+  .lp_h1{
+    font-size: 50px;
+    margin: 20px;
   }
 }

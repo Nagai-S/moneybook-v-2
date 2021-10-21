@@ -1,5 +1,5 @@
 <div class="tab-pane <%= active %>" id="<%= tab_id %>">
-  <%= form_with model: [current_user, @event], local: true do |f| %>
+  <%= form_with model: @event, local: true do |f| %>
   <div class="form_wrapper" id="<%= backcolor %>">
 
     <%= render "layouts/errors", resource: f.object %>
@@ -18,7 +18,7 @@
     <div class="row">
       <div class='<%= label_class %>'>
         <%= f.label :genre, "ジャンルを選択してください" %>
-        (<%= link_to "ジャンルを作成", new_user_genre_path %>)
+        (<%= link_to "ジャンルを作成", new_genre_path %>)
       </div>
       <div class="<%= form_class %>">
         <%= f.collection_select :genre, current_user.genres.where(iae: iae), :id, :name, {selected: genre_id_for_event(iae)}, {class: "form-control", id: "select"} %>

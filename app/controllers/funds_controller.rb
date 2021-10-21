@@ -1,4 +1,6 @@
 class FundsController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
     all_funds = Fund.all
     @funds = all_funds.page(params[:page]).per(80)

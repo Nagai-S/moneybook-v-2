@@ -28,17 +28,27 @@ gem 'bcrypt', '~> 3.1.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
-# Add
+# Login
 gem 'devise'
+gem 'devise_token_auth'
+# 日本語化
 gem 'rails-i18n', '~> 6.0'
 gem 'devise-i18n'
+# .env
 gem 'dotenv-rails'
+# pagination
 gem "kaminari"
-gem 'devise_token_auth'
+# SEO
 gem 'meta-tags'
 gem 'sitemap_generator'
+# for cron
 gem 'whenever' 
+# for aws
 gem 'aws-sdk'
+# rooting and scheme
+gem "annotate"
+# グラフ描写
+gem 'chartkick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

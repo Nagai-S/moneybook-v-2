@@ -5,6 +5,7 @@ RSpec.describe AccountExchangesController do
     @user = create(:user)
     @user.confirm
     sign_in @user
+
     @account1 = @user.accounts.create(name: "account1", value: 1000)
     @account2 = @user.accounts.create(name: "account2", value: 2000)
     @account3 = @user.accounts.create(name: "account3", value: 3000)
@@ -26,7 +27,6 @@ RSpec.describe AccountExchangesController do
     describe "createに成功" do
       it "accountから振り替え" do
         params = {
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
             "date(2i)": "2",
@@ -49,7 +49,6 @@ RSpec.describe AccountExchangesController do
       
       it "card未払いから振り替え" do
         params = {
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": Date.today.year,
             "date(2i)": Date.today.month,
@@ -74,7 +73,6 @@ RSpec.describe AccountExchangesController do
       
       it "card支払い済みから振り替え" do
         params = {
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": Date.today.year-1,
             "date(2i)": Date.today.month,
@@ -97,9 +95,8 @@ RSpec.describe AccountExchangesController do
     end
 
     describe "createに失敗" do
-      it "accountから振り替え" do
+      it "sourceとtoが同じで失敗" do
         params = {
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
             "date(2i)": "2",
@@ -117,65 +114,153 @@ RSpec.describe AccountExchangesController do
           Account.find(@account1.id).value
         }.by(0).and change{
           Account.find(@account2.id).value
+        }.by(0).and change{
+          AccountExchange.all.length
+        }.by(0)
+      end
+
+      it "valueがなくてaccountからの振り替えに失敗" do
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "0",
+            source_account: @account1.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: "",
+          }
+        }
+        expect{
+          post :create, params: params
+        }.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          AccountExchange.all.length
         }.by(0)
       end
     end
   end
 
   describe "destroy" do
-    it "accountからの振り替えをdestroy" do
-      ax = @user.account_exchanges.create(
-        value: 100,
-        source_id: @account1.id,
-        date: Date.today,
-        to_id: @account2.id,
-        pon: true,
-      )
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: ax.id}
-      }.to change{
-        Account.find(@account1.id).value
-      }.by(100).and change{
-        Account.find(@account2.id).value
-      }.by(-100)
+    describe "destroyに成功" do
+      it "accountからの振り替えをdestroy" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account1.id,
+          date: Date.today,
+          to_id: @account2.id,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@account1.id).value
+        }.by(100).and change{
+          Account.find(@account2.id).value
+        }.by(-100)
+      end
+      
+      it "card未払いからの振り替えをdestroy" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          card_id: @card1.id,
+          date: Date.today,
+          to_id: @account2.id,
+          pon: false,
+        )
+        ax.update(pay_date: ax.decide_pay_day)
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@card1.account.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(-100).and change{
+          Account.find(@card1.account.id).after_pay_value
+        }.by(100)
+      end
+      
+      it "card支払い済みからの振り替えをdestroy" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          card_id: @card1.id,
+          date: Date.today.prev_year(1),
+          to_id: @account2.id,
+          pon: true,
+        )
+        ax.update(pay_date: ax.decide_pay_day)
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@card1.account.id).value
+        }.by(100).and change{
+          Account.find(@account2.id).value
+        }.by(-100)
+      end
+  
     end
-    
-    it "card未払いからの振り替えをdestroy" do
-      ax = @user.account_exchanges.create(
-        value: 100,
-        card_id: @card1.id,
-        date: Date.today,
-        to_id: @account2.id,
-        pon: false,
-      )
-      ax.update(pay_date: ax.decide_pay_day)
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: ax.id}
-      }.to change{
-        Account.find(@card1.account.id).value
-      }.by(0).and change{
-        Account.find(@account2.id).value
-      }.by(-100).and change{
-        Account.find(@card1.account.id).after_pay_value
-      }.by(100)
-    end
-    
-    it "card支払い済みからの振り替えをdestroy" do
-      ax = @user.account_exchanges.create(
-        value: 100,
-        card_id: @card1.id,
-        date: Date.today.prev_year(1),
-        to_id: @account2.id,
-        pon: true,
-      )
-      ax.update(pay_date: ax.decide_pay_day)
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: ax.id}
-      }.to change{
-        Account.find(@card1.account.id).value
-      }.by(100).and change{
-        Account.find(@account2.id).value
-      }.by(-100)
+
+    describe "destroyに失敗" do
+      it "parents_deleted(sourceとcardがない)の時にdestroyできない" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: nil,
+          card_id: nil,
+          date: Date.today.prev_year(1),
+          to_id: @account2.id,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          AccountExchange.all.length
+        }.by(0)
+      end
+
+      it "parents_deleted(toがない)の時にdestroyできない" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account1.id,
+          date: Date.today.prev_year(1),
+          to_id: nil,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          AccountExchange.all.length
+        }.by(0)
+      end
+
+      it "正しいuserでない時にdestroyできない" do
+        uncorrect_user = create(:user)
+        uncorrect_user.confirm
+        sign_in uncorrect_user
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account1.id,
+          date: Date.today.prev_year(1),
+          to_id: @account2.id,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: {id: ax.id}
+        }.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          AccountExchange.all.length
+        }.by(0)
+      end
     end
   end
   
@@ -183,7 +268,6 @@ RSpec.describe AccountExchangesController do
     describe "updateに成功" do
       context "振り替え元を変更" do
         let(:params){{
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
             "date(2i)": "2",
@@ -195,6 +279,7 @@ RSpec.describe AccountExchangesController do
             value: 200,
           }
         }}
+
         it "accountの振り替えから変更" do
           ax = @user.account_exchanges.create(
             value: 100,
@@ -262,7 +347,6 @@ RSpec.describe AccountExchangesController do
       
       context "振り替え先を変更" do
         let(:params){{
-          user_id: @user.id,
           account_exchange:{
             "date(1i)": "2020",
             "date(2i)": "2",
@@ -274,6 +358,7 @@ RSpec.describe AccountExchangesController do
             value: 200,
           }
         }}
+
         it "別のaccountに変更" do
           ax = @user.account_exchanges.create(
             value: 100,
@@ -297,20 +382,19 @@ RSpec.describe AccountExchangesController do
     end
       
     describe "updateに失敗" do
-      let(:params){{
-        user_id: @user.id,
-        account_exchange:{
-          "date(1i)": "2020",
-          "date(2i)": "2",
-          "date(3i)": "20",
-          account_or_card: "0",
-          source_account: @account2.id,
-          card: @card1.id,
-          to_account: @account2.id,
-          value: 200,
+      it "sourceとtoが同じで失敗" do
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "0",
+            source_account: @account2.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: 200,
+          }
         }
-      }}
-      it "振り替え元がaccountの振り替えから変更" do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account3.id,
@@ -327,6 +411,142 @@ RSpec.describe AccountExchangesController do
           Account.find(@account1.id).value
         }.by(0).and change{
           Account.find(@account2.id).value
+        }.by(0).and change{
+          ax.account.id
+        }.by(0)
+      end
+
+      it "valueがなくて失敗" do
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "0",
+            source_account: @account3.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: "",
+          }
+        }
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account3.id,
+          date: Date.today,
+          to_id: @account1.id,
+          pon: true,
+        )
+        params[:id] = ax.id
+        expect{
+          put :update, params: params  
+        }.to change{
+          Account.find(@account3.id).value
+        }.by(0).and change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          ax.to_account.id
+        }.by(0)
+      end
+
+      it "parents_deleted(souceとcard)がなくて失敗" do
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "0",
+            source_account: @account3.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: 200,
+          }
+        }
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: nil,
+          card_id: nil,
+          date: Date.today,
+          to_id: @account1.id,
+          pon: true,
+        )
+        params[:id] = ax.id
+        expect{
+          put :update, params: params  
+        }.to change{
+          Account.find(@account3.id).value
+        }.by(0).and change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          ax.to_account.id
+        }.by(0)
+      end
+
+      it "parents_deleted(to)がなくて失敗" do
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "0",
+            source_account: @account3.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: 200,
+          }
+        }
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account2.id,
+          date: Date.today,
+          to_id: nil,
+          pon: true,
+        )
+        params[:id] = ax.id
+        expect{
+          put :update, params: params  
+        }.to change{
+          Account.find(@account3.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          ax.account.id
+        }.by(0)
+      end
+
+      it "正しいuserでなくて失敗" do
+        uncorrect_user = create(:user)
+        uncorrect_user.confirm
+        sign_in uncorrect_user
+        params = {
+          account_exchange:{
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            account_or_card: "1",
+            source_account: @account3.id,
+            card: @card1.id,
+            to_account: @account2.id,
+            value: 200,
+          }
+        }
+        ax = @user.account_exchanges.create(
+          value: 100,
+          source_id: @account3.id,
+          date: Date.today,
+          to_id: @account2.id,
+          pon: true,
+        )
+        params[:id] = ax.id
+        expect{
+          put :update, params: params  
+        }.to change{
+          Account.find(@account3.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          ax.source_id
         }.by(0)
       end
     end

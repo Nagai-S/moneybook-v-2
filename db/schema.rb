@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_09_062319) do
+ActiveRecord::Schema.define(version: 2021_10_17_084148) do
 
   create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -69,6 +69,33 @@ ActiveRecord::Schema.define(version: 2021_07_09_062319) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
+  create_table "fund_user_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "card_id"
+    t.date "pay_date"
+    t.boolean "buy_or_sell", default: true
+    t.integer "value"
+    t.integer "commission"
+    t.bigint "fund_user_id", null: false
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "pon", default: false
+    t.index ["account_id"], name: "index_fund_user_histories_on_account_id"
+    t.index ["card_id"], name: "index_fund_user_histories_on_card_id"
+    t.index ["fund_user_id"], name: "index_fund_user_histories_on_fund_user_id"
+  end
+
+  create_table "fund_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "fund_id", null: false
+    t.decimal "average_buy_value", precision: 10, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["fund_id"], name: "index_fund_users_on_fund_id"
+    t.index ["user_id"], name: "index_fund_users_on_user_id"
+  end
+
   create_table "funds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "value"
     t.string "name"
@@ -114,5 +141,8 @@ ActiveRecord::Schema.define(version: 2021_07_09_062319) do
   add_foreign_key "cards", "accounts"
   add_foreign_key "cards", "users"
   add_foreign_key "events", "users"
+  add_foreign_key "fund_user_histories", "fund_users"
+  add_foreign_key "fund_users", "funds"
+  add_foreign_key "fund_users", "users"
   add_foreign_key "genres", "users"
 end

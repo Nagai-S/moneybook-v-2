@@ -1,0 +1,28 @@
+<%= form_with model: @fund_user, local: true do |f| %>
+<div class="form_wrapper">
+  <%= render "layouts/errors", resource: f.object %>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :total_buy_value, "現在までの総購入額を入力してください。" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :total_buy_value, class: "form-control", id: "value" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :average_buy_value, "平均取得価額を入力してください。" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :average_buy_value, class: "form-control", id: "value" %>
+    </div>
+  </div>
+
+  <%= f.text_field :fund_id, value: @fund.id, style: "display:none" %>
+
+  <%= f.submit "資産に追加", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>

@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-10 offset-1 col-sm-6 offset-sm-6 col-md-4 offset-md-8 page_top_menu">
-    <li><%= link_to "クレジットカード登録", new_user_card_path, class: "square" %></li>
+    <li><%= link_to "クレジットカード登録", new_card_path, class: "square" %></li>
   </div>
 </div>
 
@@ -27,20 +27,20 @@
         <tbody>
           <tr>
             <td>
-              <%= link_to card.name, user_events_search_path(
+              <%= link_to card.name, events_search_path(
                 card: card.id
               ) %>
             </td>
             <td>
-              <%= link_to card.account.name, user_events_search_path(
+              <%= link_to card.account.name, events_search_path(
                 account: card.account.id
               ) %>
             </td>
             <td><%= card.pay_date %></td>
             <td><%= card.month_date %></td>
-            <td><%=link_to "詳細", user_card_path(params[:user_id], :id => card.id) %></td>
-            <td><%=link_to "削除", user_card_path(params[:user_id], :id => card.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
-            <td><%=link_to "編集", edit_user_card_path(params[:user_id], :id => card.id) %></td>
+            <td><%=link_to "詳細", card_path(card.id) %></td>
+            <td><%=link_to "削除", card_path(card.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+            <td><%=link_to "編集", edit_card_path(card.id) %></td>
           </tr>
         </tbody>
 

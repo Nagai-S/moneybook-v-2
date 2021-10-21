@@ -18,7 +18,8 @@
           <td>
             <%= fund.name %>
           </td>
-          <td><%= link_to "自分の資産に追加", "#" %></td>
+          <td><%= link_to "自分の資産に追加", new_fund_user_path(fund_id: fund.id) %></td>
+
         </tr>
       </tbody>
       <% end %>

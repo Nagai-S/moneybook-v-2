@@ -27,7 +27,6 @@ RSpec.describe EventsController do
     describe "createに成功" do
       it "accountの収入で登録" do
         params = {
-          user_id: @user.id,
           event:{
             iae: true,
             "date(1i)": "2020",
@@ -50,7 +49,6 @@ RSpec.describe EventsController do
 
       it "accountの支出で登録" do
         params = {
-          user_id: @user.id,
           event:{
             iae: false,
             "date(1i)": "2020",
@@ -69,7 +67,6 @@ RSpec.describe EventsController do
 
       it "card未払いで登録" do
         params = {
-          user_id: @user.id,
           event:{
             iae: false,
             "date(1i)": Date.today.year,
@@ -94,7 +91,6 @@ RSpec.describe EventsController do
 
       it "card支払い済みで登録" do
         params = {
-          user_id: @user.id,
           event:{
             iae: false,
             "date(1i)": Date.today.year-1,
@@ -113,9 +109,8 @@ RSpec.describe EventsController do
     end
     
     describe "createに失敗" do
-      it "accountで失敗" do
+      it "valueがなくてaccountで失敗" do
         params = {
-          user_id: @user.id,
           event:{
             iae: false,
             "date(1i)": "2020",
@@ -129,83 +124,151 @@ RSpec.describe EventsController do
             value: "",
           }
         }
-        expect{post :create, params: params}.to change{Account.find(@account1.id).value}.by(0)
+        expect{post :create, params: params}.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{Event.all.length}.by(0)
+      end
+
+      it "genreのiaeと一致せずaccountで失敗" do
+        params = {
+          
+          event:{
+            iae: false,
+            "date(1i)": "2020",
+            "date(2i)": "2",
+            "date(3i)": "20",
+            genre: @genre_in.id,
+            account_or_card: "0",
+            account: @account1.id,
+            card: @card1.id,
+            memo: "",
+            value: 100,
+          }
+        }
+        expect{post :create, params: params}.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{Event.all.length}.by(0)
       end
     end
   end
 
   describe "destroy" do
-    it "accountの支出の登録のdestroy" do
-      event = @user.events.create(
-        iae: false,
-        memo: "",
-        value: 100,
-        genre_id: @genre_ex.id,
-        account_id: @account1.id,
-        date: Date.today,
-        pon: true,
-      )
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: event.id}
-      }.to change{Account.find(@account1.id).value}.by(100)  
+    describe "destroyに成功" do
+      it "accountの支出の登録のdestroy" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          account_id: @account1.id,
+          date: Date.today,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{Account.find(@account1.id).value}.by(100)  
+      end
+  
+      it "accountの収入の登録のdestroy" do
+        event = @user.events.create(
+          iae: true,
+          memo: "",
+          value: 100,
+          genre_id: @genre_in.id,
+          account_id: @account1.id,
+          date: Date.today,
+          pon: true,
+        )
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{Account.find(@account1.id).value}.by(-100)  
+      end
+  
+      it "card未払いの登録のdestroy" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          date: Date.today,
+          pon: false,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{
+          Account.find(@card1.account.id).value
+        }.by(0).and change{
+          Account.find(@card1.account.id).after_pay_value
+        }.by(100)
+      end
+  
+      it "card支払い済みの登録のdestroy" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{Account.find(@card1.account.id).value}.by(100) 
+      end
     end
 
-    it "accountの収入の登録のdestroy" do
-      event = @user.events.create(
-        iae: true,
-        memo: "",
-        value: 100,
-        genre_id: @genre_in.id,
-        account_id: @account1.id,
-        date: Date.today,
-        pon: true,
-      )
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: event.id}
-      }.to change{Account.find(@account1.id).value}.by(-100)  
-    end
+    describe "destroyに失敗" do
+      it "parents_deletedの時にdestroyできない" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: nil,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        event.update(card_id: nil)
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{
+          Account.find(@card1.account.id).value
+        }.by(0).and change{Event.all.length}.by(0) 
+      end
 
-    it "card未払いの登録のdestroy" do
-      event = @user.events.create(
-        iae: false,
-        memo: "",
-        value: 100,
-        genre_id: @genre_ex.id,
-        card_id: @card1.id,
-        date: Date.today,
-        pon: false,
-      )
-      event.update(pay_date: event.decide_pay_day)
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: event.id}
-      }.to change{
-        Account.find(@card1.account.id).value
-      }.by(0).and change{
-        Account.find(@card1.account.id).after_pay_value
-      }.by(100)
-    end
-
-    it "card支払い済みの登録のdestroy" do
-      event = @user.events.create(
-        iae: false,
-        memo: "",
-        value: 100,
-        genre_id: @genre_ex.id,
-        card_id: @card1.id,
-        date: Date.today.prev_year(1),
-        pon: true,
-      )
-      event.update(pay_date: event.decide_pay_day)
-      expect{
-        delete :destroy, params: {user_id: @user.id, id: event.id}
-      }.to change{Account.find(@card1.account.id).value}.by(100) 
+      it "正しいuserでなくて失敗" do
+        uncorrect_user = create(:user)
+        uncorrect_user.confirm
+        sign_in uncorrect_user
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: nil,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        expect{
+          delete :destroy, params: { id: event.id}
+        }.to change{
+          Account.find(@card1.account.id).value
+        }.by(0).and change{Event.all.length}.by(0) 
+      end
     end
   end
   
   describe "update" do
     describe "updateに成功" do
       let(:params) {{
-        user_id: @user.id,
         event:{
           iae: false,
           "date(1i)": "2020",
@@ -326,7 +389,6 @@ RSpec.describe EventsController do
     
     describe "updateに失敗" do
       let(:params) {{
-        user_id: @user.id,
         event:{
           iae: false,
           "date(1i)": "2020",
@@ -340,7 +402,8 @@ RSpec.describe EventsController do
           value: "",
         }
       }}
-      it "accountの支出から失敗" do
+
+      it "valueがなくてaccountの支出から失敗" do
         event = @user.events.create(
           iae: false,
           memo: "",
@@ -354,6 +417,93 @@ RSpec.describe EventsController do
         expect{put :update, params: params}.to change{
           Account.find(@account1.id).value
         }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          event.account.id
+        }.by(0)
+      end
+
+      it "valueがなくてcardの支払い済みの支出から失敗" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        params[:id] = event.id
+        expect{put :update, params: params}.to change{
+          Account.find(@card1.account.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          event.card.id
+        }.by(0)
+      end
+
+      it "iaeとgenre.iaeが異なって失敗" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          account_id: @account1.id,
+          date: Date.today,
+          pon: true,
+        )
+        params[:id] = event.id
+        params[:event][:iae] = true
+        params[:event][:value] = 100
+        expect{put :update, params: params}.to change{
+          Account.find(@account1.id).value
+        }.by(0).and change{
+          Account.find(@account2.id).value
+        }.by(0).and change{
+          event.account.id
+        }.by(0)
+      end
+
+      it "paarents_deletedの時に失敗" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: nil,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        event.update(card_id: nil)
+        params[:id] = event.id
+        params[:event][:value] = 100
+        expect{put :update, params: params}.to change{
+          Account.find(@account2.id).value
+        }.by(0)
+      end
+
+      it "正しいuserではない時に失敗" do
+        uncorrect_user = create(:user)
+        uncorrect_user.confirm
+        sign_in uncorrect_user
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: nil,
+          date: Date.today.prev_year(1),
+          pon: true,
+        )
+        event.update(pay_date: event.decide_pay_day)
+        params[:id] = event.id
+        params[:event][:value] = 100
+        expect{put :update, params: params}.to change{
           Account.find(@account2.id).value
         }.by(0)
       end

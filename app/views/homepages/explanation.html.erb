@@ -5,7 +5,7 @@
     <h4>必須アクション</h4>
     <% unless current_user.accounts.exists? %>
     <li>
-      <%= link_to "アカウントを追加してください。", new_user_account_path %>
+      <%= link_to "アカウントを追加してください。", new_account_path %>
     </li>
     <% end %>
   </div>
@@ -14,21 +14,21 @@
     <h3>STEP1：アカウント登録</h3>
     <p>
       銀行や現金、電子マネーなどの名前と初期残高を入力してアカウントを登録しましょう。
-      <%= link_to "こちらから", new_user_account_path %>
+      <%= link_to "こちらから", new_account_path %>
     </p>
   </div>
   <div class="ex_body col-12 col-sm-6 color-blue">
     <h3>STEP2：ジャンル登録</h3>
     <p>
       食費や、給料などのジャンルを支出、収入それぞれ登録しましょう。
-      <%= link_to "こちらから", new_user_genre_path %>
+      <%= link_to "こちらから", new_genre_path %>
     </p>
   </div>
   <div class="ex_body col-12 col-sm-6 color-step3">
     <h3>STEP3：クレジットカード登録</h3>
     <p>
       連携アカウント、締め日、引き落とし日を指定してクレジットカードを登録しましょう。
-      <%= link_to "こちらから", new_user_card_path %>
+      <%= link_to "こちらから", new_card_path %>
     </p>
     <p class="ditail">
       連携アカウントとは：そのクレジットカードの利用分が引き落とされる口座のことです。</br>
@@ -47,7 +47,7 @@
       ④メモ（必要あれば）</br>
       ⑤金額</br>
       を指定して、お金を利用するたびに記録をつけましょう。
-      <%= link_to "こちらから", new_user_event_path %>
+      <%= link_to "こちらから", new_event_path %>
     </p>
   </div>
   <div class="ex_body col-12 col-sm-6 color-normal">
@@ -55,13 +55,13 @@
     <p>
       銀行からお金を引き落とした時や、クレジットカードから電子マネーにお金をチャージした際に
       振替元アカウントや、振替元カードと振替先アカウントを指定して、お金の振り替えを行えます。
-      <%= link_to "こちらから", new_user_account_exchange_path %>
+      <%= link_to "こちらから", new_account_exchange_path %>
     </p>
   </div>
   <div class="ex_body col-12 col-sm-6 color-blue">
     <h3>STEP6：クレジット履歴確認</h3>
     <p>
-      <%= link_to "こちらから", user_cards_path %>クレジットカードの詳細ページにいくと、
+      <%= link_to "こちらから", cards_path %>クレジットカードの詳細ページにいくと、
       次の引き落とし日での、トータル引き落とし金額と、使用履歴の一覧を確認できます。</br>
       実際のカード会社が提供している使用履歴一覧と比較することで、不正利用などを防ぐことができます。
     </p>

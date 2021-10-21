@@ -12,6 +12,7 @@
 
   <%= stylesheet_pack_tag 'application', media: 'all' %>
   <%= javascript_pack_tag 'application' %>
+  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300" rel="stylesheet">
 
   <%= favicon_link_tag 'favicon.png'%>
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -39,31 +40,32 @@
       <div class="menu close">=</div>
       <div class="menu open">×</div>
 
-      <%= link_to "+", new_user_event_path(current_user), class: "plus" %>
+      <%= link_to "+", new_event_path, class: "plus" %>
       
       <h1 class="headline">
-        <%= link_to image_tag("logo.png", height: "55"), user_events_path(current_user) %>
+        <%= link_to image_tag("logo.png", height: "55"), events_path %>
       </h1>
 
       <div class="header_list">
         <ul>
-          <li><%= link_to "トップ", user_events_path(current_user) %></li>
-          <li><%= link_to "新規入力", new_user_event_path(current_user) %></li>
-          <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-          <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
-          <li><%= link_to "投資信託", funds_index_path %></li>
+          <li><%= link_to "トップ", events_path %></li>
+          <li><%= link_to "新規入力", new_event_path %></li>
+          <li><%= link_to "資産情報", accounts_path %></li>
+          <li><%= link_to "クレジットカード", cards_path %></li>
+          <li><%= link_to "投資信託", fund_users_path %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
       </div>
 
       <div class="dropdown_list" id="close">
         <ul>
-          <li><%= link_to "トップ", user_events_path(current_user) %></li>
-          <li><%= link_to "新規入力", new_user_event_path(current_user) %></li>
-          <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-          <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
-          <li><%= link_to "投資信託", funds_index_path %></li>
-          <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
+          <li><%= link_to "トップ", events_path %></li>
+          <li><%= link_to "新規入力", new_event_path %></li>
+          <li><%= link_to "資産情報", accounts_path %></li>
+          <li><%= link_to "クレジットカード", cards_path %></li>
+          <li><%= link_to "投資信託", fund_users_path %></li>
+          <li><%= link_to "振替一覧", account_exchanges_path %></li>
+          <li><%= link_to "ジャンル", genres_path %></li>
           <li class="last"><%= link_to "登録情報", edit_user_registration_path %></li>
         </ul>
       </div>
@@ -86,28 +88,30 @@
         <div class="index1">
           <ul>
             <li class="top_bold">一覧</li>
-            <li><%= link_to "トップ", user_events_path(current_user) %></li>
-            <li><%= link_to "残高", user_accounts_path(current_user) %></li>
-            <li><%= link_to "クレジットカード", user_cards_path(current_user) %></li>
-            <li><%= link_to "ジャンル", user_genres_path(current_user) %></li>
-            <li><%= link_to "振替", user_account_exchanges_path(current_user) %></li>
+            <li><%= link_to "トップ", events_path %></li>
+            <li><%= link_to "資産情報", accounts_path %></li>
+            <li><%= link_to "クレジットカード", cards_path %></li>
+            <li><%= link_to "投資信託", fund_users_path %></li>
+            <li><%= link_to "ジャンル", genres_path %></li>
+            <li><%= link_to "振替", account_exchanges_path %></li>
           </ul>
         </div>
         <div class="index2">
           <ul>
             <li class="top_bold">新規作成</li>
-            <li><%= link_to "新規入力", new_user_event_path(current_user) %></li>
-            <li><%= link_to "アカウント", new_user_account_path(current_user) %></li>
-            <li><%= link_to "クレジットカード", new_user_card_path(current_user) %></li>
-            <li><%= link_to "ジャンル", new_user_genre_path(current_user) %></li>
-            <li><%= link_to "振替", new_user_account_exchange_path(current_user) %></li>
+            <li><%= link_to "新規入力", new_event_path %></li>
+            <li><%= link_to "アカウント", new_account_path %></li>
+            <li><%= link_to "クレジットカード", new_card_path %></li>
+            <li><%= link_to "ジャンル", new_genre_path %></li>
+            <li><%= link_to "振替", new_account_exchange_path %></li>
           </ul>
         </div>
         <div class="index3">
           <ul>
             <li class="top_bold">その他</li>
-            <li><%= link_to "アプリの使い方", user_explanation_path(user_id: current_user.id) %></li>
-            <li><%= link_to "検索", user_events_search_path(current_user) %></li>
+            <li><%= link_to "アプリの使い方", explanation_path %></li>
+            <li><%= link_to "イベント検索", events_search_path %></li>
+            <li><%= link_to "投資信託検索", funds_search_path %></li>
             <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>

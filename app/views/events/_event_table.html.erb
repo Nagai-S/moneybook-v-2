@@ -16,11 +16,11 @@
     <li class="col-sm-2 offset-sm-0  pc_date"><%= l event.date unless a==event.date %></li>
     <div class="col-6 col-sm-1">
       <div class="mobile_th">ジャンル</div>
-      <li><%= event.genre ? event.genre.name : deleted_message %></li>
+      <li><%= event.genre ? event.genre.name : deleted_message(false) %></li>
     </div>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">アカウント</div>
-      <li><%= account_or_card_name(event) %></li>
+      <li><%= account_or_card_name(event, false) %></li>
     </div>
     <div class="col-12 col-sm-2">
       <div class="mobile_th"><%= "メモ" if event.memo? %></div>
@@ -36,10 +36,10 @@
     </div>
     <% unless event.parents_deleted %>
     <li class="col-6 col-sm-1">
-      <%= link_to "削除", user_event_path(params[:user_id], event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
+      <%= link_to "削除", event_path(event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
     </li>
     <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_user_event_path(params[:user_id], event.id) %>
+      <%= link_to "編集", edit_event_path( event.id) %>
     </li>
     <% end %>
   </div>

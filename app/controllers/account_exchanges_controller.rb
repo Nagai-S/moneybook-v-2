@@ -2,7 +2,9 @@ class AccountExchangesController < ApplicationController
   before_action :authenticate_user!
   before_action :select_ax, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
+  before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
+  before_action :set_previous_url, only: [:new, :edit]
   
   def index
     @axs = current_user.account_exchanges.includes(:account,:card,:to_account).page(params[:page])
@@ -18,7 +20,7 @@ class AccountExchangesController < ApplicationController
 
     if @ax.save
       @ax.after_change_action(@ax.pay_date)
-      redirect_to user_account_exchanges_path(current_user)
+      redirect_to_previou_url
     else
       flash.now[:danger] = "振替の作成に失敗しました。"
       render "new"
@@ -35,7 +37,6 @@ class AccountExchangesController < ApplicationController
   end
   
   def edit
-    session[:previous_url] = request.referer
   end
 
   def update
@@ -46,10 +47,7 @@ class AccountExchangesController < ApplicationController
       before_source_inf[:account].plus(before_source_inf[:value])
       before_to_inf[:account].plus(before_to_inf[:value])
       @ax.after_change_action(@ax.pay_date)
-      unless Rails.env.test?
-        redirect_to session[:previous_url]
-        session[:previous_url].clear
-      end
+      redirect_to_previou_url
     else
       flash.now[:danger] = "振替の編集に失敗しました。"
       render "edit"
@@ -62,11 +60,11 @@ class AccountExchangesController < ApplicationController
     end    
 
     def select_ax
-      @ax = AccountExchange.find_by(user_id: params[:user_id], id: params[:id])
+      @ax = AccountExchange.find_by(id: params[:id])
     end
 
     def confirm_parents_deleted
-      redirect_to user_accounts_path(current_user) if @ax.parents_deleted
+      redirect_to account_exchanges_path if @ax.parents_deleted
     end
 
     def association_model_update
@@ -78,6 +76,10 @@ class AccountExchangesController < ApplicationController
         @ax.card_id = params[:account_exchange][:card]
         @ax.source_id = nil
       end
+    end
+
+    def correct_user!
+      redirect_to root_path unless current_user == @ax.user
     end
     
 end

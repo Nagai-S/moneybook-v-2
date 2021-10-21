@@ -1,38 +1,21 @@
-<h1>統計情報</h1>
+<h1>資産情報</h1>
 
 <div class="row">
   <div class="col-10 offset-1 col-sm-8 offset-sm-4 col-md-6 offset-md-6 page_top_menu">
-    <li><%= link_to "アカウント追加", new_user_account_path, class: "square" %></li>
-    <li><%= link_to "振替一覧", user_account_exchanges_path %></li>
-    <li><%= link_to "新規振替", new_user_account_exchange_path %></li>
+    <li><%= link_to "アカウント追加", new_account_path, class: "square" %></li>
+    <li><%= link_to "振替一覧", account_exchanges_path %></li>
+    <li><%= link_to "新規振替", new_account_exchange_path %></li>
   </div>
 </div>
 
+<h2>総資産</h2>
+<%= pie_chart @assets_ratio, {library: {title: {
+  text: "¥" + current_user.total_assets.to_s(:delimited)
+}}} %>
+
 <div class="row">
   <div class="col-12 col-md-6">
-    <h2>残高</h2>
-    <div class="table_contents">
-      <div class="table-responsive">
-        <table class="table" id="table_accounts">
-          <thead>
-            <tr>
-              <th>現在残高</th>
-              <th>引き落とし後の残高</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>¥<%= current_user.accounts.sum(:value).to_s(:delimited) %></td>
-              <td>¥<%= current_user.after_pay_value.to_s(:delimited) %></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-12 col-md-6">
-    <h2>アカウント残高</h2>
+    <h2>アカウント別現金資産</h2>
 
     <div class="table_contents">
       <div class="table-responsive">
@@ -45,24 +28,61 @@
               <th></th>
             </tr>
           </thead>
-
-          <% @accounts.each do |account| %>
-
           <tbody>
+            <% @accounts.each do |account| %>
             <tr>
               <td>
-                <%= link_to account.name, user_events_search_path(
+                <%= link_to account.name, events_search_path(
                   account: account.id
                 ) %>
               </td>
               <td>¥<%= account.value.to_s(:delimited) %></td>
               <td>¥<%= account.after_pay_value.to_s(:delimited) %></td>
-              <td><%= link_to "削除", user_account_url(current_user.id, account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+              <td><%= link_to "削除", account_path(account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+            </tr>
+            <% end %>
+            <tr class="total">
+              <td>トータル</td>
+              <td class="total_value">¥<%= current_user.accounts.sum(:value).to_s(:delimited) %></td>
+              <td class="total_value">¥<%= current_user.after_pay_value.to_s(:delimited) %></td>
             </tr>
           </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-          <% end %>
+  <div class="col-12 col-md-6">
+    <h2>投資信託資産</h2>
 
+    <div class="table_contents">
+      <div class="table-responsive">
+        <table class="table" id="table_accounts">
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>時価評価額</th>
+              <th>評価損益</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @fund_users.each do |fund_user| %>
+            <tr>
+              <td>
+                <%=link_to fund_user.fund.name, fund_user_fund_user_histories_path(fund_user.id) %>
+              </td>
+              <td>¥<%= fund_user.now_value.to_s(:delimited) %></td>
+              <td class=<%= loss_or_gain(fund_user.gain_value) %>>¥<%= fund_user.gain_value.to_s(:delimited) %></td>
+            </tr>
+            <% end %>
+            <tr class="total">
+              <td>トータル</td>
+              <td class="total_value">¥<%= current_user.total_fund_value.to_s(:delimited) %></td>
+              <td class="total_value <%= loss_or_gain(current_user.total_fund_gain_value) %>">
+                ¥<%= current_user.total_fund_gain_value.to_s(:delimited) %>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -95,7 +115,7 @@
             <tr>
               <td><%= "#{prev_month_event_date(i).year}年" unless a==prev_month_event_date(i).year %></td>
               <td class="border-right">
-                <%= link_to "#{prev_month_event_date(i).month}月", user_events_search_path(
+                <%= link_to "#{prev_month_event_date(i).month}月", events_search_path(
                   date_or_not: "1",
                   "date1(1i)": prev_month_event_date(i).year,
                   "date1(2i)": prev_month_event_date(i).month,
@@ -120,7 +140,7 @@
           <% a=prev_month_event_date(i).year %>
           <% end %>
         </table>
-        <%= link_to "もっと見る", user_account_month_path(current_user) %>
+        <%= link_to "もっと見る", account_month_path(current_user) %>
       </div>
     </div>
 
@@ -149,7 +169,7 @@
           <tbody>
             <tr>
               <td class="border-right">
-                <%= link_to "#{prev_year_event_date(i).year}年", user_events_search_path(
+                <%= link_to "#{prev_year_event_date(i).year}年", events_search_path(
                   date_or_not: "1",
                   "date1(1i)": prev_year_event_date(i).year,
                   "date1(2i)": "1",

@@ -1,4 +1,4 @@
-<%= form_with model: [current_user, @card], local: true do |f| %>
+<%= form_with model: @card, local: true do |f| %>
 <div class="form_wrapper">
   <%= render "layouts/errors", resource: f.object %>
 

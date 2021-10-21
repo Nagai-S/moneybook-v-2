@@ -19,4 +19,15 @@ class Api::AuthController < Api::ApplicationController
     end
     render json: {message: "success"}, status: 200
   end
+
+  def update_fund_value
+    used_funds = []
+    FundUser.all.includes(:fund).each do |fund_user|
+      used_funds.push(fund_user.fund)
+    end
+    used_funds.uniq.each do |fund|
+      fund.set_now_value_of_fund
+    end
+    render json: {message: "success"}, status: 200
+  end
 end

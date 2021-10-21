@@ -1,0 +1,46 @@
+<h1>投資信託</h1>
+<div class="row">
+  <div class="col-10 offset-1 col-sm-8 offset-sm-4 col-md-6 offset-md-6 page_top_menu">
+    <li><%= link_to "投資信託追加", funds_index_path, class: "square" %></li>
+  </div>
+</div>
+
+<h2>全ての投資信託</h2>
+<%= pie_chart @fund_users_ratio, {library: {title: {
+  text: "¥" + current_user.total_fund_value.to_s(:delimited) + "</br>" +
+  "(<span class=" + loss_or_gain(current_user.total_fund_gain_value) + ">" + 
+  "¥" + plus_minus_gain_value(current_user.total_fund_gain_value) + "</span>)",
+}}} %>
+
+<h2>保有投資信託</h2>
+<div class="table_contents">
+  <div class="table-responsive">
+    <table class="table" id="table_accounts">
+      <thead>
+        <tr>
+          <th>投資信託名</th>
+          <th>時価評価額</th>
+          <th>総購入額</th>
+          <th>平均取得価額</th>
+          <th>評価損益</th>
+        </tr>
+      </thead>
+
+      <% @fund_users.each do |fund_user| %>
+      
+      <tbody>
+        <tr>
+          <td><%= link_to fund_user.fund.name, fund_user_fund_user_histories_path(fund_user.id) %></td>
+          <td>¥<%= fund_user.now_value.to_s(:delimited) %></td>
+          <td>¥<%= fund_user.total_buy_value.to_s(:delimited) %></td>
+          <td>¥<%= fund_user.average_buy_value.to_s(:delimited) %></td>
+          <td class=<%= loss_or_gain(fund_user.gain_value) %>>¥<%= fund_user.gain_value.to_s(:delimited) %></td>
+          <td><%= link_to "削除", fund_user_path(fund_user.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+        </tr>
+      </tbody>
+
+      <% end %>
+      
+    </table>
+  </div>
+</div>

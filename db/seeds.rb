@@ -5,6 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
 user=User.first
 
 user.confirm
@@ -56,11 +57,11 @@ user.cards.create(
 if File.exist?(Rails.root+'all_funds.txt')
   file = File.open(Rails.root+'all_funds.txt')
   funds_array = file.readlines
-  data_length = (funds_array.length+1)/3
+  data_length = funds_array.length/2
   (data_length).times do |i|
-    j = i*3
-    str_id = funds_array[j]
-    name = funds_array[j+1]
+    j = i*2
+    str_id = funds_array[j+1]
+    name = funds_array[j]
     name1 = NKF.nkf('-w -Z4', name)
     name2 = NKF.nkf('-w -X', name1)
     Fund.create(name: name2.delete("\n"), string_id: str_id.delete("\n"))

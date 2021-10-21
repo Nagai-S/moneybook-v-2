@@ -11,7 +11,7 @@ namespace :modify_db do
   end
 
   desc "fundsの半角全角を揃える + 改行コードを消す"
-  task unify_string_size_of_funds: :environment do
+  task modify_funds: :environment do
     Fund.all.each do |fund|
       name1 = NKF.nkf('-w -Z4', fund.name)
       name2 = NKF.nkf('-w -X', name1)

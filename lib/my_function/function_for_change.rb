@@ -2,73 +2,73 @@
 module MyFunction
   module FunctionForChange
     def after_change_action(selected_pay_date)
-      self.to_account.plus(self.value) if self.to_account
+      to_account.plus(value) if to_account
       
-      if self.account
-        self.update(pay_date: nil, pon: true)
-        value = self.iae ? self.value : -self.value
-        self.account.plus(value)
-      elsif self.card
+      if account
+        update(pay_date: nil, pon: true)
+        set_value = iae ? value : -value
+        account.plus(set_value)
+      elsif card
         if selected_pay_date
           pay_day = MyFunction::FlexDate.return_date(
             selected_pay_date.year,
             selected_pay_date.month,
-            self.card.pay_date
+            card.pay_date
           )
         else
-          pay_day = self.decide_pay_day
+          pay_day = decide_pay_day
         end
   
-        self.update(pay_date: pay_day)
+        update(pay_date: pay_day)
   
-        self.change_pon(false)
+        change_pon(false)
       end
     end
   
-    def change_pon(event_pon) #boolには変化前のaxやeventのponを入れる
-      if self.pay_date <= Date.today && !event_pon
-        self.card.account.plus(-self.value)
-      elsif self.pay_date>Date.today && event_pon
-        self.card.account.plus(self.value)
+    def change_pon(event_pon) #event_ponには変化前のaxやeventのponを入れる
+      if pay_date <= Date.today && !event_pon
+        card.account.plus(-value)
+      elsif pay_date>Date.today && event_pon
+        card.account.plus(value)
       end
-      self.pay_date <= Date.today ? self.update(pon: true) : self.update(pon: false)
+      pay_date <= Date.today ? update(pon: true) : update(pon: false)
     end
   
     def before_change_action
-      if self.card == nil
-        account = self.account
-        value = self.iae ? -self.value : self.value
+      if card == nil
+        set_account = account
+        set_value = iae ? -value : value
       else
-        account = self.card.account
-        value = self.pon ? self.value : 0
+        set_account = card.account
+        set_value = pon ? value : 0
       end
   
-      return {account: account, value: value}
+      return {account: set_account, value: set_value}
     end
   
     def decide_pay_day
-      if self.card.pay_date > self.card.month_date
-        if self.card.month_date < self.date.day
-          a = self.date.next_month
-          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, self.card.pay_date)
+      if card.pay_date > card.month_date
+        if card.month_date < date.day
+          a = date.next_month
+          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
         else
-          pay_day = MyFunction::FlexDate.return_date(self.date.year, self.date.month, self.card.pay_date)
+          pay_day = MyFunction::FlexDate.return_date(date.year, date.month, card.pay_date)
         end
       else
-        if self.card.month_date < self.date.day
-          a = self.date.next_month(2)
-          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, self.card.pay_date)
+        if card.month_date < date.day
+          a = date.next_month(2)
+          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
         else
-          a = self.date.next_month
-          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, self.card.pay_date)
+          a = date.next_month
+          pay_day = MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
         end
       end
       return pay_day
     end
 
     def account_deleted
-      account_nil = self.account == nil
-      card_nil = self.card == nil
+      account_nil = account == nil
+      card_nil = card == nil
       if card_nil && account_nil
         return true
       else

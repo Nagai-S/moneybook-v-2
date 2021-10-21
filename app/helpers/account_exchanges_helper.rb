@@ -3,7 +3,11 @@ module AccountExchangesHelper
     if @ax.to_account
       @ax.to_account.id
     elsif current_user.account_exchanges.exists?
-      current_user.account_exchanges.where.not(to_account: nil).first.to_account.id if current_user.account_exchanges.where.not(to_account: nil).exists?
+      current_user
+      .account_exchanges
+      .where.not(to_account: nil)
+      .first.to_account.id if current_user
+      .account_exchanges.where.not(to_account: nil).exists?
     end
   end
 
@@ -11,7 +15,11 @@ module AccountExchangesHelper
     if @ax.card
       @ax.card.id
     elsif current_user.account_exchanges.where.not(card_id: nil).exists?
-      current_user.account_exchanges.where.not(card_id: nil).first.card.id if current_user.account_exchanges.where.not(card_id: nil).exists?
+      current_user
+      .account_exchanges
+      .where.not(card_id: nil)
+      .first.card.id if current_user
+      .account_exchanges.where.not(card_id: nil).exists?
     end
   end
 
@@ -19,7 +27,11 @@ module AccountExchangesHelper
     if @ax.account
       @ax.account.id
     elsif current_user.account_exchanges.where.not(source_id: nil).exists?
-      current_user.account_exchanges.where.not(source_id: nil).first.account.id if current_user.account_exchanges.where.not(source_id: nil).exists?
+      current_user
+      .account_exchanges
+      .where.not(source_id: nil)
+      .first.account.id if current_user
+      .account_exchanges.where.not(source_id: nil).exists?
     end
   end
   

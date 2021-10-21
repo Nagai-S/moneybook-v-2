@@ -1,22 +1,20 @@
 class GenresController < ApplicationController
   before_action :authenticate_user!
   before_action :select_genre, only: [:destroy, :edit, :update]
+  before_action :correct_user!, only: [:destroy, :edit, :update]
+  before_action :set_previous_url, only: [:new, :edit]
   
   def index
   end
 
   def new
     @genre = current_user.genres.build(iae: params[:iae])
-    session[:previous_url] = request.referer
   end
 
   def create
     @genre = current_user.genres.build(genres_params)
     if @genre.save
-      unless Rails.env.test?
-        redirect_to session[:previous_url]
-        session[:previous_url].clear
-      end
+      redirect_to_previou_url
     else
       flash.now[:danger] = "ジャンルの作成に失敗しました。"
       render 'new'
@@ -26,7 +24,7 @@ class GenresController < ApplicationController
   def destroy
     @genre.before_destroy_action
     @genre.destroy
-    redirect_to user_genres_path(params[:user_id])
+    redirect_to genres_path
   end
   
   def edit
@@ -34,7 +32,7 @@ class GenresController < ApplicationController
 
   def update
     if @genre.update(genres_params)
-      redirect_to user_genres_path(params[:user_id])
+      redirect_to_previou_url
     else
       flash.now[:danger] = "ジャンルの編集に失敗しました。"
       render "edit"
@@ -47,7 +45,10 @@ class GenresController < ApplicationController
     end
 
     def select_genre
-      @genre = Genre.find_by(user_id: params[:user_id], id: params[:id])
+      @genre = Genre.find_by(id: params[:id])
     end
     
+    def correct_user!
+      redirect_to root_path unless current_user == @genre.user
+    end
 end

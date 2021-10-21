@@ -24,3 +24,10 @@ ja:
         value: 金額
         pay_date: 引き落とし日
         source_id: 振替元アカウント
+      fund_user:
+        average_buy_value: 平均取得価額
+      fund_user_history:
+        date: 日付
+        value: 金額
+        pay_date: 引き落とし日
+        commission: 手数料

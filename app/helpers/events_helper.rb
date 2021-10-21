@@ -3,7 +3,11 @@ module EventsHelper
     if @event.genre
       @event.genre.id
     else
-      current_user.events.where.not(genre_id: nil).where(iae: iae).first.genre.id if current_user.events.where.not(genre_id: nil).where(iae: iae).exists?
+      current_user
+      .events
+      .where.not(genre_id: nil)
+      .where(iae: iae).first.genre.id if current_user
+      .events.where.not(genre_id: nil).where(iae: iae).exists?
     end
   end
 
@@ -11,7 +15,11 @@ module EventsHelper
     if @event.card
       @event.card.id
     elsif current_user.events.where.not(card_id: nil).exists?
-      current_user.events.where.not(card_id: nil).first.card.id if current_user.events.where.not(card_id: nil).exists?
+      current_user
+      .events
+      .where.not(card_id: nil)
+      .first.card.id if current_user
+      .events.where.not(card_id: nil).exists?
     end
   end
 
@@ -19,7 +27,11 @@ module EventsHelper
     if @event.account
       @event.account.id
     else
-      current_user.events.where.not(account_id: nil).where(iae: iae).first.account.id if current_user.events.where.not(account_id: nil).where(iae: iae).exists?
+      current_user
+      .events.where.not(account_id: nil)
+      .where(iae: iae)
+      .first.account.id if current_user
+      .events.where.not(account_id: nil).where(iae: iae).exists?
     end
   end
   

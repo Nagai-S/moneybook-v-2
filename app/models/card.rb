@@ -1,8 +1,32 @@
+# == Schema Information
+#
+# Table name: cards
+#
+#  id         :bigint           not null, primary key
+#  month_date :integer
+#  name       :string(255)
+#  pay_date   :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  account_id :bigint           not null
+#  user_id    :bigint           not null
+#
+# Indexes
+#
+#  index_cards_on_account_id  (account_id)
+#  index_cards_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (account_id => accounts.id)
+#  fk_rails_...  (user_id => users.id)
+#
 class Card < ApplicationRecord
   belongs_to :user
   belongs_to :account
   has_many :events
   has_many :account_exchanges
+  has_many :fund_user_histories
 
   validates :name, presence: {message: "は１文字以上入力してください。"}, 
   uniqueness: { scope: :user, message: "「%{value}」と同じ名前のカードが存在します。" }
@@ -21,51 +45,49 @@ class Card < ApplicationRecord
   validate :pay_not_equal_to_month, :card_name_not_account_name
 
   def before_destroy_action
-    self.events.each do |event|
+    events.each do |event|
       event.update(card_id: nil)
     end
-    self.account_exchanges.each do |ax|
+    account_exchanges.each do |ax|
       ax.update(card_id: nil)
     end
   end
 
-  def months_count_for_not_pay
-    first_date_event = self.events.where(pon: false).first.pay_date if self.events.where(pon: false).first
-    last_date_event = self.events.where(pon: false).last.pay_date if self.events.where(pon: false).last
-    first_date_ax = self.account_exchanges.where(pon: false).first.pay_date if self.account_exchanges.where(pon: false).first
-    last_date_ax = self.account_exchanges.where(pon: false).last.pay_date if self.account_exchanges.where(pon: false).last
+  def not_pay_months
+    not_pay_month = []
 
-    if first_date_event && first_date_ax
-      first_date = first_date_event>first_date_ax ? first_date_event : first_date_ax
-    elsif first_date_event
-      first_date = first_date_event
-    elsif first_date_ax
-      first_date = first_date_ax
+    if events.where(pon: false).exists?
+      events.where(pon: false).each do |event|
+        not_pay_month.push(event.pay_date)
+      end
+    end
+    if account_exchanges.where(pon: false).exists?
+      account_exchanges.where(pon: false).each do |ax|
+        not_pay_month.push(ax.pay_date)
+      end
+    end
+    if fund_user_histories.where(pon: false).exists?
+      fund_user_histories.where(pon: false).each do |fund_user_history|
+        not_pay_month.push(fund_user_history.pay_date)
+      end
     end
 
-    if last_date_event && last_date_ax
-      last_date = last_date_event>last_date_ax ? last_date_ax : last_date_event
-    elsif last_date_event
-      last_date = last_date_event
-    elsif last_date_ax
-      last_date = last_date_ax
-    end
-    months = (first_date.year-1-last_date.year)*12+first_date.month+12-last_date.month+1
-    return months
+    return not_pay_month.uniq.sort
   end
 
   def not_pay_value(pay_date)
-    event = self.events.where(pon: false, pay_date: pay_date).sum(:value)
-    ax = self.account_exchanges.where(pon: false, pay_date: pay_date).sum(:value)
-    return event+ax
+    event = events.where(pon: false, pay_date: pay_date).sum(:value)
+    ax = account_exchanges.where(pon: false, pay_date: pay_date).sum(:value)
+    fund_user_history = fund_user_histories.where(pon: false, pay_date: pay_date).sum(:value)
+    return event + ax + fund_user_history
   end
 
   def after_update_action
-    self.events.includes(:card, :account).each do |event|
+    events.includes(:card, :account).each do |event|
       event.update(pay_date: event.decide_pay_day)
       event.change_pon(event.pon)
     end
-    self.account_exchanges.includes(:card, :account).each do |ax|
+    account_exchanges.includes(:card, :account).each do |ax|
       ax.update(pay_date: ax.decide_pay_day)
       ax.change_pon(ax.pon)
     end

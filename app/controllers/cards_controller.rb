@@ -1,7 +1,9 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :select_card, only: [:destroy, :edit, :update, :show,]
+  before_action :select_card, only: [:destroy, :edit, :update, :show]
+  before_action :correct_user!, only: [:destroy, :edit, :update, :show]
   before_action :to_explanation, only: [:show, :index, :new]
+  before_action :set_previous_url, only: [:new, :edit]
   
   def index
     @cards = current_user.cards.includes(:account)
@@ -15,7 +17,7 @@ class CardsController < ApplicationController
     @card = current_user.cards.build(cards_params)
     @card.account_id = params[:card][:account]
     if @card.save
-      redirect_to user_cards_path
+      redirect_to_previou_url
     else
       flash.now[:danger] = "クレジットカードの作成に失敗しました。"
       render "new"
@@ -30,7 +32,7 @@ class CardsController < ApplicationController
     else
       @card.before_destroy_action
       @card.destroy
-      redirect_to user_cards_path(params[:user_id])
+      redirect_to cards_path
     end
   end
   
@@ -44,7 +46,7 @@ class CardsController < ApplicationController
     @card.account_id = params[:card][:account]
     if @card.update(cards_params)
       @card.after_update_action
-      redirect_to user_cards_path(params[:user_id])
+      redirect_to_previou_url
     else
       flash.now[:danger] = "クレジットカードの編集に失敗しました。"
       render "edit"
@@ -57,7 +59,11 @@ class CardsController < ApplicationController
     end
 
     def select_card
-      @card = Card.find_by(user_id: params[:user_id], id: params[:id])
+      @card = Card.find_by(id: params[:id])
+    end
+
+    def correct_user!
+      redirect_to root_path unless current_user == @card.user
     end
     
 end

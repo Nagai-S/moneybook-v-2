@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include ApplicationHelper
+  
   protect_from_forgery with: :exception
   protect_from_forgery unless: -> { request.format.json? } 
   before_action :set_host
@@ -9,7 +11,7 @@ class ApplicationController < ActionController::Base
   ]
 
   def after_sign_in_path_for(resource)
-    user_events_path(current_user) # ログイン後に遷移するpathを設定
+    events_path # ログイン後に遷移するpathを設定
   end
 
   def after_sign_out_path_for(resource)
@@ -29,7 +31,18 @@ class ApplicationController < ActionController::Base
       ])
     end
     unless current_user.accounts.exists?
-      redirect_to user_explanation_path(current_user)
+      redirect_to explanation_path
+    end
+  end
+
+  def set_previous_url
+    session[:previous_url] = request.referer unless Rails.env.test?
+  end
+
+  def redirect_to_previou_url
+    unless Rails.env.test?
+      redirect_to session[:previous_url]
+      session[:previous_url].clear
     end
   end
 
