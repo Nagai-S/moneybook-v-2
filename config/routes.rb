@@ -46,7 +46,7 @@
 #                                       POST   /api/v1/account_exchanges(.:format)                                                      api/account_exchanges#create
 #                       api_daily_email GET    /api/v1/daily_email(.:format)                                                            api/auth#daily_email
 #                 api_update_fund_value GET    /api/v1/update_fund_value(.:format)                                                      api/auth#update_fund_value
-#                      api_regist_funds GET    /api/v1/regist_funds(.:format)                                                           api/auth#regist_funds
+#                      api_regist_funds POST   /api/v1/regist_funds(.:format)                                                           api/auth#regist_funds
 #                              accounts GET    /accounts(.:format)                                                                      accounts#index
 #                                       POST   /accounts(.:format)                                                                      accounts#create
 #                           new_account GET    /accounts/new(.:format)                                                                  accounts#new
@@ -135,7 +135,7 @@ Rails.application.routes.draw do
 
       get "daily_email" => "auth#daily_email"
       get "update_fund_value" => "auth#update_fund_value"
-      get "regist_funds" => "auth#regist_funds"
+      post "regist_funds" => "auth#regist_funds"
     end
   end
   

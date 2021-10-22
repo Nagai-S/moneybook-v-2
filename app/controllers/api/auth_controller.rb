@@ -40,5 +40,6 @@ class Api::AuthController < Api::ApplicationController
       value: value,
       string_id: string_id
     )
+    render json: {message: "success"}, status: 200
   end
 end
