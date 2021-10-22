@@ -18,7 +18,6 @@ class Fund < ApplicationRecord
   has_many :users, through: :fund_users
 
   validates :name, presence: {message: "は１文字以上入力してください。"}
-  default_scope -> {order("RAND()")}
 
   def set_now_value_of_fund
     id = string_id
