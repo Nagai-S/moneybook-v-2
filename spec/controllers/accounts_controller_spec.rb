@@ -20,12 +20,14 @@ RSpec.describe AccountsController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true
         )
         ax1 = @user.account_exchanges.create(
           value: 100,
           source_id: @account1.id,
+          card_id: nil,
           to_id: @account2.id,
           date: Date.today,
           pon: true
@@ -33,6 +35,7 @@ RSpec.describe AccountsController do
         ax2 = @user.account_exchanges.create(
           value: 100,
           source_id: @account2.id,
+          card_id: nil,
           to_id: @account1.id,
           date: Date.today,
           pon: true

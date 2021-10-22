@@ -22,7 +22,7 @@
 class FundUser < ApplicationRecord
   belongs_to :user
   belongs_to :fund
-  has_many :fund_user_histories, dependent: :destroy
+  has_many :fund_user_histories, dependent: :delete_all
 
   validates(
     :average_buy_value, 

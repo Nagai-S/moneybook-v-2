@@ -46,6 +46,7 @@
 #                                       POST   /api/v1/account_exchanges(.:format)                                                      api/account_exchanges#create
 #                       api_daily_email GET    /api/v1/daily_email(.:format)                                                            api/auth#daily_email
 #                 api_update_fund_value GET    /api/v1/update_fund_value(.:format)                                                      api/auth#update_fund_value
+#                      api_regist_funds GET    /api/v1/regist_funds(.:format)                                                           api/auth#regist_funds
 #                              accounts GET    /accounts(.:format)                                                                      accounts#index
 #                                       POST   /accounts(.:format)                                                                      accounts#create
 #                           new_account GET    /accounts/new(.:format)                                                                  accounts#new
@@ -82,7 +83,10 @@
 #         fund_user_fund_user_histories GET    /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#index
 #                                       POST   /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#create
 #       new_fund_user_fund_user_history GET    /fund_users/:fund_user_id/fund_user_histories/new(.:format)                              fund_user_histories#new
-#           fund_user_fund_user_history DELETE /fund_users/:fund_user_id/fund_user_histories/:id(.:format)                              fund_user_histories#destroy
+#      edit_fund_user_fund_user_history GET    /fund_users/:fund_user_id/fund_user_histories/:id/edit(.:format)                         fund_user_histories#edit
+#           fund_user_fund_user_history PATCH  /fund_users/:fund_user_id/fund_user_histories/:id(.:format)                              fund_user_histories#update
+#                                       PUT    /fund_users/:fund_user_id/fund_user_histories/:id(.:format)                              fund_user_histories#update
+#                                       DELETE /fund_users/:fund_user_id/fund_user_histories/:id(.:format)                              fund_user_histories#destroy
 #                            fund_users GET    /fund_users(.:format)                                                                    fund_users#index
 #                                       POST   /fund_users(.:format)                                                                    fund_users#create
 #                         new_fund_user GET    /fund_users/new(.:format)                                                                fund_users#new
@@ -131,6 +135,7 @@ Rails.application.routes.draw do
 
       get "daily_email" => "auth#daily_email"
       get "update_fund_value" => "auth#update_fund_value"
+      get "regist_funds" => "auth#regist_funds"
     end
   end
   
@@ -140,7 +145,7 @@ Rails.application.routes.draw do
   resources :events, only: [:index, :create, :new, :edit, :update, :destroy]
   resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
   resources :fund_users, only: [:new, :create, :index, :destroy, :update] do
-    resources :fund_user_histories, only: [:new, :create, :index, :destroy]
+    resources :fund_user_histories, only: [:new, :create, :index, :destroy, :edit, :update]
   end
   get "account_month" => "accounts#month_index"
   get "explanation" => "homepages#explanation"

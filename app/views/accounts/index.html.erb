@@ -36,14 +36,14 @@
                   account: account.id
                 ) %>
               </td>
-              <td>¥<%= account.value.to_s(:delimited) %></td>
+              <td>¥<%= account.now_value.to_s(:delimited) %></td>
               <td>¥<%= account.after_pay_value.to_s(:delimited) %></td>
               <td><%= link_to "削除", account_path(account.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
             </tr>
             <% end %>
             <tr class="total">
               <td>トータル</td>
-              <td class="total_value">¥<%= current_user.accounts.sum(:value).to_s(:delimited) %></td>
+              <td class="total_value">¥<%= current_user.total_account_value.to_s(:delimited) %></td>
               <td class="total_value">¥<%= current_user.after_pay_value.to_s(:delimited) %></td>
             </tr>
           </tbody>
@@ -72,7 +72,9 @@
                 <%=link_to fund_user.fund.name, fund_user_fund_user_histories_path(fund_user.id) %>
               </td>
               <td>¥<%= fund_user.now_value.to_s(:delimited) %></td>
-              <td class=<%= loss_or_gain(fund_user.gain_value) %>>¥<%= fund_user.gain_value.to_s(:delimited) %></td>
+              <td class=<%= loss_or_gain(fund_user.gain_value) %>>
+                ¥<%= fund_user.gain_value.to_s(:delimited) %>
+              </td>
             </tr>
             <% end %>
             <tr class="total">

@@ -54,6 +54,10 @@ class Event < ApplicationRecord
     account_deleted
   end
 
+  def update_account(account_id)
+    update(account_id: account_id)
+  end
+
   private
     def iae_equal_to_genre_iae
       if genre_id != nil && genre.iae != iae

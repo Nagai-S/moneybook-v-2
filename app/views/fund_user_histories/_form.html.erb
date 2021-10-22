@@ -29,13 +29,13 @@
 
     <ul class="nav nav-tabs <%= label_class %>" id="card-account">
       <li class="nav-item">
-        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#tab_nothing" data-toggle="tab" id='nothing'>選択しない</a>
+        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:nothing] %>" href="#tab_nothing" data-toggle="tab" id='nothing'>選択しない</a>
       </li>
     </ul>
 
@@ -50,13 +50,13 @@
     <%= f.select(
       :account_or_card,
       [["account",0], ["card",1], ["nothing",2]],
-      {selected: active_is_account_or_card_for_fund_user_history(buy_or_sell)[:number]},
+      {selected: active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:number]},
       style: "display:none",
       id: "account_or_card"
     ) %>
 
     <div class="tab-content">
-      <div class="tab-pane <%= active_is_account_or_card_for_fund_user_history(buy_or_sell)[:account] %>" id="tab_account">
+      <div class="tab-pane <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:account] %>" id="tab_account">
         <div class="row">
           <div class="<%= form_class %>">
             <%= f.collection_select(
@@ -71,7 +71,7 @@
         </div>
       </div>
 
-      <div class="tab-pane <%= active_is_account_or_card_for_fund_user_history(buy_or_sell)[:card] %>" id="tab_card">
+      <div class="tab-pane <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:card] %>" id="tab_card">
         <div class="row">
           <div class="<%= form_class %>">
             <%= f.collection_select(
@@ -86,7 +86,7 @@
         </div>
       </div>
 
-      <div class="tab-pane" id="tab_nothing">
+      <div class="tab-pane <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:nothing] %>" id="tab_nothing">
         
       </div>
     </div>

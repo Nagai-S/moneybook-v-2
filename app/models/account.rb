@@ -35,11 +35,6 @@ class Account < ApplicationRecord
     only_integer: {message: "は整数で入力してください。"}
   }
 
-  def plus(set_value)
-    now_value = value
-    update(value: now_value + set_value)
-  end
-  
   def after_pay_value
     not_pay_value = 0
     cards.includes(:events, :account_exchanges).each do |card|
@@ -47,7 +42,7 @@ class Account < ApplicationRecord
       not_pay_value += card.account_exchanges.where(pon: false).sum(:value)
       not_pay_value += card.fund_user_histories.where(pon: false).sum(:value)
     end
-    return value - not_pay_value
+    return now_value - not_pay_value
   end
 
   def before_destroy_action
@@ -60,6 +55,26 @@ class Account < ApplicationRecord
     account_exchanges_source.each do |ax|
       ax.update(source_id: nil)
     end
+    fund_user_histories.each do |fund_user_history|
+      fund_user_history.update(account_id: nil)
+    end
+  end
+
+  def now_value
+    event_in_sum = events.where(pon: true, iae: true).sum(:value)
+    event_ex_sum = events.where(pon: true, iae: false).sum(:value)
+    ax_source_sum = account_exchanges_source.where(pon: true).sum(:value)
+    ax_to_sum = account_exchanges_to.sum(:value)
+    fund_user_history_buy_sum = fund_user_histories.where(pon: true, buy_or_sell: true).sum(:value)
+    fund_user_history_sell_sum = fund_user_histories.where(pon: true, buy_or_sell: false).sum(:value)
+    fund_user_history_sell_commission_sum = fund_user_histories.where(
+      pon: true,
+      buy_or_sell: false
+    ).sum(:commission)
+
+    return value + event_in_sum - event_ex_sum + 
+    ax_to_sum - ax_source_sum + 
+    fund_user_history_sell_sum - fund_user_history_buy_sum - fund_user_history_sell_commission_sum
   end
   
 end

@@ -4,11 +4,12 @@ class AccountsController < ApplicationController
   before_action :correct_user!, only: :destroy
   
   def index
-    @accounts = current_user.accounts.includes(:cards)
+    not_order_accounts = current_user.accounts.includes(:cards)
+    @accounts = not_order_accounts.sort{|a, b| (-1) * (a.now_value <=> b.now_value)}
     @fund_users = current_user.fund_users
     assets_array = []
     @accounts.each do |account|
-      assets_array.push([omit_string(account.name), account.value])
+      assets_array.push([omit_string(account.name), account.now_value])
     end
     @fund_users.each do |fund_user|
       assets_array.push([omit_string(fund_user.fund.name), fund_user.now_value])

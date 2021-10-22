@@ -1,0 +1,21 @@
+<h1><%= @fund_user.fund.name %></h1>
+
+<%= render 'form_tab' %>
+
+<div class="tab-content">
+  <%= render 'form', {
+    active: active_is_buy_or_sell[:buy],
+    tab_id: "tab_buy",
+    backcolor: "",
+    buy_or_sell: true,
+    edit: true,
+  } %>
+
+  <%= render 'form', {
+    active: active_is_buy_or_sell[:sell],
+    tab_id: "tab_sell",
+    backcolor: "income",
+    buy_or_sell: false,
+    edit: true,
+  } %>
+</div>

@@ -5,7 +5,8 @@ class FundUsersController < ApplicationController
   before_action :set_previous_url, only: :new
   
   def index
-    @fund_users = current_user.fund_users
+    fund_users_not_order = current_user.fund_users
+    @fund_users = fund_users_not_order.sort{|a, b| (-1) * (a.now_value <=> b.now_value)}
     fund_users_array = []
     @fund_users.each do |fund_user|
       fund_users_array.push([omit_string(fund_user.fund.name), fund_user.now_value])
@@ -31,6 +32,9 @@ class FundUsersController < ApplicationController
           buy_or_sell: true,
           pon: true
         )
+      end
+      if @fund.update_on != Date.today
+        @fund.set_now_value_of_fund
       end
       redirect_to fund_users_path
     else

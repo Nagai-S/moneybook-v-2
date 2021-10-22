@@ -9,6 +9,14 @@ RSpec.describe FundUsersController do
     @fund = Fund.create(
       name: "fund1",
       value: 10000,
+      update_on: nil,
+      string_id: "JP90C000CVU4",
+    )
+    @fund_updated = Fund.create(
+      name: "fund1",
+      value: 10000,
+      update_on: Date.today,
+      string_id: "JP90C0000VZ4",
     )
     @fund_user = @user.fund_users.create(
       average_buy_value: 9000,
@@ -23,14 +31,35 @@ RSpec.describe FundUsersController do
         average_buy_value: 9000
       }
     }} 
-    it "total_buy_valueがある" do
-      params[:fund_user][:total_buy_value] = 20000
-      expect{post :create, params: params}.to change{
-        FundUserHistory.all.length
-      }.by(1).and change{
-        FundUser.all.length
-      }.by(1)
+    describe "total_buy_valueがある" do
+      it "valueとupdate_onが更新される" do
+        params[:fund_user][:total_buy_value] = 20000
+        expect{post :create, params: params}.to change{
+          FundUserHistory.all.length
+        }.by(1).and change{
+          FundUser.all.length
+        }.by(1).and change{
+          Fund.find(@fund.id).update_on
+        }.and change{
+          Fund.find(@fund.id).value
+        }
+      end
+
+      it "valueとupdate_onが更新されない" do
+        params[:fund_user][:fund_id] = @fund_updated.id
+        params[:fund_user][:total_buy_value] = 20000
+        expect{post :create, params: params}.to change{
+          FundUserHistory.all.length
+        }.by(1).and change{
+          FundUser.all.length
+        }.by(1).and change{
+          Fund.find(@fund_updated.id).update_on
+        }.by(0).and change{
+          Fund.find(@fund_updated.id).value
+        }.by(0)
+      end
     end
+    
 
     it "total_buy_valueがない" do
       expect{post :create, params: params}.to change{

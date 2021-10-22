@@ -51,8 +51,43 @@ class Card < ApplicationRecord
     account_exchanges.each do |ax|
       ax.update(card_id: nil)
     end
+    fund_user_histories.each do |fund_user_history|
+      fund_user_history.update(card_id: nil)
+    end
   end
 
+  def after_update_action
+    events.includes(:card, :account).each do |event|
+      event.update(
+        pay_date: event.decide_pay_day,
+      )
+      event.change_pon
+      unless event.pon
+        event.update(account_id: account_id)
+      end
+    end
+    account_exchanges.includes(:card, :account).each do |ax|
+      ax.update(
+        pay_date: ax.decide_pay_day,
+      )
+      ax.change_pon
+      unless ax.pon
+        ax.update(source_id: account_id)
+      end
+    end
+    fund_user_histories.includes(:card, :account).each do |fund_user_history|
+      fund_user_history.update(
+        pay_date: fund_user_history.decide_pay_day,
+        account_id: account_id
+      )
+      fund_user_history.change_pon
+      unless fund_user_history.pon
+        fund_user_history.update(account_id: account_id)
+      end
+    end
+  end
+
+  # for show----------------------------------------------------------
   def not_pay_months
     not_pay_month = []
 
@@ -81,18 +116,7 @@ class Card < ApplicationRecord
     fund_user_history = fund_user_histories.where(pon: false, pay_date: pay_date).sum(:value)
     return event + ax + fund_user_history
   end
-
-  def after_update_action
-    events.includes(:card, :account).each do |event|
-      event.update(pay_date: event.decide_pay_day)
-      event.change_pon(event.pon)
-    end
-    account_exchanges.includes(:card, :account).each do |ax|
-      ax.update(pay_date: ax.decide_pay_day)
-      ax.change_pon(ax.pon)
-    end
-  end
-  
+  # -----------------------------------------------------------------
 
   private
     def pay_not_equal_to_month

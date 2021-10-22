@@ -32,6 +32,8 @@ class FundUserHistory < ApplicationRecord
   belongs_to :card, optional: true
   belongs_to :fund_user
 
+  default_scope -> {order(date: :desc)}
+
   validates :date, presence: true
   validates :value, presence: {message: "は一桁以上入力してください。"},
   numericality: {
@@ -54,5 +56,9 @@ class FundUserHistory < ApplicationRecord
 
   def buy_or_sell_name
     return buy_or_sell ? "購入" : "売却"
+  end
+
+  def update_account(account_id)
+    update(account_id: account_id)
   end
 end

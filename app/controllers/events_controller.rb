@@ -8,7 +8,10 @@ class EventsController < ApplicationController
   before_action :set_previous_url, only: [:new, :edit]
 
   def index
-    @events = current_user.events.includes(:account,:card,:genre).page(params[:page]).per(80)
+    @events = current_user
+    .events
+    .includes(:account,:card,:genre)
+    .page(params[:page]).per(80)
   end
 
   def new
@@ -31,7 +34,9 @@ class EventsController < ApplicationController
       value_array << value_include_plus_minus
     end
     @sum = value_array.sum
-    @events = events.includes(:account,:card,:genre).page(params[:page]).per(80)
+    @events = events
+    .includes(:account,:card,:genre)
+    .page(params[:page]).per(80)
   end
 
   def create
@@ -48,9 +53,7 @@ class EventsController < ApplicationController
   end
   
   def destroy
-    before_inf = @event.before_change_action
     @event.destroy
-    before_inf[:account].plus(before_inf[:value])
     redirect_to request.referer unless Rails.env.test?
   end
   
@@ -58,11 +61,8 @@ class EventsController < ApplicationController
   end
 
   def update
-    before_inf = @event.before_change_action
-
     association_model_update
     if @event.update(events_params)
-      before_inf[:account].plus(before_inf[:value])
       @event.after_change_action(@event.pay_date)
       redirect_to_previou_url
     else

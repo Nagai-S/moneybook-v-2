@@ -20,10 +20,10 @@ module ApplicationHelper
   end
 
   def account_or_card_name(event, fund_or_not)
-    if event.account
-      event.account.name
-    elsif event.card
+    if event.card
       event.card.name
+    elsif event.account
+      event.account.name
     else
       deleted_message(fund_or_not)
     end

@@ -40,11 +40,19 @@ class User < ApplicationRecord
   has_many :funds, through: :fund_users
   has_many :fund_user_histories, through: :fund_users, dependent: :delete_all
 
+  def total_account_value
+    return_value = 0
+    accounts.each do |account|
+      return_value += account.now_value
+    end
+    return return_value
+  end
+  
   def after_pay_value
     not_pay_value = account_exchanges.where(pon: false).sum(:value) + 
     events.where(pon: false).sum(:value) + 
     fund_user_histories.where(pon: false).sum(:value)
-    return self.accounts.sum(:value) - not_pay_value
+    return total_account_value - not_pay_value
   end
 
   def how_long_months_years
@@ -72,7 +80,7 @@ class User < ApplicationRecord
   end
   
   def total_assets
-    accounts.sum(:value) + total_fund_value
+    total_account_value + total_fund_value
   end
 
 end

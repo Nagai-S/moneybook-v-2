@@ -1,9 +1,10 @@
 class FundUserHistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :select_fund_user
-  before_action :correct_user!, only: :destroy
+  before_action :select_fund_user_history, only: [:destroy, :edit, :update]
+  before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
-  before_action :set_previous_url, only: [:new]
+  before_action :set_previous_url, only: [:new, :edit]
   
   def index
     @fund_user_histories = @fund_user.fund_user_histories
@@ -14,13 +15,10 @@ class FundUserHistoriesController < ApplicationController
   end
 
   def create
-    @fund_user_history = @fund_user.fund_user_histories.build(fund_user_historys_params)
+    @fund_user_history = @fund_user.fund_user_histories.build(fund_user_histories_params)
     association_model_update
 
     if @fund_user_history.save
-      if !@fund_user_history.buy_or_sell
-        @fund_user_history.value -= @fund_user_history.commission
-      end
       @fund_user_history.after_change_action(@fund_user_history.pay_date)
       redirect_to_previou_url
     else
@@ -30,17 +28,22 @@ class FundUserHistoriesController < ApplicationController
   end
 
   def destroy
-    if !@fund_user_history.buy_or_sell
-      @fund_user_history.value -= @fund_user_history.commission
-    end
-    if @fund_user_history.account == nil && @fund_user_history.card == nil
-      @fund_user_history.destroy
-    else
-      before_inf = @fund_user_history.before_change_action
-      @fund_user_history.destroy
-      before_inf[:account].plus(before_inf[:value])
-    end
+    @fund_user_history.destroy
     redirect_to request.referer unless Rails.env.test?
+  end
+
+  def edit
+  end
+
+  def update
+    association_model_update
+    if @fund_user_history.update(fund_user_histories_params)
+      @fund_user_history.after_change_action(@fund_user_history.pay_date)
+      redirect_to_previou_url
+    else
+      flash.now[:danger] = "編集に失敗しました。"
+      render "edit"
+    end
   end
 
   private
@@ -48,7 +51,11 @@ class FundUserHistoriesController < ApplicationController
       @fund_user = FundUser.find(params[:fund_user_id])
     end
 
-    def fund_user_historys_params
+    def select_fund_user_history
+      @fund_user_history = FundUserHistory.find(params[:id])
+    end
+
+    def fund_user_histories_params
       params.require(:fund_user_history).permit(
         :date,
         :value,
@@ -72,7 +79,6 @@ class FundUserHistoriesController < ApplicationController
     end
 
     def correct_user!
-      @fund_user_history = @fund_user.fund_user_histories.find(params[:id])
       redirect_to root_path unless current_user == @fund_user_history.fund_user.user
     end
   

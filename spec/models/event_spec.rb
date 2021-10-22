@@ -48,6 +48,7 @@ RSpec.describe Event do
       value: 100,
       genre_id: @genre_ex.id,
       card_id: @card1.id,
+      account_id: @card1.account.id,
       date: Date.today.prev_year(1),
       pon: false,
     )
@@ -59,6 +60,7 @@ RSpec.describe Event do
       value: 100,
       genre_id: @genre_ex.id,
       card_id: @card1.id,
+      account_id: @card1.account.id,
       date: Date.today,
       pon: true,
     )
@@ -67,18 +69,18 @@ RSpec.describe Event do
 
   it "change_ponでfalseからtrueに変化する" do
     expect{
-      @event.change_pon(@event.pon)
+      @event.change_pon
     }.to change{
-      Account.find(@card1.account.id).value
+      Account.find(@card1.account.id).now_value
     }.by(-100)
     expect(Event.find(@event.id).pon).to eq true
   end
 
   it "change_ponでtrueからfalseに変化する" do
     expect{
-      @event1.change_pon(@event1.pon)
+      @event1.change_pon
     }.to change{
-      Account.find(@card1.account.id).value
+      Account.find(@card1.account.id).now_value
     }.by(100)
     expect(Event.find(@event1.id).pon).to eq false
   end

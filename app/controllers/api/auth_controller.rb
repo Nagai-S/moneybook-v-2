@@ -30,4 +30,15 @@ class Api::AuthController < Api::ApplicationController
     end
     render json: {message: "success"}, status: 200
   end
+
+  def regist_funds
+    name = params[:fund][:name]
+    value = params[:fund][:value]
+    string_id = params[:fund][:string_id]
+    Fund.create(
+      name: name,
+      value: value,
+      string_id: string_id
+    )
+  end
 end

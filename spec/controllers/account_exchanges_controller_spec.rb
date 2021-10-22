@@ -41,9 +41,9 @@ RSpec.describe AccountExchangesController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(-100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(100)
       end
       
@@ -63,9 +63,9 @@ RSpec.describe AccountExchangesController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(100).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(-100)
@@ -87,38 +87,14 @@ RSpec.describe AccountExchangesController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(-100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(100)
       end
     end
 
     describe "createに失敗" do
-      it "sourceとtoが同じで失敗" do
-        params = {
-          account_exchange:{
-            "date(1i)": "2020",
-            "date(2i)": "2",
-            "date(3i)": "20",
-            account_or_card: "0",
-            source_account: @account1.id,
-            card: @card1.id,
-            to_account: @account1.id,
-            value: 100,
-          }
-        }
-        expect{
-          post :create, params: params
-        }.to change{
-          Account.find(@account1.id).value
-        }.by(0).and change{
-          Account.find(@account2.id).value
-        }.by(0).and change{
-          AccountExchange.all.length
-        }.by(0)
-      end
-
       it "valueがなくてaccountからの振り替えに失敗" do
         params = {
           account_exchange:{
@@ -135,9 +111,9 @@ RSpec.describe AccountExchangesController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           AccountExchange.all.length
         }.by(0)
@@ -151,6 +127,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           to_id: @account2.id,
           pon: true,
@@ -158,9 +135,9 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-100)
       end
       
@@ -168,6 +145,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
           date: Date.today,
           to_id: @account2.id,
           pon: false,
@@ -176,9 +154,9 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-100).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(100)
@@ -188,6 +166,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
           date: Date.today.prev_year(1),
           to_id: @account2.id,
           pon: true,
@@ -196,9 +175,9 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-100)
       end
   
@@ -217,7 +196,7 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           AccountExchange.all.length
         }.by(0)
@@ -227,6 +206,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account1.id,
+          card_id: nil,
           date: Date.today.prev_year(1),
           to_id: nil,
           pon: true,
@@ -234,7 +214,7 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
           AccountExchange.all.length
         }.by(0)
@@ -247,6 +227,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account1.id,
+          card_id: nil,
           date: Date.today.prev_year(1),
           to_id: @account2.id,
           pon: true,
@@ -254,9 +235,9 @@ RSpec.describe AccountExchangesController do
         expect{
           delete :destroy, params: {id: ax.id}
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           AccountExchange.all.length
         }.by(0)
@@ -284,6 +265,7 @@ RSpec.describe AccountExchangesController do
           ax = @user.account_exchanges.create(
             value: 100,
             source_id: @account3.id,
+            card_id: nil,
             date: Date.today,
             to_id: @account2.id,
             pon: true,
@@ -292,11 +274,11 @@ RSpec.describe AccountExchangesController do
           expect{
             put :update, params: params  
           }.to change{
-            Account.find(@account3.id).value
+            Account.find(@account3.id).now_value
           }.by(100).and change{
-            Account.find(@account1.id).value
+            Account.find(@account1.id).now_value
           }.by(-200).and change{
-            Account.find(@account2.id).value
+            Account.find(@account2.id).now_value
           }.by(100)
         end
         
@@ -304,6 +286,7 @@ RSpec.describe AccountExchangesController do
           ax = @user.account_exchanges.create(
             value: 100,
             card_id: @card1.id,
+            source_id: @card1.account.id,
             date: Date.today,
             to_id: @account2.id,
             pon: false,
@@ -313,11 +296,11 @@ RSpec.describe AccountExchangesController do
           expect{
             put :update, params: params
           }.to change{
-            Account.find(@card1.account.id).value
+            Account.find(@card1.account.id).now_value
           }.by(0).and change{
-            Account.find(@account1.id).value
+            Account.find(@account1.id).now_value
           }.by(-200).and change{
-            Account.find(@account2.id).value
+            Account.find(@account2.id).now_value
           }.by(100).and change{
             Account.find(@card1.account.id).after_pay_value
           }.by(100)
@@ -327,6 +310,7 @@ RSpec.describe AccountExchangesController do
           ax = @user.account_exchanges.create(
             value: 100,
             card_id: @card1.id,
+            source_id: @card1.account.id,
             date: Date.today.prev_year(1),
             to_id: @account2.id,
             pon: true,
@@ -336,11 +320,11 @@ RSpec.describe AccountExchangesController do
           expect{
             put :update, params: params
           }.to change{
-            Account.find(@card1.account.id).value
+            Account.find(@card1.account.id).now_value
           }.by(100).and change{
-            Account.find(@account1.id).value
+            Account.find(@account1.id).now_value
           }.by(-200).and change{
-            Account.find(@account2.id).value
+            Account.find(@account2.id).now_value
           }.by(100)
         end
       end
@@ -363,6 +347,7 @@ RSpec.describe AccountExchangesController do
           ax = @user.account_exchanges.create(
             value: 100,
             source_id: @account1.id,
+            card_id: nil,
             date: Date.today,
             to_id: @account3.id,
             pon: true,
@@ -371,51 +356,17 @@ RSpec.describe AccountExchangesController do
           expect{
             put :update, params: params  
           }.to change{
-            Account.find(@account3.id).value
+            Account.find(@account3.id).now_value
           }.by(-100).and change{
-            Account.find(@account1.id).value
+            Account.find(@account1.id).now_value
           }.by(-100).and change{
-            Account.find(@account2.id).value
+            Account.find(@account2.id).now_value
           }.by(200)
         end
       end
     end
       
     describe "updateに失敗" do
-      it "sourceとtoが同じで失敗" do
-        params = {
-          account_exchange:{
-            "date(1i)": "2020",
-            "date(2i)": "2",
-            "date(3i)": "20",
-            account_or_card: "0",
-            source_account: @account2.id,
-            card: @card1.id,
-            to_account: @account2.id,
-            value: 200,
-          }
-        }
-        ax = @user.account_exchanges.create(
-          value: 100,
-          source_id: @account3.id,
-          date: Date.today,
-          to_id: @account2.id,
-          pon: true,
-        )
-        params[:id] = ax.id
-        expect{
-          put :update, params: params  
-        }.to change{
-          Account.find(@account3.id).value
-        }.by(0).and change{
-          Account.find(@account1.id).value
-        }.by(0).and change{
-          Account.find(@account2.id).value
-        }.by(0).and change{
-          ax.account.id
-        }.by(0)
-      end
-
       it "valueがなくて失敗" do
         params = {
           account_exchange:{
@@ -432,6 +383,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account3.id,
+          card_id: nil,
           date: Date.today,
           to_id: @account1.id,
           pon: true,
@@ -440,11 +392,11 @@ RSpec.describe AccountExchangesController do
         expect{
           put :update, params: params  
         }.to change{
-          Account.find(@account3.id).value
+          Account.find(@account3.id).now_value
         }.by(0).and change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           ax.to_account.id
         }.by(0)
@@ -475,9 +427,9 @@ RSpec.describe AccountExchangesController do
         expect{
           put :update, params: params  
         }.to change{
-          Account.find(@account3.id).value
+          Account.find(@account3.id).now_value
         }.by(0).and change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
           ax.to_account.id
         }.by(0)
@@ -499,6 +451,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account2.id,
+          card_id: nil,
           date: Date.today,
           to_id: nil,
           pon: true,
@@ -507,9 +460,9 @@ RSpec.describe AccountExchangesController do
         expect{
           put :update, params: params  
         }.to change{
-          Account.find(@account3.id).value
+          Account.find(@account3.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           ax.account.id
         }.by(0)
@@ -534,6 +487,7 @@ RSpec.describe AccountExchangesController do
         ax = @user.account_exchanges.create(
           value: 100,
           source_id: @account3.id,
+          card_id: nil,
           date: Date.today,
           to_id: @account2.id,
           pon: true,
@@ -542,9 +496,9 @@ RSpec.describe AccountExchangesController do
         expect{
           put :update, params: params  
         }.to change{
-          Account.find(@account3.id).value
+          Account.find(@account3.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           ax.source_id
         }.by(0)

@@ -7,7 +7,10 @@ class AccountExchangesController < ApplicationController
   before_action :set_previous_url, only: [:new, :edit]
   
   def index
-    @axs = current_user.account_exchanges.includes(:account,:card,:to_account).page(params[:page])
+    @axs = current_user
+    .account_exchanges
+    .includes(:account,:card,:to_account)
+    .page(params[:page])
   end
 
   def new
@@ -28,11 +31,7 @@ class AccountExchangesController < ApplicationController
   end
 
   def destroy
-    before_source_inf = @ax.before_change_action
-    before_to_inf = @ax.before_change_for_toAccount
     @ax.destroy
-    before_source_inf[:account].plus(before_source_inf[:value])
-    before_to_inf[:account].plus(before_to_inf[:value])
     redirect_to request.referer unless Rails.env.test?
   end
   
@@ -40,12 +39,8 @@ class AccountExchangesController < ApplicationController
   end
 
   def update
-    before_source_inf = @ax.before_change_action
-    before_to_inf = @ax.before_change_for_toAccount
     association_model_update
     if @ax.update(ax_params)
-      before_source_inf[:account].plus(before_source_inf[:value])
-      before_to_inf[:account].plus(before_to_inf[:value])
       @ax.after_change_action(@ax.pay_date)
       redirect_to_previou_url
     else

@@ -43,7 +43,7 @@ RSpec.describe EventsController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(100) 
       end
 
@@ -62,7 +62,9 @@ RSpec.describe EventsController do
             value: 100,
           }
         }
-        expect{post :create, params: params}.to change{Account.find(@account1.id).value}.by(-100)
+        expect{post :create, params: params}.to change{
+          Account.find(@account1.id).now_value
+        }.by(-100)
       end
 
       it "card未払いで登録" do
@@ -83,7 +85,7 @@ RSpec.describe EventsController do
         expect{
           post :create, params: params
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(-100)
@@ -104,7 +106,9 @@ RSpec.describe EventsController do
             value: 100,
           }
         }
-        expect{post :create, params: params}.to change{Account.find(@card1.account.id).value}.by(-100)
+        expect{post :create, params: params}.to change{
+          Account.find(@card1.account.id).now_value
+        }.by(-100)
       end
     end
     
@@ -125,7 +129,7 @@ RSpec.describe EventsController do
           }
         }
         expect{post :create, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{Event.all.length}.by(0)
       end
 
@@ -146,7 +150,7 @@ RSpec.describe EventsController do
           }
         }
         expect{post :create, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{Event.all.length}.by(0)
       end
     end
@@ -161,12 +165,14 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
         expect{
           delete :destroy, params: { id: event.id}
-        }.to change{Account.find(@account1.id).value}.by(100)  
+        }.to change{Account.find(@account1.id).now_value}
+        .by(100)  
       end
   
       it "accountの収入の登録のdestroy" do
@@ -176,12 +182,14 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_in.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
         expect{
           delete :destroy, params: { id: event.id}
-        }.to change{Account.find(@account1.id).value}.by(-100)  
+        }.to change{Account.find(@account1.id).now_value}
+        .by(-100)  
       end
   
       it "card未払いの登録のdestroy" do
@@ -191,6 +199,7 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today,
           pon: false,
         )
@@ -198,7 +207,7 @@ RSpec.describe EventsController do
         expect{
           delete :destroy, params: { id: event.id}
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(100)
@@ -211,13 +220,15 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
         event.update(pay_date: event.decide_pay_day)
         expect{
           delete :destroy, params: { id: event.id}
-        }.to change{Account.find(@card1.account.id).value}.by(100) 
+        }.to change{Account.find(@card1.account.id).now_value}
+        .by(100) 
       end
     end
 
@@ -238,7 +249,7 @@ RSpec.describe EventsController do
         expect{
           delete :destroy, params: { id: event.id}
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{Event.all.length}.by(0) 
       end
 
@@ -252,7 +263,7 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
-          account_id: nil,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
@@ -260,7 +271,7 @@ RSpec.describe EventsController do
         expect{
           delete :destroy, params: { id: event.id}
         }.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{Event.all.length}.by(0) 
       end
     end
@@ -271,9 +282,9 @@ RSpec.describe EventsController do
       let(:params) {{
         event:{
           iae: false,
-          "date(1i)": "2020",
-          "date(2i)": "2",
-          "date(3i)": "20",
+          "date(1i)" => "2020",
+          "date(2i)" => "2",
+          "date(3i)" => "20",
           genre: @genre_ex.id,
           account_or_card: "0",
           account: @account2.id,
@@ -290,14 +301,15 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-200)
       end
 
@@ -308,14 +320,15 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_in.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(-100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-200)
       end
 
@@ -326,18 +339,43 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today,
           pon: false,
         )
         event.update(pay_date: event.decide_pay_day)
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-200).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(100)
+      end
+
+      it "card未払いから支払い済みへ変更" do
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: @card1.account.id,
+          date: Date.today.prev_month(3),
+          pon: false,
+        )
+        params[:event][:account_or_card] = "1"
+        event.update(pay_date: event.decide_pay_day)
+        params[:id] = event.id
+        expect{put :update, params: params}.to change{
+          Account.find(@card1.account.id).now_value
+        }.by(-200).and change{
+          Account.find(@account2.id).now_value
+        }.by(0).and change{
+          Account.find(@card1.account.id).after_pay_value
+        }.by(-100)
+        expect(Event.find(event.id).pon).to eq true
       end
 
       it "card支払い済みからpay_dateを指定して未払いへ変更" do
@@ -347,6 +385,7 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
@@ -357,7 +396,7 @@ RSpec.describe EventsController do
         params[:event]["pay_date(2i)"] = Date.today.next_month(1).month
         params[:event]["pay_date(3i)"] = @card1.pay_date
         expect{put :update, params: params}.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(100).and change{
           Account.find(@card1.account.id).after_pay_value
         }.by(-100)
@@ -374,15 +413,16 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
         event.update(pay_date: event.decide_pay_day)
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(-200)
       end
     end
@@ -410,14 +450,15 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           event.account.id
         }.by(0)
@@ -430,15 +471,16 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
         event.update(pay_date: event.decide_pay_day)
         params[:id] = event.id
         expect{put :update, params: params}.to change{
-          Account.find(@card1.account.id).value
+          Account.find(@card1.account.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           event.card.id
         }.by(0)
@@ -451,6 +493,7 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true,
         )
@@ -458,9 +501,9 @@ RSpec.describe EventsController do
         params[:event][:iae] = true
         params[:event][:value] = 100
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0).and change{
           event.account.id
         }.by(0)
@@ -482,7 +525,7 @@ RSpec.describe EventsController do
         params[:id] = event.id
         params[:event][:value] = 100
         expect{put :update, params: params}.to change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0)
       end
 
@@ -496,7 +539,7 @@ RSpec.describe EventsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
-          account_id: nil,
+          account_id: @card1.account.id,
           date: Date.today.prev_year(1),
           pon: true,
         )
@@ -504,7 +547,7 @@ RSpec.describe EventsController do
         params[:id] = event.id
         params[:event][:value] = 100
         expect{put :update, params: params}.to change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0)
       end
     end

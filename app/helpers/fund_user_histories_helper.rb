@@ -32,23 +32,25 @@ module FundUserHistoriesHelper
     end
   end
 
-  def active_is_account_or_card_for_fund_user_history(buy_or_sell)
+  def active_is_account_or_card_for_fund_user_history(buy_or_sell, edit_or_not)
     if !buy_or_sell
-      return {account: "active", card: "", number: 0}
-    elsif @fund_user_history.account
-      return {account: "active", card: "", number: 0}
+      return {account: "active", card: "", nothing: "", number: 0}
+    elsif edit_or_not && !@fund_user_history.account && !@fund_user_history.card
+      return {account: "", card: "", nothing: "active", number: 2}
     elsif @fund_user_history.card
       return {account: "", card: "active", number: 1}
+    elsif @fund_user_history.account
+      return {account: "active", card: "", nothing: "", number: 0}
     elsif @fund_user.fund_user_histories.exists?
       if @fund_user.fund_user_histories.where(buy_or_sell: true).first.card
         return {account: "", card: "active", number: 1}
       elsif @fund_user.fund_user_histories.where(buy_or_sell: true).first.account
-        return {account: "active", card: "", number: 0}
+        return {account: "active", card: "", nothing: "", number: 0}
       else
-        {account: "active", card: "", number: 0}
+        {account: "active", card: "", nothing: "", number: 0}
       end
     else
-      return {account: "active", card: "", number: 0}
+      return {account: "active", card: "", nothing: "", number: 0}
     end
   end
 end

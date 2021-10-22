@@ -2,13 +2,8 @@
 module MyFunction
   module FunctionForChange
     def after_change_action(selected_pay_date)
-      to_account.plus(value) if to_account
-      
-      if account
-        update(pay_date: nil, pon: true)
-        set_value = iae ? value : -value
-        account.plus(set_value)
-      elsif card
+      if card
+        update_account(card.account.id)
         if selected_pay_date
           pay_day = MyFunction::FlexDate.return_date(
             selected_pay_date.year,
@@ -20,30 +15,15 @@ module MyFunction
         end
   
         update(pay_date: pay_day)
-  
-        change_pon(false)
-      end
-    end
-  
-    def change_pon(event_pon) #event_ponには変化前のaxやeventのponを入れる
-      if pay_date <= Date.today && !event_pon
-        card.account.plus(-value)
-      elsif pay_date>Date.today && event_pon
-        card.account.plus(value)
-      end
-      pay_date <= Date.today ? update(pon: true) : update(pon: false)
-    end
-  
-    def before_change_action
-      if card == nil
-        set_account = account
-        set_value = iae ? -value : value
+        
+        change_pon
       else
-        set_account = card.account
-        set_value = pon ? value : 0
+        update(pay_date: nil, pon: true)
       end
+    end
   
-      return {account: set_account, value: set_value}
+    def change_pon
+      pay_date <= Date.today ? update(pon: true) : update(pon: false)
     end
   
     def decide_pay_day

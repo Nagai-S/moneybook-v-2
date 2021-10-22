@@ -43,7 +43,6 @@ class AccountExchange < ApplicationRecord
     message: "は半角数字で入力してください。", 
     only_integer: {message: "は整数で入力してください。"}
   }
-  validate :source_not_equal_to_to
 
   def iae
     return false
@@ -61,12 +60,10 @@ class AccountExchange < ApplicationRecord
     end
   end
 
-  private
-    def source_not_equal_to_to
-      if source_id == to_id && source_id != nil && to_id != nil
-        errors.add(:source_id, "と振替先アカウントを別にしてください。")
-      end
-    end
+  def update_account(account_id)
+    update(source_id: account_id)
+  end
+
 end
 
 

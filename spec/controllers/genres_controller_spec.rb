@@ -19,6 +19,7 @@ RSpec.describe GenresController do
           value: 100,
           genre_id: @genre_ex.id,
           account_id: @account1.id,
+          card_id: nil,
           date: Date.today,
           pon: true
         )

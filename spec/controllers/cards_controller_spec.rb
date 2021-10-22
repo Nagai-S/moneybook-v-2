@@ -8,6 +8,7 @@ RSpec.describe CardsController do
     @genre_ex = @user.genres.create(name: "genre_ex", iae: false)
     @account1 = @user.accounts.create(name: "account1", value: 1000)
     @account2 = @user.accounts.create(name: "account2", value: 1000)
+    @account3 = @user.accounts.create(name: "account3", value: 1000)
     @card1 = @user.cards.create(
       name: "card1", 
       pay_date: 1, 
@@ -27,6 +28,7 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.new(today.year,today.month,27),
           pon: false
         )
@@ -43,7 +45,7 @@ RSpec.describe CardsController do
         }
   
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
           Account.find(@account1.id).after_pay_value
         }.by(0).and change{
@@ -63,6 +65,7 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year,
           pon: true
         )
@@ -79,7 +82,7 @@ RSpec.describe CardsController do
         }
   
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0)
         expect(Event.find(event.id).pon).to eq true
       end
@@ -91,6 +94,7 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year,
           pon: false
         )
@@ -107,7 +111,7 @@ RSpec.describe CardsController do
         }
   
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(-100)
         expect(Event.find(event.id).pon).to eq true
       end
@@ -116,6 +120,7 @@ RSpec.describe CardsController do
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
           to_id: @account2.id,
           date: Date.today,
           pon: true
@@ -133,11 +138,60 @@ RSpec.describe CardsController do
         }
   
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(100).and change{
-          Account.find(@account2.id).value
+          Account.find(@account2.id).now_value
         }.by(0)
         expect(AccountExchange.find(ax.id).pon).to eq false
+      end
+
+      it "編集して、引き落とし済みのaccountは変わらず未引き落としのaccountが変わる" do
+        ax = @user.account_exchanges.create(
+          value: 100,
+          card_id: @card1.id,
+          source_id: @card1.account.id,
+          to_id: @account2.id,
+          date: Date.today,
+          pon: false
+        )
+        event = @user.events.create(
+          iae: false,
+          memo: "",
+          value: 100,
+          genre_id: @genre_ex.id,
+          card_id: @card1.id,
+          account_id: @card1.account.id,
+          date: Date.today.prev_year,
+          pon: true
+        )
+        event.update(pay_date: event.decide_pay_day)
+        ax.update(pay_date: ax.decide_pay_day)
+  
+        params = {
+          card: {
+            name: @card1.name,
+            pay_date: 1,
+            month_date: 20,
+            account: @account2.id
+          },
+          id: @card1.id
+        }
+  
+        expect{put :update, params: params}.to change{
+          Account.find(@account1.id).now_value
+        }.by(0).and change{
+          Account.find(@account2.id).now_value
+        }.by(0).and change{
+          Account.find(@account2.id).after_pay_value
+        }.by(-100).and change{
+          AccountExchange.find(ax.id).source_id
+        }.from(
+          @account1.id
+        ).to(
+          @account2.id
+        ).and change{
+          Event.find(event.id).account_id
+        }.by(0)
       end
     end
     
@@ -153,6 +207,7 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today,
           pon: true
         )
@@ -169,7 +224,7 @@ RSpec.describe CardsController do
         }
   
         expect{put :update, params: params}.to change{
-          Account.find(@account1.id).value
+          Account.find(@account1.id).now_value
         }.by(0).and change{
           @card1.pay_date
         }.by(0).and change{
@@ -190,19 +245,22 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today.prev_year,
           pon: false
         )
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
+          to_id: @account2.id,
           date: Date.today.prev_year,
           pon: false
         )
         event.update(pay_date: event.decide_pay_day)
         ax.update(pay_date: ax.decide_pay_day)
-        event.change_pon(event.pon)
-        ax.change_pon(ax.pon)
+        event.change_pon
+        ax.change_pon
 
         expect{delete :destroy, params: params}.to change{
           Card.all.length
@@ -220,6 +278,7 @@ RSpec.describe CardsController do
           value: 100,
           genre_id: @genre_ex.id,
           card_id: @card1.id,
+          account_id: @card1.account.id,
           date: Date.today,
           pon: false
         )
@@ -235,6 +294,8 @@ RSpec.describe CardsController do
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
+          to_id: @account2.id,
           date: Date.today,
           pon: false
         )
@@ -253,11 +314,13 @@ RSpec.describe CardsController do
         ax = @user.account_exchanges.create(
           value: 100,
           card_id: @card1.id,
+          source_id: @card1.account.id,
+          to_id: @account2.id,
           date: Date.today.prev_year,
           pon: false
         )
         ax.update(pay_date: ax.decide_pay_day)
-        ax.change_pon(ax.pon)
+        ax.change_pon
   
         expect{delete :destroy, params: params}.to change{
           Card.all.length
@@ -266,6 +329,5 @@ RSpec.describe CardsController do
       end
     end
   end
-  
   
 end
