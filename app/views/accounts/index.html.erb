@@ -9,9 +9,17 @@
 </div>
 
 <h2>総資産</h2>
-<%= pie_chart @assets_ratio, {library: {title: {
-  text: "¥" + current_user.total_assets.to_s(:delimited)
-}}} %>
+<%= pie_chart accounts_data_for_glaph, {
+  colors: [ 
+    "#769fcd",
+    "#b9d7ea",
+    "#d6e6f2",
+    "#f7fbfc",
+  ],
+  library: {title: {
+    text: "¥" + current_user.total_assets.to_s(:delimited)
+  }}
+} %>
 
 <div class="row">
   <div class="col-12 col-md-6">
@@ -110,7 +118,7 @@
             </tr>
           </thead>
 
-          <% a=0 %>
+          <% a = 0 %>
           <% month_count.times do |i| %>
 
           <tbody>
@@ -139,7 +147,7 @@
             </tr>
           </tbody>
 
-          <% a=prev_month_event_date(i).year %>
+          <% a = prev_month_event_date(i).year %>
           <% end %>
         </table>
         <%= link_to "もっと見る", account_month_path(current_user) %>

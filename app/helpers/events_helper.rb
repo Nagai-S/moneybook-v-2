@@ -71,4 +71,26 @@ module EventsHelper
     "-" unless event.iae
   end
 
+  def this_month_data
+    ex_genres = []
+    current_user.genres.each do |genre|
+      value = genre.events.where(
+        iae: false,
+        date: Date.today.all_month
+      ).sum(:value)
+      ex_genres.push([omit_string(genre.name), value]) if value > 0
+    end
+    ex_genres = ex_genres.sort{|a, b| (-1) * (a[1] <=> b[1])}
+    in_genres = []
+    current_user.genres.each do |genre|
+      value = genre.events.where(iae: true, date: Date.today.all_month).sum(:value)
+      in_genres.push([omit_string(genre.name), value]) if value > 0
+    end
+    in_genres = in_genres.sort{|a, b| (-1) * (a[1] <=> b[1])}
+    {
+      ex_genres: ex_genres,
+      in_genres: in_genres
+    }
+  end
+
 end

@@ -1,5 +1,35 @@
 <h1>履歴</h1>
 
+<h2>今月のデータ</h2>
+<div class='row'>
+  <div class='col-12 col-sm-6'>
+    <%= pie_chart this_month_data[:ex_genres], {
+      colors: [ 
+        "#769fcd",
+        "#b9d7ea",
+        "#d6e6f2",
+        "#f7fbfc",
+      ],
+      library: {title: {
+      text: "支出" + "</br>¥-" + each_value_for_month(Date.today)[:ex].to_s(:delimited)
+    }}
+    } %>
+  </div>
+  <div class='col-12 col-sm-6'>
+    <%= pie_chart this_month_data[:in_genres], {
+      colors: [
+        "#74E637",
+        "#92E665",
+        "#B8E69F",
+        "#DDE6D8",
+      ],
+      library: {title: {
+      text: "収入" + "</br>¥" + each_value_for_month(Date.today)[:in].to_s(:delimited)
+    }}
+    } %>
+  </div>
+</div>
+
 <div class="search-h">検索する</div>
 <div class="search_wrapper" id="search_close">
   <%= render "search", {

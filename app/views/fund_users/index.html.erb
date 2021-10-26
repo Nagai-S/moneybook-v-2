@@ -6,11 +6,19 @@
 </div>
 
 <h2>全ての投資信託</h2>
-<%= pie_chart @fund_users_ratio, {library: {title: {
-  text: "¥" + current_user.total_fund_value.to_s(:delimited) + "</br>" +
-  "(<span class=" + loss_or_gain(current_user.total_fund_gain_value) + ">" + 
-  "¥" + plus_minus_gain_value(current_user.total_fund_gain_value) + "</span>)",
-}}} %>
+<%= pie_chart fund_users_data_for_glaph, {
+  colors: [ 
+    "#769fcd",
+    "#b9d7ea",
+    "#d6e6f2",
+    "#f7fbfc",
+  ],
+  library: {title: {
+    text: "¥" + current_user.total_fund_value.to_s(:delimited) + "</br>" +
+    "(<span class=" + loss_or_gain(current_user.total_fund_gain_value) + ">" + 
+    "¥" + plus_minus_gain_value(current_user.total_fund_gain_value) + "</span>)",
+  }}  
+} %>
 
 <h2>保有投資信託</h2>
 <div class="table_contents">

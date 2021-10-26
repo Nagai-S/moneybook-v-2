@@ -11,7 +11,7 @@ class EventsController < ApplicationController
     @events = current_user
     .events
     .includes(:account,:card,:genre)
-    .page(params[:page]).per(80)
+    .page(params[:page]).per(50)
   end
 
   def new

@@ -19,6 +19,14 @@ module ApplicationHelper
     object.date ? object.date : Date.today
   end
 
+  def each_value_for_month(date)
+    income = current_user
+    .events.where(date: date.all_month, iae: true).sum(:value)
+    ex = current_user
+    .events.where(date: date.all_month, iae: false).sum(:value)
+    return {in: income, ex: ex, plus_minus: income-ex}
+  end
+
   def account_or_card_name(event, fund_or_not)
     if event.card
       event.card.name

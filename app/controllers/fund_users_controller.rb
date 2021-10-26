@@ -7,11 +7,6 @@ class FundUsersController < ApplicationController
   def index
     fund_users_not_order = current_user.fund_users
     @fund_users = fund_users_not_order.sort{|a, b| (-1) * (a.now_value <=> b.now_value)}
-    fund_users_array = []
-    @fund_users.each do |fund_user|
-      fund_users_array.push([omit_string(fund_user.fund.name), fund_user.now_value])
-    end
-    @fund_users_ratio = fund_users_array.sort{|a, b| (-1) * (a[1] <=> b[1])}
   end
   
   def new

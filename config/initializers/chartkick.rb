@@ -1,10 +1,5 @@
 Chartkick.options = {
   donut: true,
-  colors: [ "#769fcd",
-            "#b9d7ea",
-            "#d6e6f2",
-            "#f7fbfc",
-          ],
   height: "500px",
   thousands: ",", 
   suffix: "円",
