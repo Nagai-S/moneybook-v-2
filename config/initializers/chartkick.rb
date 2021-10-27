@@ -1,6 +1,5 @@
 Chartkick.options = {
   donut: true,
-  height: "500px",
   thousands: ",", 
   suffix: "円",
   library: {

@@ -4,8 +4,11 @@ namespace :daily_change do
     Event.where(pon: false).each do |event|
       event.change_pon
     end
-    AccountExchange.where(pon: false).each do |event|
-      event.change_pon
+    AccountExchange.where(pon: false).each do |ax|
+      ax.change_pon
+    end
+    FundUserHistory.where(pon: false).each do |fuh|
+      fuh.change_pon
     end
   end
 
