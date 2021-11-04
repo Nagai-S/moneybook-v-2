@@ -3,7 +3,6 @@ class AccountExchangesController < ApplicationController
   before_action :select_ax, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
   before_action :correct_user!, only: [:destroy, :edit, :update]
-  before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
   before_action :set_previous_url, only: [:new, :edit]
   
   def index
@@ -22,7 +21,7 @@ class AccountExchangesController < ApplicationController
     association_model_update
 
     if @ax.save
-      @ax.after_change_action(@ax.pay_date)
+      @ax.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = "振替の作成に失敗しました。"
@@ -32,16 +31,21 @@ class AccountExchangesController < ApplicationController
 
   def destroy
     @ax.destroy
-    redirect_to request.referer unless Rails.env.test?
+    if @ax.destroy
+      redirect_to request.referer unless Rails.env.test?
+    else
+      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      redirect_to request.referer unless Rails.env.test?
+    end
   end
-  
+
   def edit
   end
 
   def update
     association_model_update
     if @ax.update(ax_params)
-      @ax.after_change_action(@ax.pay_date)
+      @ax.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = "振替の編集に失敗しました。"
@@ -56,10 +60,6 @@ class AccountExchangesController < ApplicationController
 
     def select_ax
       @ax = AccountExchange.find_by(id: params[:id])
-    end
-
-    def confirm_parents_deleted
-      redirect_to account_exchanges_path if @ax.parents_deleted
     end
 
     def association_model_update

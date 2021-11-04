@@ -14,7 +14,7 @@ class Api::AccountExchangesController < Api::ApplicationController
     association_model_update
 
     if @ax.save
-      @ax.after_change_action(@ax.pay_date)
+      @ax.after_change_action
       render json: {message: "success"}
     else
       render json: {message: "error", errors: @ax.errors}, status: 404

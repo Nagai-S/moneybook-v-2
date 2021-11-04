@@ -39,8 +39,12 @@ class FundUsersController < ApplicationController
   end
 
   def destroy
-    @fund_user.destroy
-    redirect_to request.referer unless Rails.env.test?
+    if @fund_user.destroy
+      redirect_to request.referer unless Rails.env.test?
+    else
+      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      redirect_to request.referer unless Rails.env.test?
+    end
   end
   
   def update

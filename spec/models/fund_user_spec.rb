@@ -1,4 +1,4 @@
-# == Schema Information
+2# == Schema Information
 #
 # Table name: fund_users
 #
@@ -91,7 +91,7 @@ RSpec.describe FundUser do
 
   describe "#now_value" do
     it "fundのvalueがある時" do
-      expect(@fund_user1.now_value).to eq (600.to_f*10000.to_f/9000.to_f).round
+      expect(@fund_user1.now_value).to eq ((900.to_f*10000.to_f/9000.to_f) - 300).round
     end
     
     it "fundのvalueがない時" do

@@ -1,13 +1,13 @@
 # お金の変化と引き落とし日を追うアルゴリズム  
 module MyFunction
   module FunctionForChange
-    def after_change_action(selected_pay_date)
+    def after_change_action
       if card
         update_account(card.account.id)
-        if selected_pay_date
+        if pay_date
           pay_day = MyFunction::FlexDate.return_date(
-            selected_pay_date.year,
-            selected_pay_date.month,
+            pay_date.year,
+            pay_date.month,
             card.pay_date
           )
         else
@@ -46,15 +46,5 @@ module MyFunction
       return pay_day
     end
 
-    def account_deleted
-      account_nil = account == nil
-      card_nil = card == nil
-      if card_nil && account_nil
-        return true
-      else
-        return false
-      end
-    end
-    
   end
 end

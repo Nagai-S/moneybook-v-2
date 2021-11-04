@@ -43,9 +43,11 @@ module EventsHelper
     elsif @event.account
       return {account: "active", card: "", number: 0}
     elsif current_user.events.exists?
-      if current_user.events.where(iae: false).first.card
+      if current_user.events.where(iae: false).first && 
+        current_user.events.where(iae: false).first.card
         return {account: "", card: "active", number: 1}
-      elsif current_user.events.where(iae: false).first.account
+      elsif current_user.events.where(iae: false).first && 
+        current_user.events.where(iae: false).first.account
         return {account: "active", card: "", number: 0}
       else
         {account: "active", card: "", number: 0}
@@ -67,11 +69,7 @@ module EventsHelper
     event.iae ? "true" : "false"
   end
 
-  def plus_minus(event)
-    "-" unless event.iae
-  end
-
-  def this_month_data
+  def this_month_data_for_glaph
     ex_genres = []
     current_user.genres.each do |genre|
       value = genre.events.where(

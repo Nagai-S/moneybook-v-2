@@ -14,7 +14,7 @@ class Api::EventsController < Api::ApplicationController
     association_model_update
 
     if @event.save
-      @event.after_change_action(@event.pay_date)
+      @event.after_change_action
       render json: {message: "success"}
     else
       render json: {message: "error", errors: @event.errors}, status: 404

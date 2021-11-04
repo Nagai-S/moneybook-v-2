@@ -25,14 +25,20 @@ class CardsController < ApplicationController
   end
   
   def destroy
-    if @card.events.exists?(pon: false) || @card.account_exchanges.exists?(pon: false)
+    if @card.events.exists?(pon: false) || 
+      @card.account_exchanges.exists?(pon: false) ||
+      @card.fund_user_histories.exists?(pon: false)
       index
       flash.now[:danger] = "このカードを使用した未引き落としのイベントまたは振替が存在するため削除できません。"
       render "index"
     else
       @card.before_destroy_action
-      @card.destroy
-      redirect_to cards_path
+      if @card.destroy
+        redirect_to cards_path
+      else
+        flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+        redirect_to cards_path
+      end
     end
   end
   

@@ -3,7 +3,7 @@
 <h2>今月のデータ</h2>
 <div class='row'>
   <div class='col-12 col-sm-6'>
-    <%= pie_chart this_month_data[:ex_genres], {
+    <%= pie_chart this_month_data_for_glaph[:ex_genres], {
       height: '400px',
       colors: [ 
         "#769fcd",
@@ -17,7 +17,7 @@
     } %>
   </div>
   <div class='col-12 col-sm-6'>
-    <%= pie_chart this_month_data[:in_genres], {
+    <%= pie_chart this_month_data_for_glaph[:in_genres], {
       height: '400px',
       colors: [
         "#74E637",

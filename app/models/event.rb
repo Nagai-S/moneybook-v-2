@@ -46,16 +46,26 @@ class Event < ApplicationRecord
   }
   validate :iae_equal_to_genre_iae
 
-  def to_account
-    return false
-  end
-
-  def parents_deleted
-    account_deleted
-  end
-
   def update_account(account_id)
     update(account_id: account_id)
+  end
+
+  def payment_source_name
+    if card
+      card.name
+    elsif account
+      account.name
+    else
+      "削除済み"
+    end
+  end
+
+  def genre_name
+    genre ? genre.name : "削除済み"
+  end
+
+  def value_to_string
+    iae ? "¥" +  value.to_s(:delimited) :  "¥-" + value.to_s(:delimited)
   end
 
   private

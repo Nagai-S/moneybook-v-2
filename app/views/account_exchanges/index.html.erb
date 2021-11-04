@@ -23,11 +23,11 @@
     <li class="col-sm-2 offset-sm-0  pc_date"><%= l ax.date unless a==ax.date %></li>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">振り替え元アカウント</div>
-      <li><%= account_or_card_name(ax, false) %></li>
+      <li><%= ax.source_name %></li>
     </div>
     <div class="col-6 col-sm-2">
       <div class="mobile_th">振り替え先アカウント</div>
-      <li><%= ax.to_account ? ax.to_account.name : deleted_message(false) %></li>
+      <li><%= ax.to_account_name %></li>
     </div>
     <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
       <div class="mobile_th">金額</div>
@@ -37,14 +37,12 @@
       <div class="mobile_th"><%= "引き落とし日" if ax.pay_date %></div>
       <li><%= l ax.pay_date if ax.pay_date %></li>
     </div>
-    <% unless ax.parents_deleted %>
     <li class="col-6 col-sm-1">
       <%= link_to "削除", account_exchange_path(ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
     </li>
     <li class="col-6 col-sm-1">
       <%= link_to "編集", edit_account_exchange_path(ax.id) %>
     </li>
-    <% end %>
   </div>
   <% a=ax.date %>
   <% end %>

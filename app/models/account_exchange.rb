@@ -44,22 +44,20 @@ class AccountExchange < ApplicationRecord
     only_integer: {message: "は整数で入力してください。"}
   }
 
-  def iae
-    return false
-  end
-
-  def before_change_for_toAccount
-    return {account: to_account, value: -value}
-  end
-
-  def parents_deleted
-    if account_deleted || to_account == nil
-      return true
+  def source_name
+    if card
+      card.name
+    elsif account
+      account.name
     else
-      return false
+      "削除済み"
     end
   end
 
+  def to_account_name
+    to_account ? to_account.name : "削除済み"
+  end
+  
   def update_account(account_id)
     update(source_id: account_id)
   end

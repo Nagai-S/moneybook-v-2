@@ -23,8 +23,12 @@ class GenresController < ApplicationController
   
   def destroy
     @genre.before_destroy_action
-    @genre.destroy
-    redirect_to genres_path
+    if @genre.destroy
+      redirect_to genres_path
+    else
+      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      redirect_to genres_path
+    end
   end
   
   def edit

@@ -27,18 +27,12 @@ module ApplicationHelper
     return {in: income, ex: ex, plus_minus: income-ex}
   end
 
-  def account_or_card_name(event, fund_or_not)
-    if event.card
-      event.card.name
-    elsif event.account
-      event.account.name
-    else
-      deleted_message(fund_or_not)
-    end
-  end
-
-  def deleted_message(fund_or_not)
-    fund_or_not ? "ー" : "削除済み"
+  def each_value_for_year(date)
+    income = current_user
+    .events.where(date: date.all_year, iae: true).sum(:value)
+    ex = current_user
+    .events.where(date: date.all_year, iae: false).sum(:value)
+    return {in: income, ex: ex, plus_minus: income-ex}
   end
   
   def loss_or_gain(value)

@@ -18,7 +18,8 @@
     "#f7fbfc",
   ],
   library: {title: {
-    text: "¥" + current_user.total_assets.to_s(:delimited)
+    text: "¥" + current_user.total_assets.to_s(:delimited) + 
+    "</br>(¥" + current_user.total_after_pay_assets.to_s(:delimited) + ")"
   }}
 } %>
 

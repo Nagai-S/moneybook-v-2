@@ -6,7 +6,8 @@ class AccountsController < ApplicationController
   def index
     not_order_accounts = current_user.accounts.includes(:cards)
     @accounts = not_order_accounts.sort{|a, b| (-1) * (a.now_value <=> b.now_value)}
-    @fund_users = current_user.fund_users
+    not_order_fund_users = current_user.fund_users
+    @fund_users = not_order_fund_users.sort{|a,b| (-1) * (a.now_value <=> b.now_value)}
   end
 
   def month_index
@@ -34,8 +35,12 @@ class AccountsController < ApplicationController
       render "index"
     else
       @account.before_destroy_action
-      @account.destroy
-      redirect_to accounts_path
+      if @account.destroy
+        redirect_to accounts_path
+      else
+        flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+        redirect_to accounts_path
+      end
     end
   end
   

@@ -67,7 +67,7 @@ def all_axs_create
     to_id = data["to_id"]
     pon = data["pon"]
   
-    aoc = a_id ? "0" : "1"
+    aoc = c_id ? "1" : "0"
     account_id = a_id_trans(a_id)
     to_id = a_id_trans(to_id)
     card_id = c_id_trans(c_id)
@@ -106,7 +106,7 @@ def all_events_create
     g_id = data["genre_id"]
     pon = data["pon"]
   
-    aoc = a_id ? "0" : "1"
+    aoc = c_id ? "1" : "0"
     account_id = a_id_trans(a_id)
     genre_id = g_id_trans(g_id)
     card_id = c_id_trans(c_id)

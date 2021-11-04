@@ -46,16 +46,18 @@ class FundUserHistory < ApplicationRecord
     only_integer: {message: "は整数で入力してください。"}
   }
 
-  def iae
-    return !self.buy_or_sell
-  end
-
-  def to_account
-    return false
-  end
-
   def buy_or_sell_name
     return buy_or_sell ? "購入" : "売却"
+  end
+
+  def payment_source_name
+    if card
+      card.name
+    elsif account
+      account.name
+    else
+      "ー"
+    end
   end
 
   def update_account(account_id)

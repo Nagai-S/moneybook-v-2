@@ -40,8 +40,8 @@ class FundUser < ApplicationRecord
 
   def now_value
     return_value = fund.value ? (
-      (total_buy_value - total_buy_commission - total_sell_value).to_f * 
-      fund.value.to_f/average_buy_value.to_f
+      ((total_buy_value - total_buy_commission).to_f * 
+      fund.value.to_f/average_buy_value.to_f) - total_sell_value
     ).round : (
       total_buy_value.to_f - total_buy_commission.to_f - total_sell_value.to_f
     ).round
@@ -56,4 +56,5 @@ class FundUser < ApplicationRecord
   def gain_value
     return now_value - total_buy_value
   end
+
 end

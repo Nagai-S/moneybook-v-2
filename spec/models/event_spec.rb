@@ -34,6 +34,7 @@ RSpec.describe Event do
     @user = create(:user)
     @user.confirm
     @genre_ex = @user.genres.create(name: "genre_ex", iae: false)
+    @genre_in = @user.genres.create(name: "genre_in", iae: true)
     @account1 = @user.accounts.create(name: "account1", value: 1000)
     @card1 = @user.cards.create(
       name: "card1", 
@@ -41,47 +42,134 @@ RSpec.describe Event do
       month_date: 20, 
       account_id: @account1.id
     )
-
-    @event = @user.events.create(
-      iae: false,
-      memo: "",
-      value: 100,
-      genre_id: @genre_ex.id,
-      card_id: @card1.id,
-      account_id: @card1.account.id,
-      date: Date.today.prev_year(1),
-      pon: false,
-    )
-    @event.update(pay_date: @event.decide_pay_day)
-
-    @event1 = @user.events.create(
-      iae: false,
-      memo: "",
-      value: 100,
-      genre_id: @genre_ex.id,
-      card_id: @card1.id,
-      account_id: @card1.account.id,
-      date: Date.today,
-      pon: true,
-    )
-    @event1.update(pay_date: @event1.decide_pay_day)
   end
 
-  it "change_ponでfalseからtrueに変化する" do
-    expect{
-      @event.change_pon
-    }.to change{
-      Account.find(@card1.account.id).now_value
-    }.by(-100)
-    expect(Event.find(@event.id).pon).to eq true
+  describe "optional validation" do
+    describe "iae_equal_to_genre" do
+      it "iae:true, genre:false" do
+        new_event = @user.events.build(
+          iae: true,
+          value: 100,
+          account_id: @account1.id,
+          card_id: nil,
+          genre_id: @genre_ex.id,
+          date: Date.today,
+          memo: "",
+          pon: true,
+          pay_date: nil,
+        )
+        expect(new_event).to be_invalid
+      end
+
+      it "iae:false, genre:true" do
+        new_event = @user.events.build(
+          iae: false,
+          value: 100,
+          account_id: @account1.id,
+          card_id: nil,
+          genre_id: @genre_in.id,
+          date: Date.today,
+          memo: "",
+          pon: true,
+          pay_date: nil,
+        )
+        expect(new_event).to be_invalid
+      end
+    end
   end
 
-  it "change_ponでtrueからfalseに変化する" do
-    expect{
-      @event1.change_pon
-    }.to change{
-      Account.find(@card1.account.id).now_value
-    }.by(100)
-    expect(Event.find(@event1.id).pon).to eq false
+  describe "with controller" do
+    describe "#after_change_action" do
+      it "card_id:nilの時" do
+        event = @user.events.create(
+          value: 100,
+          card_id: nil,
+          account_id: @account1.id,
+          genre_id: @genre_in.id,
+          date: Date.today,
+          iae: true,
+        )
+        event.after_change_action
+        expect(event.account_id).to eq @account1.id
+        expect(event.card_id).to eq nil
+        expect(event.pon).to eq true
+        expect(event.pay_date).to eq nil
+      end
+
+      it "card_id:not_nil,pay_date:nil,date:todayの時" do
+        event = @user.events.create(
+          value: 100,
+          account_id: nil,
+          card_id: @card1.id,
+          genre_id: @genre_ex.id,
+          date: Date.today,
+          iae: false,
+        )
+        event.after_change_action
+        expect(event.card_id).to eq @card1.id
+        expect(event.account_id).to eq @card1.account_id
+        expect(event.pon).to eq false
+        expect(event.pay_date).to eq event.decide_pay_day
+      end
+
+      it "card_id:not_nil,pay_date:nil,date:1year_agoの時" do
+        event = @user.events.create(
+          value: 100,
+          account_id: nil,
+          card_id: @card1.id,
+          genre_id: @genre_ex.id,
+          date: Date.today.prev_year,
+          iae: false,
+        )
+        event.after_change_action
+        expect(event.card_id).to eq @card1.id
+        expect(event.account_id).to eq @card1.account_id
+        expect(event.pon).to eq true
+        expect(event.pay_date).to eq event.decide_pay_day
+      end
+
+      it "card_id:not_nil,pay_date:last_monthの時" do
+        event = @user.events.create(
+          value: 100,
+          account_id: nil,
+          card_id: @card1.id,
+          genre_id: @genre_ex.id,
+          iae: false,
+          date: Date.today.prev_year,
+          pay_date: Date.new(Date.today.year, Date.today.month - 1, @card1.pay_date)
+        )
+        event.after_change_action
+        expect(event.card_id).to eq @card1.id
+        expect(event.account_id).to eq @card1.account_id
+        expect(event.pon).to eq true
+        expect(event.pay_date).to eq Date.new(
+          Date.today.year, 
+          Date.today.month - 1, 
+          @card1.pay_date
+        )
+      end
+
+      it "card_id:not_nil,pay_date:next_monthの時" do
+        event = @user.events.create(
+          value: 100,
+          account_id: nil,
+          card_id: @card1.id,
+          genre_id: @genre_ex.id,
+          date: Date.today.prev_year,
+          iae: false,
+          pay_date: Date.new(Date.today.year, Date.today.month + 1, @card1.pay_date)
+        )
+        event.after_change_action
+        expect(event.card_id).to eq @card1.id
+        expect(event.account_id).to eq @card1.account_id
+        expect(event.pon).to eq false
+        expect(event.pay_date).to eq Date.new(
+          Date.today.year, 
+          Date.today.month + 1, 
+          @card1.pay_date
+        )
+      end
+    end
   end
+  
 end

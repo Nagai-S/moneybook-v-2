@@ -19,7 +19,7 @@ class FundUserHistoriesController < ApplicationController
     association_model_update
 
     if @fund_user_history.save
-      @fund_user_history.after_change_action(@fund_user_history.pay_date)
+      @fund_user_history.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = @fund_user_history.buy_or_sell_name + "に失敗しました。"
@@ -28,8 +28,12 @@ class FundUserHistoriesController < ApplicationController
   end
 
   def destroy
-    @fund_user_history.destroy
-    redirect_to request.referer unless Rails.env.test?
+    if @fund_user_history.destroy
+      redirect_to request.referer unless Rails.env.test?
+    else
+      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      redirect_to request.referer unless Rails.env.test?
+    end
   end
 
   def edit
@@ -38,7 +42,7 @@ class FundUserHistoriesController < ApplicationController
   def update
     association_model_update
     if @fund_user_history.update(fund_user_histories_params)
-      @fund_user_history.after_change_action(@fund_user_history.pay_date)
+      @fund_user_history.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = "編集に失敗しました。"

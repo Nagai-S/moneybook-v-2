@@ -4,7 +4,6 @@ class EventsController < ApplicationController
   before_action :select_event, only: [:destroy, :edit, :update]
   before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new, :search]
-  before_action :confirm_parents_deleted, only: [:destroy, :edit, :update]
   before_action :set_previous_url, only: [:new, :edit]
 
   def index
@@ -44,7 +43,7 @@ class EventsController < ApplicationController
     association_model_update
 
     if @event.save
-      @event.after_change_action(@event.pay_date)
+      @event.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = "イベントの作成に失敗しました。"
@@ -53,8 +52,12 @@ class EventsController < ApplicationController
   end
   
   def destroy
-    @event.destroy
-    redirect_to request.referer unless Rails.env.test?
+    if @event.destroy
+      redirect_to request.referer unless Rails.env.test?
+    else
+      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      redirect_to request.referer unless Rails.env.test?
+    end
   end
   
   def edit
@@ -63,7 +66,7 @@ class EventsController < ApplicationController
   def update
     association_model_update
     if @event.update(events_params)
-      @event.after_change_action(@event.pay_date)
+      @event.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = "イベントの編集に失敗しました。"
@@ -78,10 +81,6 @@ class EventsController < ApplicationController
 
     def select_event
       @event = Event.find_by(id: params[:id])
-    end
-
-    def confirm_parents_deleted
-      redirect_to events_path if @event.parents_deleted
     end
 
     def association_model_update

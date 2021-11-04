@@ -88,26 +88,26 @@ class Card < ApplicationRecord
   end
 
   # for show----------------------------------------------------------
-  def not_pay_months
-    not_pay_month = []
+  def not_pay_dates
+    not_pay_date_array = []
 
     if events.where(pon: false).exists?
       events.where(pon: false).each do |event|
-        not_pay_month.push(event.pay_date)
+        not_pay_date_array.push(event.pay_date)
       end
     end
     if account_exchanges.where(pon: false).exists?
       account_exchanges.where(pon: false).each do |ax|
-        not_pay_month.push(ax.pay_date)
+        not_pay_date_array.push(ax.pay_date)
       end
     end
     if fund_user_histories.where(pon: false).exists?
       fund_user_histories.where(pon: false).each do |fund_user_history|
-        not_pay_month.push(fund_user_history.pay_date)
+        not_pay_date_array.push(fund_user_history.pay_date)
       end
     end
 
-    return not_pay_month.uniq.sort
+    return not_pay_date_array.uniq.sort
   end
 
   def not_pay_value(pay_date)
