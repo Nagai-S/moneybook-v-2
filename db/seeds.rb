@@ -48,22 +48,27 @@ user.accounts.create(
 
 user.cards.create(
   [
-    {name: "YahooCard", account_id: 4, pay_date: 27, month_date: 31},
-    {name: "RakutenCard", account_id: 4, pay_date: 27, month_date: 31},
+    {name: "YahooCard", account_id: 1, pay_date: 27, month_date: 31},
+    {name: "RakutenCard", account_id: 1, pay_date: 27, month_date: 31},
     {name: "メルペイMasterCard", account_id: 3, pay_date: 1, month_date: 31},
   ]
 )
 
-if File.exist?(Rails.root+'all_funds.txt')
-  file = File.open(Rails.root+'all_funds.txt')
+if File.exist?(Rails.root+'effective_all_funds.txt')
+  file = File.open(Rails.root+'effective_all_funds.txt')
   funds_array = file.readlines
-  data_length = funds_array.length/2
+  data_length = funds_array.length/3
   (data_length).times do |i|
-    j = i*2
-    str_id = funds_array[j+1]
+    j = i*3
+    str_id = funds_array[j+2]
+    value = funds_array[j+1]
     name = funds_array[j]
     name1 = NKF.nkf('-w -Z4', name)
     name2 = NKF.nkf('-w -X', name1)
-    Fund.create(name: name2.delete("\n"), string_id: str_id.delete("\n"))
+    Fund.create(
+      name: name2.delete("\n"),
+      string_id: str_id.delete("\n"),
+      value: value.delete("\n")
+    )
   end
 end

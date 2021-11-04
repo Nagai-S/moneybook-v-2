@@ -126,7 +126,7 @@ class Card < ApplicationRecord
     end
 
     def card_name_not_account_name
-      Account.all.each do |account|
+      user.accounts.each do |account|
         if account.name == name
           errors.add(:name, "はアカウントでも使用されているので使えません。")
         end
