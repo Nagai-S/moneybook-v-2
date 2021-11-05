@@ -2,6 +2,7 @@
 <div class="form_wrapper">
   <%= render "layouts/errors", resource: f.object %>
 
+  <% if new_or_not %>
   <div class="row">
     <div class='<%= label_class %>'>
       <%= f.label :iae, "収入か支出か選択してください" %>
@@ -10,6 +11,7 @@
       <%= f.select :iae, [["支出",false],["収入",true]], {selected: @genre.iae}, class: "form-control", id: "select" %>
     </div>
   </div>
+  <% end %>
 
   <div class="row">
     <div class='<%= label_class %>'>
@@ -20,7 +22,7 @@
     </div>
   </div>
 
-  <%= f.submit "ジャンル作成", class: "btn btn-primary", role: "button" %>
+  <%= f.submit "ジャンル登録", class: "btn btn-primary", role: "button" %>
 </div>
 
 <% end %>

@@ -29,7 +29,7 @@ class CardsController < ApplicationController
       @card.account_exchanges.exists?(pon: false) ||
       @card.fund_user_histories.exists?(pon: false)
       index
-      flash.now[:danger] = "このカードを使用した未引き落としのイベントまたは振替が存在するため削除できません。"
+      flash.now[:danger] = "このカードを使用した未引き落としのものが存在するため削除できません。"
       render "index"
     else
       @card.before_destroy_action

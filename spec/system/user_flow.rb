@@ -14,9 +14,10 @@ RSpec.feature "UserFlow", type: :feature do
   scenario do
     user = create(:user)
     user.confirm
+    expect(User.all.length).to eq 1
   end
   
-  feature "user_flow統合テスト", js: true do
+  feature "user flow test", js: true do
     background do
       @user = User.order(:id).first
       visit new_user_session_path
@@ -24,6 +25,7 @@ RSpec.feature "UserFlow", type: :feature do
       fill_in 'user[password]', with: "password"
       click_button 'ログイン'
     end
+
     scenario "create account" do
       visit new_account_path
       expect(page).to have_content "新規アカウント作成"
@@ -32,22 +34,26 @@ RSpec.feature "UserFlow", type: :feature do
       click_button 'アカウント作成'
       expect(@user.accounts.length).to eq 1
     end
+
     scenario "explain pageが表示されない" do
       visit events_path
       expect(page).to have_content '履歴'
     end
+
     scenario "create card" do
       visit cards_path
       expect(page).to have_content "クレジットカード一覧"
-      visit new_card_path
+      click_on "クレジットカード登録"
       expect(page).to have_content "新規クレジットカード作成"
       fill_in "card[name]",	with: "card_name" 
       select @user.accounts.first.name, from: "card[account]"
       select 27, from: "card[pay_date]"
       select 31, from: "card[month_date]"
       click_button 'クレジットカード登録'
+      visit cards_path
       expect(@user.cards.length).to eq 1
     end
+
     scenario "create event iae:true" do
       visit new_event_path
       expect(page).to have_content "新規イベント作成"
@@ -58,13 +64,15 @@ RSpec.feature "UserFlow", type: :feature do
         select Date.today.day, from: 'event[date(3i)]'
         select @user.genres.where(iae: true).first.name, from: 'event[genre]'
         select @user.accounts.first.name, from: 'event[account]'
-        fill_in "event[memo]",	with: "memo"
+        fill_in "event[memo]", with: "memo"
         fill_in "event[value]",	with: 100
         click_button 'イベント登録'
       end
-      expect(User.find(@user.id).events.length).to eq 1
+      visit events_path
+      expect(@user.events.length).to eq 1
       expect(@user.accounts.first.now_value).to eq 1100
     end
+
     scenario "create event iae:false using account" do
       visit new_event_path
       click_on '支出'
@@ -72,16 +80,18 @@ RSpec.feature "UserFlow", type: :feature do
         select Date.today.year, from: 'event[date(1i)]'
         select Date.today.month, from: 'event[date(2i)]'
         select Date.today.day, from: 'event[date(3i)]'
-        select @user.genres.where(iae: false).first.name, from: 'event[genre]'
+        select @user.genres.where(iae: false).order(:id).first.name, from: 'event[genre]'
         click_on 'アカウント'
         select @user.accounts.first.name, from: 'event[account]'
         fill_in "event[memo]",	with: "memo"
         fill_in "event[value]",	with: 200
         click_button 'イベント登録'
       end
-      expect(User.find(@user.id).events.length).to eq 2
+      visit events_path
+      expect(@user.events.length).to eq 2
       expect(@user.accounts.first.now_value).to eq 900
     end
+
     scenario "create event iae:false using card" do
       visit new_event_path
       click_on '支出'
@@ -89,17 +99,19 @@ RSpec.feature "UserFlow", type: :feature do
         select Date.today.year, from: 'event[date(1i)]'
         select Date.today.month, from: 'event[date(2i)]'
         select Date.today.day, from: 'event[date(3i)]'
-        select @user.genres.where(iae: false).first.name, from: 'event[genre]'
+        select @user.genres.where(iae: false).order(:id).first.name, from: 'event[genre]'
         click_on 'クレジットカード'
         select @user.cards.first.name, from: 'event[card]'
         fill_in "event[memo]",	with: "memo"
         fill_in "event[value]",	with: 150
         click_button 'イベント登録'
       end
-      expect(User.find(@user.id).events.length).to eq 3
+      visit events_path
+      expect(@user.events.length).to eq 3
       expect(@user.accounts.first.now_value).to eq 900
       expect(@user.accounts.first.after_pay_value).to eq 750
     end
+
     scenario "edit event" do
       visit events_path
       page.all('a', text: "編集")[0].click
@@ -115,20 +127,23 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "event[value]",	with: 300
         click_button 'イベント登録'
       end
-      expect(User.find(@user.id).events.length).to eq 3
+      visit events_path
+      expect(@user.events.length).to eq 3
       expect(@user.accounts.first.now_value).to eq 500
       expect(@user.accounts.first.after_pay_value).to eq 350
     end
+
     scenario "destroy event" do
       visit events_path
       page.accept_confirm do
         page.all('a', text: "削除")[0].click
       end
       visit events_path
-      expect(User.find(@user.id).events.length).to eq 2
+      expect(@user.events.length).to eq 2
       expect(@user.accounts.first.now_value).to eq 800
       expect(@user.accounts.first.after_pay_value).to eq 650
     end
+
     scenario "create ax account -> account" do
       @user.accounts.create(name: "account_name2", value: 1000)
       visit new_account_exchange_path
@@ -142,10 +157,12 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "account_exchange[value]",	with: 100
         click_button '振替を登録'
       end
-      expect(User.find(@user.id).account_exchanges.length).to eq 1
+      visit account_exchanges_path
+      expect(@user.account_exchanges.length).to eq 1
       expect(@user.accounts.order(:id).first.now_value).to eq 700
       expect(@user.accounts.order(:id).second.now_value).to eq 1100
     end
+
     scenario "create ax card -> account" do
       visit new_account_exchange_path
       within '.form_wrapper' do
@@ -158,11 +175,13 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "account_exchange[value]",	with: 200
         click_button '振替を登録'
       end
-      expect(User.find(@user.id).account_exchanges.length).to eq 2
+      visit account_exchanges_path
+      expect(@user.account_exchanges.length).to eq 2
       expect(@user.accounts.order(:id).first.now_value).to eq 700
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 350
       expect(@user.accounts.order(:id).second.now_value).to eq 1300
     end
+
     scenario "edit ax" do
       visit account_exchanges_path
       page.all('a', text: "編集")[0].click
@@ -176,22 +195,25 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "account_exchange[value]",	with: 100
         click_button '振替を登録'
       end
-      expect(User.find(@user.id).account_exchanges.length).to eq 2
+      visit account_exchanges_path
+      expect(@user.account_exchanges.length).to eq 2
       expect(@user.accounts.order(:id).first.now_value).to eq 900
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 550
       expect(@user.accounts.order(:id).second.now_value).to eq 1100
     end
+
     scenario "destroty ax" do
       visit account_exchanges_path
       page.accept_confirm do
         page.all('a', text: "削除")[0].click
       end
       visit account_exchanges_path
-      expect(User.find(@user.id).account_exchanges.length).to eq 1
+      expect(@user.account_exchanges.length).to eq 1
       expect(@user.accounts.order(:id).first.now_value).to eq 800
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 450
       expect(@user.accounts.order(:id).second.now_value).to eq 1200
     end
+
     scenario "create fund_user" do 
       visit fund_users_path
       expect(page).to have_content "投資信託"
@@ -202,13 +224,15 @@ RSpec.feature "UserFlow", type: :feature do
       fill_in "fund_user[total_buy_value]",	with: "1000" 
       fill_in "fund_user[average_buy_value]",	with: "9000"
       click_on "資産に追加"
+      visit fund_users_path
       expect(FundUser.all.length).to eq 1
       expect(FundUserHistory.all.length).to eq 1
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         (1000.to_f * 10000.to_f / 9000.to_f).round
       )
       expect(page).to have_content "投資信託"
     end
+
     scenario "update average_buy_value" do
       visit fund_users_path
       click_link "fund1"
@@ -216,11 +240,12 @@ RSpec.feature "UserFlow", type: :feature do
       fill_in "fund_user[average_buy_value]",	with: 9500
       click_on "平均取得価額を更新"
       expect(page).to have_content "更新しました。"
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         (1000.to_f * 10000.to_f / 9500.to_f).round
       )
     end
-    scenario "create fuh buy by account with commission" do
+
+    scenario "create fuh_buy by account with commission" do
       visit fund_users_path
       click_link "fund1"
       click_on "購入または売却"
@@ -235,14 +260,16 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "fund_user_history[value]",	with: 100
         click_button '購入'
       end
+      visit fund_users_path
       expect(FundUserHistory.all.length).to eq 2
       expect(@user.accounts.order(:id).first.now_value).to eq 700
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 350
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         (1090.to_f * 10000.to_f / 9500.to_f).round
       )
     end
-    scenario "create fuh buy by card no commission" do
+
+    scenario "create fuh_buy by card no commission" do
       visit fund_users_path
       click_link "fund1"
       click_on "購入または売却"
@@ -257,14 +284,16 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "fund_user_history[value]",	with: 200
         click_button '購入'
       end
+      visit fund_users_path
       expect(FundUserHistory.all.length).to eq 3
       expect(@user.accounts.order(:id).first.now_value).to eq 700
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 150
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         (1290.to_f * 10000.to_f / 9500.to_f).round
       )
     end
-    scenario "create fuh sell with commission" do
+
+    scenario "create fuh_sell with commission" do
       visit fund_users_path
       click_link "fund1"
       click_on "購入または売却"
@@ -279,13 +308,15 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "fund_user_history[value]",	with: 300
         click_button '売却'
       end
+      visit fund_users_path
       expect(FundUserHistory.all.length).to eq 4
       expect(@user.accounts.order(:id).first.now_value).to eq 950
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 400
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         ((1290.to_f * 10000.to_f / 9500.to_f) - 300).round
       )
     end
+
     scenario 'edit fuh' do
       visit fund_users_path
       click_link "fund1"
@@ -294,11 +325,13 @@ RSpec.feature "UserFlow", type: :feature do
         fill_in "fund_user_history[commission]",	with: 0
         click_button "購入"
       end
+      visit fund_users_path
       expect(FundUserHistory.all.length).to eq 4
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         ((1300.to_f * 10000.to_f / 9500.to_f) - 300).round
       )
     end
+
     scenario 'destroy fuh' do
       visit fund_users_path
       click_link "fund1"
@@ -307,24 +340,13 @@ RSpec.feature "UserFlow", type: :feature do
       end
       visit fund_users_path
       expect(FundUserHistory.all.length).to eq 3
-      expect(User.find(@user.id).fund_users.first.now_value).to eq(
+      expect(@user.fund_users.first.now_value).to eq(
         ((1200.to_f * 10000.to_f / 9500.to_f) - 300).round
       )
       expect(@user.accounts.order(:id).first.now_value).to eq 1050
       expect(@user.accounts.order(:id).first.after_pay_value).to eq 500
     end
-    scenario 'destroy fund_user' do
-      visit fund_users_path
-      page.accept_confirm do
-        click_on '削除'
-      end
-      visit fund_users_path
-      expect(FundUser.all.length).to eq 0
-      expect(FundUserHistory.all.length).to eq 0
-      expect(@user.accounts.order(:id).first.now_value).to eq 800
-      expect(@user.accounts.order(:id).first.after_pay_value).to eq 450
-      expect(@user.accounts.order(:id).second.now_value).to eq 1200
-    end
+
     scenario "show card" do
       card2 = @user.cards.create(
         name: "card_name2",
@@ -334,20 +356,107 @@ RSpec.feature "UserFlow", type: :feature do
       )
       visit cards_path
       expect(page).to have_content 'クレジットカード一覧'
-      page.all('a', text: "詳細")[0].click
+      click_link "詳細", href: card_path(@user.cards.order(:id).first.id)
       expect(page).to have_content 'card_name'
       visit cards_path
-      page.all('a', text: "詳細")[1].click
+      click_link "詳細", href: card_path(card2.id)
       expect(page).to have_content 'このクレジットカードを使用した未引き落としイベントはありません'
     end
-    scenario "visit account index" do
+
+    scenario "edit card" do
+      visit cards_path
+      click_link "編集", href: edit_card_path(@user.cards.order(:id).first.id)
+      select @user.accounts.order(:id).second.name, from: "card[account]"
+      select 25, from: "card[pay_date]"
+      click_button "クレジットカード登録"
+      visit cards_path
+      expect(@user.accounts.order(:id).first.now_value).to eq 1050
+      expect(@user.accounts.order(:id).first.after_pay_value).to eq 1050
+      expect(@user.accounts.order(:id).second.now_value).to eq 1200
+      expect(@user.accounts.order(:id).second.after_pay_value).to eq 650
+      expect(@user.events.where.not(card_id: nil).first.pay_date.day).to eq 25
+    end
+
+    scenario "failed destroy card" do
+      visit cards_path
+      page.accept_confirm do
+        click_link "削除", href: card_path(@user.cards.order(:id).first.id)
+      end
+      expect(page).to have_content "このカードを使用した未引き落としのものが存在するため削除できません。" 
+      expect(@user.cards.length).to eq 2
+    end
+
+    scenario "destroy card" do
+      visit cards_path
+      page.accept_confirm do
+        click_link "削除", href: card_path(@user.cards.order(:id).second.id)
+      end
+      visit cards_path
+      expect(@user.cards.length).to eq 1
+    end
+
+    scenario "create genre" do
+      visit genres_path
+      click_on "ジャンル追加"
+      select "支出", from: "genre[iae]"
+      fill_in "genre[name]",	with: "new_genre_name" 
+      click_button "ジャンル登録"
+      visit genres_path
+      expect(@user.genres.order(:id).last.name).to eq "new_genre_name"
+    end
+
+    scenario "edit genre" do
+      visit genres_path
+      expect(page).to have_content "ジャンル一覧" 
+      click_link "編集", href: edit_genre_path(@user.genres.where(iae: false).order(:id).first.id)
+      fill_in "genre[name]",	with: "genre_ex" 
+      click_button "ジャンル登録"
+      visit genres_path
+      expect(@user.events.first.genre.name).to eq "genre_ex"
+    end
+
+    scenario "destroy genre" do
+      visit genres_path
+      page.accept_confirm do
+        click_link "削除", href: genre_path(@user.genres.where(iae: false).order(:id).first.id)
+      end
+      visit genres_path
+      expect(@user.events.first.genre).to eq nil
+    end
+    
+    scenario "failed destroy account" do
       visit accounts_path
       expect(page).to have_content "資産情報"
+      page.accept_confirm do
+        click_link "削除", href: account_path(@user.accounts.order(:id).second.id)
+      end
+      expect(page).to have_content "このアカウントに連携したクレジットカードが存在するため削除できません"
+      expect(@user.accounts.length).to eq 2
     end
-    scenario "visit genre index" do
-      visit genres_path
-      expect(page).to have_content "ジャンル一覧"
+
+    scenario "destroy account" do
+      visit accounts_path
+      expect(page).to have_content "資産情報"
+      page.accept_confirm do
+        click_link "削除", href: account_path(@user.accounts.order(:id).first.id)
+      end
+      visit accounts_path
+      expect(@user.accounts.length).to eq 1
+      expect(@user.events.where(card: nil).first.payment_source_name).to eq "削除済み"
     end
+
+    scenario 'destroy fund_user' do
+      visit fund_users_path
+      page.accept_confirm do
+        click_on '削除'
+      end
+      visit fund_users_path
+      expect(FundUser.all.length).to eq 0
+      expect(FundUserHistory.all.length).to eq 0
+      expect(@user.accounts.order(:id).first.now_value).to eq 1200
+      expect(@user.accounts.order(:id).first.after_pay_value).to eq 850
+    end
+
     scenario "visit event search" do
       visit events_path
       within "footer" do
@@ -355,6 +464,7 @@ RSpec.feature "UserFlow", type: :feature do
       end
       expect(page).to have_content "検索結果"
     end
+
     scenario "アカウント削除" do
       visit root_path
       within 'footer' do
