@@ -51,21 +51,21 @@ user.cards.create(
   ]
 )
 
-if File.exist?(Rails.root+'effective_all_funds.txt')
-  file = File.open(Rails.root+'effective_all_funds.txt')
-  funds_array = file.readlines
-  data_length = funds_array.length/3
-  (data_length).times do |i|
-    j = i*3
-    str_id = funds_array[j+2]
-    value = funds_array[j+1]
-    name = funds_array[j]
-    name1 = NKF.nkf('-w -Z4', name)
-    name2 = NKF.nkf('-w -X', name1)
-    Fund.create(
-      name: name2.delete("\n"),
-      string_id: str_id.delete("\n"),
-      value: value.delete("\n")
-    )
-  end
-end
+# if File.exist?(Rails.root+'effective_all_funds.txt')
+#   file = File.open(Rails.root+'effective_all_funds.txt')
+#   funds_array = file.readlines
+#   data_length = funds_array.length/3
+#   (data_length).times do |i|
+#     j = i*3
+#     str_id = funds_array[j+2]
+#     value = funds_array[j+1]
+#     name = funds_array[j]
+#     name1 = NKF.nkf('-w -Z4', name)
+#     name2 = NKF.nkf('-w -X', name1)
+#     Fund.create(
+#       name: name2.delete("\n"),
+#       string_id: str_id.delete("\n"),
+#       value: value.delete("\n")
+#     )
+#   end
+# end
