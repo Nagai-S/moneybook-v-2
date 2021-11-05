@@ -192,8 +192,14 @@ RSpec.describe Card do
         Event.find(@event1.id).pay_date
       ).to eq Date.new(Date.today.year, Date.today.month + 1, 1)
       expect(
+        Event.find(@event1.id).account_id
+      ).to eq @account2.id
+      expect(
         Event.find(@event2.id).pay_date
       ).to eq Date.new(Date.today.year, Date.today.month - 1, 1)
+      expect(
+        Event.find(@event2.id).account_id
+      ).to eq @account1.id
       expect(
         AccountExchange.find(@ax1.id).pay_date
       ).to eq Date.new(Date.today.year, Date.today.month, 1)
@@ -201,11 +207,26 @@ RSpec.describe Card do
         AccountExchange.find(@ax1.id).pon
       ).to eq true
       expect(
+        AccountExchange.find(@ax1.id).source_id
+      ).to eq @account1.id
+      expect(
+        AccountExchange.find(@ax2.id).pay_date
+      ).to eq Date.new(Date.today.year, Date.today.month - 1, 1)
+      expect(
+        AccountExchange.find(@ax2.id).source_id
+      ).to eq @account1.id
+      expect(
         FundUserHistory.find(@fund_user_history1.id).pay_date
       ).to eq Date.new(Date.today.year, Date.today.month + 1, 1)
       expect(
+        FundUserHistory.find(@fund_user_history1.id).account_id
+      ).to eq @account2.id
+      expect(
         FundUserHistory.find(@fund_user_history2.id).pay_date
       ).to eq Date.new(Date.today.year, Date.today.month - 2, 1)
+      expect(
+        FundUserHistory.find(@fund_user_history2.id).account_id
+      ).to eq @account1.id
     end
 
     it "#before_destroy_action" do
