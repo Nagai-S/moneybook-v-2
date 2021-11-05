@@ -78,7 +78,6 @@ class Card < ApplicationRecord
     fund_user_histories.includes(:card, :account).each do |fund_user_history|
       fund_user_history.update(
         pay_date: fund_user_history.decide_pay_day,
-        account_id: account_id
       )
       fund_user_history.change_pon
       unless fund_user_history.pon
