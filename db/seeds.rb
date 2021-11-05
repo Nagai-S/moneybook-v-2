@@ -25,32 +25,29 @@ user.genres.create(
     {name: "お小遣い", iae: true},
     {name: "ボーナス", iae: true},
     {name: "利子", iae: true},
-    {name: "売上金", iae: false},
-    {name: "立替金返金", iae: false},
-    {name: "本", iae: false},
+    {id: 18, name: "売上金", iae: true},
+    {id: 20, name: "立替金返金", iae: true},
+    {id: 21, name: "本", iae: false},
   ]
 )
 
 user.accounts.create(
   [
-    {name: "楽天銀行", value: 0},
-    {name: "京都中央信用金庫", value: 48887},
-    {name: "メルペイ", value: "0"},
-    {name: "ゆうちょ", value: 278080},
-    {name: "現金", value: 54835},
-    {name: "PayPay", value: 216},
-    {name: "SoftBankCard", value: 111},
-    {name: "eMAXIS S&P500", value: 0},
-    {name: "楽天全米index fund", value: 0},
-    {name: "楽天Pay", value: 0},
+    {id: 13, name: "楽天銀行", value: 0},
+    {id: 2, name: "京都中央信用金庫", value: 48887},
+    {id: 4, name: "ゆうちょ", value: 278080},
+    {id: 5, name: "現金", value: 54835},
+    {id: 6, name: "PayPay", value: 216},
+    {id: 12, name: "メルペイ", value: 0},
+    {id: 16, name: "楽天Pay", value: 0},
   ]
 )
 
 user.cards.create(
   [
-    {name: "YahooCard", account_id: 1, pay_date: 27, month_date: 31},
-    {name: "RakutenCard", account_id: 1, pay_date: 27, month_date: 31},
-    {name: "メルペイMasterCard", account_id: 3, pay_date: 1, month_date: 31},
+    {name: "YahooCard", account_id: 13, pay_date: 27, month_date: 31},
+    {name: "RakutenCard", account_id: 13, pay_date: 27, month_date: 31},
+    {id: 7, name: "メルペイMasterCard", account_id: 12, pay_date: 1, month_date: 31},
   ]
 )
 

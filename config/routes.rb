@@ -44,9 +44,12 @@
 #                                       POST   /api/v1/events(.:format)                                                                 api/events#create
 #                 api_account_exchanges GET    /api/v1/account_exchanges(.:format)                                                      api/account_exchanges#index
 #                                       POST   /api/v1/account_exchanges(.:format)                                                      api/account_exchanges#create
+#     api_fund_user_fund_user_histories GET    /api/v1/fund_users/:fund_user_id/fund_user_histories(.:format)                           api/fund_user_histories#index
+#                        api_fund_users GET    /api/v1/fund_users(.:format)                                                             api/fund_users#index
 #                       api_daily_email GET    /api/v1/daily_email(.:format)                                                            api/auth#daily_email
 #                 api_update_fund_value GET    /api/v1/update_fund_value(.:format)                                                      api/auth#update_fund_value
 #                      api_regist_funds POST   /api/v1/regist_funds(.:format)                                                           api/auth#regist_funds
+#                 api_initial_regist_db POST   /api/v1/initial_regist_db(.:format)                                                      api/auth#initial_regist_db
 #                              accounts GET    /accounts(.:format)                                                                      accounts#index
 #                                       POST   /accounts(.:format)                                                                      accounts#create
 #                           new_account GET    /accounts/new(.:format)                                                                  accounts#new
@@ -132,10 +135,14 @@ Rails.application.routes.draw do
 
       resources :events, only: [:create, :index]
       resources :account_exchanges, only: [:create, :index]
+      resources :fund_users, only: [:index] do
+        resources :fund_user_histories, only: [:index]
+      end
 
       get "daily_email" => "auth#daily_email"
       get "update_fund_value" => "auth#update_fund_value"
       post "regist_funds" => "auth#regist_funds"
+      post "initial_regist_db" => "auth#initial_regist_db"
     end
   end
   

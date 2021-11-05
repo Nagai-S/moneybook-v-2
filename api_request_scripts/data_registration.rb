@@ -1,51 +1,16 @@
 require "net/http"
 require "json"
 require 'dotenv/load'
-require './api_request_scripts/trans_id'
 require './api_request_scripts/get_real_data'
 
-def login
-  params = {
-    "email" => "a@gmail.com",
-    "password" => "asdfghjkl",
-  }
-
-  uri = URI.parse("http://localhost:3000/api/v1/auth/sign_in")
-  response = Net::HTTP.post_form(uri, params)
-
-  return_hash = {
-    "access_token" => response["access-token"],
-    "client" => response["client"],
-  }
-
-  return return_hash
-end
-
-def create_ax(params, header_info)
-  uri = URI.parse("http://localhost:3000/api/v1/account_exchanges")
+def create_db(params)
+  uri = URI.parse("http://localhost:3000/api/v1/initial_regist_db")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme == "https"
 
   headers = {
     "Content-Type" => "application/json",
-    "access-token" => header_info["access_token"],
-    "client" => header_info["client"],
-    "uid" => "a@gmail.com",
-  }
-  
-  response = http.post(uri.path, params.to_json, headers)
-end
-
-def create_event(params, header_info)
-  uri = URI.parse("http://localhost:3000/api/v1/events")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = uri.scheme == "https"
-
-  headers = {
-    "Content-Type" => "application/json",
-    "access-token" => header_info["access_token"],
-    "client" => header_info["client"],
-    "uid" => "a@gmail.com",
+    "access-token" => ENV["AUTH_API_ACCESS_KEY"],
   }
   
   response = http.post(uri.path, params.to_json, headers)
@@ -55,123 +20,97 @@ end
 def all_axs_create
   all_axs = get_all_axs
 
-  header_info = login
-  
   all_axs.each do |data|
-    year = data["date"].split("-")[0]
-    month = data["date"].split("-")[1]
-    day = data["date"].split("-")[2]
-    value = data["value"]
-    a_id = data["source_id"]
-    c_id = data["card_id"]
-    to_id = data["to_id"]
-    pon = data["pon"]
-  
-    aoc = c_id ? "1" : "0"
-    account_id = a_id_trans(a_id)
-    to_id = a_id_trans(to_id)
-    card_id = c_id_trans(c_id)
-    
-    params={
-      account_exchange: {
-        "date(1i)" => year,
-        "date(2i)" => month,
-        "date(3i)" => day,
-        "to_account" => to_id,
-        "source_account" => account_id,
-        "card" => card_id,
-        "value" => value,
-        "account_or_card" => aoc,
-      }
+    params = {
+      "kind" => "1",
+      "date(1i)" => data["date"].split("-")[0],
+      "date(2i)" => data["date"].split("-")[1],
+      "date(3i)" => data["date"].split("-")[2],
+      "to_id" => data["to_id"],
+      "source_id" => data["source_id"],
+      "card" => data["card_id"],
+      "value" => data["value"],
+      "pon" => data["pon"],
     }
-    
-    create_ax(params, header_info)
+
+    if data['pay_date']
+      params["pay_date(1i)"] = data["pay_date"].split("-")[0]
+      params["pay_date(2i)"] = data["pay_date"].split("-")[1]
+      params["pay_date(3i)"] = data["pay_date"].split("-")[2]
+    end
+
+    create_db(params)
   end
 end
 
 def all_events_create
   all_events = get_all_events
 
-  header_info = login
-  
   all_events.each do |data|
-    year = data["date"].split("-")[0]
-    month = data["date"].split("-")[1]
-    day = data["date"].split("-")[2]
-    iae = data["iae"]
-    memo = data["memo"]
-    value = data["value"]
-    a_id = data["account_id"]
-    c_id = data["card_id"]
-    g_id = data["genre_id"]
-    pon = data["pon"]
-  
-    aoc = c_id ? "1" : "0"
-    account_id = a_id_trans(a_id)
-    genre_id = g_id_trans(g_id)
-    card_id = c_id_trans(c_id)
-    
-    params={
-      event: {
-        "date(1i)" => year,
-        "date(2i)" => month,
-        "date(3i)" => day,
-        "genre" => genre_id,
-        "account" => account_id,
-        "card" => card_id,
-        "memo" => memo,
-        "value" => value,
-        "account_or_card" => aoc,
-        "iae" => iae,
-      }
+    params = {
+      "kind" => "0",
+      "date(1i)" => data["date"].split("-")[0],
+      "date(2i)" => data["date"].split("-")[1],
+      "date(3i)" => data["date"].split("-")[2],
+      "genre_id" => data["genre_id"],
+      "account_id" => data["account_id"],
+      "card_id" => data["card_id"],
+      "memo" => data["memo"],
+      "value" => data["value"],
+      "iae" => data["iae"],
+      "pon" => data["pon"],
     }
+
+    if data['pay_date']
+      params["pay_date(1i)"] = data["pay_date"].split("-")[0]
+      params["pay_date(2i)"] = data["pay_date"].split("-")[1]
+      params["pay_date(3i)"] = data["pay_date"].split("-")[2]
+    end
     
-    create_event(params, header_info)
+    create_db(params)
   end
 end
 
-def a_event_create
-  header_info = login
-  
-  params = {
-    event: {
-      "date(1i)" => "2021",
-      "date(2i)" => "7",
-      "date(3i)" => "1",
-      "genre" => 6,
-      "account" => 4,
-      "card" => nil,
-      "memo" => "test",
-      "value" => 10000,
-      "account_or_card" => "0",
-      "iae" => true,
+def all_fuh_create
+  all_fund_users = get_all_fund_users
+
+  all_fund_users.each do |data|
+    params = {
+      "kind" => "2",
+      "fund_id" => data["fund_id"],
+      "average_buy_value" => data["average_buy_value"]
     }
-  }
-  create_event(params, header_info)
+
+    fuh_array = []
+    all_fuh = get_all_fuh(data["id"])
+    all_fuh.each do |fuh|
+      params = {
+        "buy_or_sell" => fuh["buy_or_sell"],
+        "commission" => fuh["commission"],
+        "date(1i)" => fuh["date"].split("-")[0],
+        "date(2i)" => fuh["date"].split("-")[1],
+        "date(3i)" => fuh["date"].split("-")[2],
+        "pon" => fuh["pon"],
+        "value" => fuh["value"],
+        "account_id" => fuh["account_id"],
+        "card_id" => fuh["card_id"],
+      }
+
+      if fuh['pay_date']
+        params["pay_date(1i)"] = fuh["pay_date"].split("-")[0]
+        params["pay_date(2i)"] = fuh["pay_date"].split("-")[1]
+        params["pay_date(3i)"] = fuh["pay_date"].split("-")[2]
+      end
+
+      fuh_array.push(params)
+    end
+
+    params["fuh"] = fuh_array
+    create_db(params)
+  end
+
 end
 
-def a_ax_create
-  header_info = login
-  
-  params = {
-    account_exchange: {
-      "date(1i)" => "2021",
-      "date(2i)" => "7",
-      "date(3i)" => "2",
-      "to_account" => 1,
-      "source_account" => 2,
-      "card" => 1,
-      "value" => 1000,
-      "account_or_card" => "1",
-    }
-  }
-  create_ax(params, header_info)
-end
-
-# a_event_create
-# a_ax_create
-
-all_events_create
-p "all events create"
-all_axs_create
-p "all account exchanges create"
+# all_events_create
+# all_axs_create
+all_fuh_create
