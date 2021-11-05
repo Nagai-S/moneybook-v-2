@@ -32,15 +32,17 @@ class Api::AuthController < Api::ApplicationController
   end
 
   def regist_funds
+    id = params[:fund][:id]
     name = params[:fund][:name]
     value = params[:fund][:value]
     string_id = params[:fund][:string_id]
     Fund.create(
+      id: id,
       name: name,
       value: value,
       string_id: string_id
     )
-    render json: {message: "success"}, status: 200
+    render json: {message: name + "is created"}, status: 200
   end
 
   def initial_regist_db

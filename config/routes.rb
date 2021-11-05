@@ -50,6 +50,7 @@
 #                 api_update_fund_value GET    /api/v1/update_fund_value(.:format)                                                      api/auth#update_fund_value
 #                      api_regist_funds POST   /api/v1/regist_funds(.:format)                                                           api/auth#regist_funds
 #                 api_initial_regist_db POST   /api/v1/initial_regist_db(.:format)                                                      api/auth#initial_regist_db
+#                       api_funds_index GET    /api/v1/funds/index(.:format)                                                            api/funds#index
 #                              accounts GET    /accounts(.:format)                                                                      accounts#index
 #                                       POST   /accounts(.:format)                                                                      accounts#create
 #                           new_account GET    /accounts/new(.:format)                                                                  accounts#new
@@ -143,6 +144,7 @@ Rails.application.routes.draw do
       get "update_fund_value" => "auth#update_fund_value"
       post "regist_funds" => "auth#regist_funds"
       post "initial_regist_db" => "auth#initial_regist_db"
+      get 'funds/index'
     end
   end
   
