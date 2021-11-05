@@ -121,6 +121,7 @@ class Api::AuthController < Api::ApplicationController
           )
         end
       end
+      render json: {message: "a fund_user with all fuhs is created"}
     end
   end
 end

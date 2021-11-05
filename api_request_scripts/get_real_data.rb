@@ -46,7 +46,7 @@ end
 def get_all_fuh(fund_user_id)
   uri2 = URI.parse(
     "https://moneybook-moneybook.herokuapp.com/api/v1/fund_users/" + 
-    fund_user_id + "/fund_user_histories"
+    fund_user_id.to_s + "/fund_user_histories"
   )
   headers = {
     "Content-Type" => "application/json",
