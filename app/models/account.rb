@@ -34,15 +34,21 @@ class Account < ApplicationRecord
   }
 
   def after_pay_value
-    not_pay_value = 0
-    cards.includes(:events, :account_exchanges).each do |card|
-      not_pay_value += card.events.where(pon: false).sum(:value)
-      not_pay_value += card.account_exchanges.where(pon: false).sum(:value)
-      not_pay_value += card.fund_user_histories.where(pon: false).sum(:value)
-    end
-    return now_value - not_pay_value
-  end
+    event_in_sum = events.where(iae: true).sum(:value)
+    event_ex_sum = events.where(iae: false).sum(:value)
+    ax_source_sum = account_exchanges_source.sum(:value)
+    ax_to_sum = account_exchanges_to.sum(:value)
+    fund_user_history_buy_sum = fund_user_histories.where(buy_or_sell: true).sum(:value)
+    fund_user_history_sell_sum = fund_user_histories.where(buy_or_sell: false).sum(:value)
+    fund_user_history_sell_commission_sum = fund_user_histories.where(
+      buy_or_sell: false
+    ).sum(:commission)
 
+    return value + event_in_sum - event_ex_sum + 
+    ax_to_sum - ax_source_sum + 
+    fund_user_history_sell_sum - fund_user_history_buy_sum - fund_user_history_sell_commission_sum
+  end
+  
   def before_destroy_action
     events.each do |event|
       event.update(account_id: nil)
