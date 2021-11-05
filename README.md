@@ -61,8 +61,11 @@ $ cp env_file_model.txt .env
 * 周期的な記録を設定しておける機能
 
 ## APIについて
-* webから会員登録して、POST /api/v1/auth/sign_inでbodyとして{email: "youremail", password: "yourpassword"}でリクエストを送って返ってきた
-headerのうち"accesstoken"と"client"と"uid"をheaderに載せてリクエストを送信することで、apiとして扱える。apiの情報については今後./doc/内に載せていく予定。
+1. sign up on web page
+2. POST /api/v1/auth/sign_in with body:{email: "your-email", password: "your-password"}
+3. regist [access-token, client, uid] in response.header
+
+apiの情報については今後./doc/内に載せていく予定。
 
 ## 実際のサイト
 https://moneybook-moneybook.herokuapp.com
