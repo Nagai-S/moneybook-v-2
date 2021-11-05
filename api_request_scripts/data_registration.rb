@@ -84,7 +84,7 @@ def all_fuh_create
     fuh_array = []
     all_fuh = get_all_fuh(data["id"])
     all_fuh.each do |fuh|
-      params = {
+      fuh_params = {
         "buy_or_sell" => fuh["buy_or_sell"],
         "commission" => fuh["commission"],
         "date(1i)" => fuh["date"].split("-")[0],
@@ -97,20 +97,52 @@ def all_fuh_create
       }
 
       if fuh['pay_date']
-        params["pay_date(1i)"] = fuh["pay_date"].split("-")[0]
-        params["pay_date(2i)"] = fuh["pay_date"].split("-")[1]
-        params["pay_date(3i)"] = fuh["pay_date"].split("-")[2]
+        fuh_params["pay_date(1i)"] = fuh["pay_date"].split("-")[0]
+        fuh_params["pay_date(2i)"] = fuh["pay_date"].split("-")[1]
+        fuh_params["pay_date(3i)"] = fuh["pay_date"].split("-")[2]
       end
 
-      fuh_array.push(params)
+      fuh_array.push(fuh_params)
     end
 
     params["fuh"] = fuh_array
     create_db(params)
   end
-
 end
 
-# all_events_create
-# all_axs_create
+def all_funds_create
+  all_funds = get_all_funds
+
+  all_funds.each do |fund|
+    regist_funds(fund["id"], fund["name"], fund["value"], fund["strin_id"])
+  end
+end
+
+def regist_funds(id, name, value, string_id)
+  uri = URI.parse("http://localhost:3000/api/v1/regist_funds")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = uri.scheme === "https"
+
+  headers = {
+    "access-token" => ENV['AUTH_API_ACCESS_KEY'],
+    "Content-Type" => "application/json"
+  }
+
+  params = {
+    fund: {
+      id: id,
+      name: name,
+      value: value,
+      string_id: string_id
+    }
+  }
+
+  response = http.post(uri.path, params.to_json, headers)
+
+  p JSON.parse(response.body)
+end
+
+all_events_create
+all_axs_create
+all_funds_create
 all_fuh_create

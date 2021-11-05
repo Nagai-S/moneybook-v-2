@@ -60,3 +60,20 @@ def get_all_fuh(fund_user_id)
 
   return JSON.parse(response.body)["fund_user_histories"]
 end
+
+def get_all_funds
+  uri2 = URI.parse(
+    "https://moneybook-moneybook.herokuapp.com/api/v1/funds/index" 
+  )
+  headers = {
+    "Content-Type" => "application/json",
+    "access-token" => ENV['PRODUCTION_ACCESS_TOKEN'],
+    "client" => ENV['PRODUCTION_CLIENT'],
+    "uid" => ENV['PRODUCTION_UID'],
+  }
+  http = Net::HTTP.new(uri2.host, uri2.port)
+  http.use_ssl = uri2.scheme === "https"
+  response = http.get(uri2.path, headers)
+
+  return JSON.parse(response.body)["funds"]
+end
