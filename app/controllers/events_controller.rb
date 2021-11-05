@@ -53,10 +53,18 @@ class EventsController < ApplicationController
   
   def destroy
     if @event.destroy
-      redirect_to request.referer unless Rails.env.test?
+      unless Rails.env.test?
+        redirect_to request.referer 
+      else
+        redirect_to root_path
+      end
     else
       flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
-      redirect_to request.referer unless Rails.env.test?
+      unless Rails.env.test?
+        redirect_to request.referer 
+      else
+        redirect_to root_path
+      end
     end
   end
   

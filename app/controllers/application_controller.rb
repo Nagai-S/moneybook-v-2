@@ -43,6 +43,8 @@ class ApplicationController < ActionController::Base
     unless Rails.env.test?
       redirect_to session[:previous_url]
       session[:previous_url].clear
+    else
+      redirect_to root_path
     end
   end
 
