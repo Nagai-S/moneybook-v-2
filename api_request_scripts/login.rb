@@ -1,3 +1,6 @@
+require "net/http"
+require "json"
+
 def login
   params = {
     "email" => "a@gmail.com",
@@ -14,3 +17,5 @@ def login
 
   return return_hash
 end
+
+puts login
