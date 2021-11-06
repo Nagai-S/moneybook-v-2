@@ -3,7 +3,7 @@ require "json"
 require 'dotenv/load'
 
 def send_email
-  uri = URI.parse("http://localhost:3000/api/v1/daily_email")
+  uri = URI.parse("http://localhost:8080/api/v1/daily_email")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === "https"
   headers = {
@@ -19,7 +19,7 @@ def send_email
 end
 
 def update_fund_value
-  uri = URI.parse("http://localhost:3000/api/v1/update_fund_value")
+  uri = URI.parse("http://localhost:8080/api/v1/update_fund_value")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === "https"
   headers = {

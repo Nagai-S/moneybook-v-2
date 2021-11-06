@@ -4,7 +4,7 @@ require 'dotenv/load'
 require './api_request_scripts/get_real_data'
 
 def create_db(params)
-  uri = URI.parse("http://localhost:3000/api/v1/initial_regist_db")
+  uri = URI.parse("http://localhost:8080/api/v1/initial_regist_db")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme == "https"
 
@@ -119,7 +119,7 @@ def all_funds_create
 end
 
 def regist_funds(id, name, value, string_id)
-  uri = URI.parse("http://localhost:3000/api/v1/regist_funds")
+  uri = URI.parse("http://localhost:8080/api/v1/regist_funds")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === "https"
 

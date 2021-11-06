@@ -4,7 +4,7 @@ def login
     "password" => "asdfghjkl",
   }
 
-  uri = URI.parse("http://localhost:3000/api/v1/auth/sign_in")
+  uri = URI.parse("http://localhost:8080/api/v1/auth/sign_in")
   response = Net::HTTP.post_form(uri, params)
 
   return_hash = {

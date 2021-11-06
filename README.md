@@ -11,7 +11,7 @@ Dockerを[インストール](https://hub.docker.com/editions/community/docker-c
 ```
 $ bash initial.sh
 ```
-4. http://localhost:3000
+4. http://localhost:8080
 にアクセス
 5. email: a@gmail.com, password: asdfghjkl でログインする
 
