@@ -1,7 +1,6 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :select_card, only: [:destroy, :edit, :update, :show]
-  before_action :correct_user!, only: [:destroy, :edit, :update, :show]
+  before_action :correct_user!, only: [:destroy, :edit, :update, :show, :pay_not_data]
   before_action :to_explanation, only: [:show, :index, :new]
   before_action :set_previous_url, only: [:new, :edit]
   
@@ -41,10 +40,21 @@ class CardsController < ApplicationController
       end
     end
   end
-  
+
   def show
+    @events = @card.events
+    .includes(:account,:card,:genre)
+    .page(params[:event_page]).per(30)
+    ax_array = []
+    @card.account_exchanges.each{|ax| ax_array.push(ax)}
+    @axs = Kaminari.paginate_array(ax_array)
+    .page(params[:ax_page]).per(30)
+    @fund_user_histories = @card.fund_user_histories
   end
   
+  def pay_not_data
+  end
+
   def edit
   end
 
@@ -64,11 +74,8 @@ class CardsController < ApplicationController
       params.require(:card).permit(:name, :pay_date, :month_date)
     end
 
-    def select_card
-      @card = Card.find_by(id: params[:id])
-    end
-
     def correct_user!
+      @card = Card.find_by(id: params[:id])
       redirect_to root_path unless current_user == @card.user
     end
     

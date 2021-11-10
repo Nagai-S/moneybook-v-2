@@ -166,7 +166,7 @@ RSpec.describe Card do
     end
   end
   
-  describe "for show" do
+  describe "for pay_not_for_card" do
     it "#not_pay_dates" do
       expect(@card.not_pay_dates).to eq [
         Date.new(Date.today.year, Date.today.month, 27),

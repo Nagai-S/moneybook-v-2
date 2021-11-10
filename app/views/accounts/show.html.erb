@@ -1,0 +1,40 @@
+<%= javascript_pack_tag 'account' %>
+<h1><%= @account.name %></h1>
+
+<div class="account_update_form">
+<%= form_with model: @account, id: "account_update" do |f| %>
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :name, "アカウントの名前を入力してください。" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :name, class: "form-control account_name", id: "name" %>
+    </div>
+  </div>
+  <Button class="btn btn-primary account_update_button" %>名前を変更</Button>
+<% end %>
+</div>
+
+<h2>使用履歴</h2>
+<% if @events.exists? %>
+<%= render "events/table" %>
+<% else %>
+<p><%= @account.name %>を利用した履歴はありません。</p>
+<% end %>
+
+<h2>振替</h2>
+<% if @axs.length > 0 %>
+<%= render "account_exchanges/table" %>
+<% else %>
+<p><%= @account.name %>を利用した振替はありません。</p>
+<% end %>
+
+<h2>投資信託</h2>
+<% if @fund_user_histories.exists? %>
+<%= render "fund_user_histories/table" %>
+<% else %>
+<p><%= @account.name %>を利用した投資信託の売買はありません。</p>
+<% end %>
+
+
+

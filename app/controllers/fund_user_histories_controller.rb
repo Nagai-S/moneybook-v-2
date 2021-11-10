@@ -1,7 +1,6 @@
 class FundUserHistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :select_fund_user
-  before_action :select_fund_user_history, only: [:destroy, :edit, :update]
   before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
   before_action :set_previous_url, only: [:new, :edit]
@@ -63,10 +62,6 @@ class FundUserHistoriesController < ApplicationController
       @fund_user = FundUser.find(params[:fund_user_id])
     end
 
-    def select_fund_user_history
-      @fund_user_history = FundUserHistory.find(params[:id])
-    end
-
     def fund_user_histories_params
       params.require(:fund_user_history).permit(
         :date,
@@ -76,7 +71,7 @@ class FundUserHistoriesController < ApplicationController
         :pay_date
       )
     end
-
+    
     def association_model_update
       if params[:fund_user_history][:account_or_card] == "0"
         @fund_user_history.account_id = params[:fund_user_history][:account]
@@ -89,8 +84,9 @@ class FundUserHistoriesController < ApplicationController
         @fund_user_history.account_id = nil
       end
     end
-
+    
     def correct_user!
+      @fund_user_history = FundUserHistory.find(params[:id])
       redirect_to root_path unless current_user == @fund_user_history.fund_user.user
     end
   

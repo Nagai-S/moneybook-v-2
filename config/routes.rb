@@ -54,12 +54,15 @@
 #                              accounts GET    /accounts(.:format)                                                                      accounts#index
 #                                       POST   /accounts(.:format)                                                                      accounts#create
 #                           new_account GET    /accounts/new(.:format)                                                                  accounts#new
-#                               account DELETE /accounts/:id(.:format)                                                                  accounts#destroy
+#                               account GET    /accounts/:id(.:format)                                                                  accounts#show
+#                                       PATCH  /accounts/:id(.:format)                                                                  accounts#update
+#                                       PUT    /accounts/:id(.:format)                                                                  accounts#update
+#                                       DELETE /accounts/:id(.:format)                                                                  accounts#destroy
 #                                genres GET    /genres(.:format)                                                                        genres#index
 #                                       POST   /genres(.:format)                                                                        genres#create
 #                             new_genre GET    /genres/new(.:format)                                                                    genres#new
-#                            edit_genre GET    /genres/:id/edit(.:format)                                                               genres#edit
-#                                 genre PATCH  /genres/:id(.:format)                                                                    genres#update
+#                                 genre GET    /genres/:id(.:format)                                                                    genres#show
+#                                       PATCH  /genres/:id(.:format)                                                                    genres#update
 #                                       PUT    /genres/:id(.:format)                                                                    genres#update
 #                                       DELETE /genres/:id(.:format)                                                                    genres#destroy
 #                                 cards GET    /cards(.:format)                                                                         cards#index
@@ -97,6 +100,7 @@
 #                             fund_user PATCH  /fund_users/:id(.:format)                                                                fund_users#update
 #                                       PUT    /fund_users/:id(.:format)                                                                fund_users#update
 #                                       DELETE /fund_users/:id(.:format)                                                                fund_users#destroy
+#                      pay_not_for_card GET    /pay_not_for_cards/:id(.:format)                                                         cards#pay_not_data
 #                         account_month GET    /account_month(.:format)                                                                 accounts#month_index
 #                           explanation GET    /explanation(.:format)                                                                   homepages#explanation
 #                         events_search GET    /events/search(.:format)                                                                 events#search
@@ -124,8 +128,8 @@
 #                  rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
 
 Rails.application.routes.draw do
-  get 'funds/index'
-  get 'funds/search'
+  get '/funds/index', to: 'funds#index'
+  get '/funds/search', to: 'funds#search'
   devise_for :users, :controllers => {
     :registrations => 'users/registrations',
   }
@@ -140,25 +144,26 @@ Rails.application.routes.draw do
         resources :fund_user_histories, only: [:index]
       end
 
-      get "daily_email" => "auth#daily_email"
-      get "update_fund_value" => "auth#update_fund_value"
-      post "regist_funds" => "auth#regist_funds"
-      post "initial_regist_db" => "auth#initial_regist_db"
-      get 'funds/index'
+      get "/daily_email", to: "auth#daily_email"
+      get "/update_fund_value", to: "auth#update_fund_value"
+      post "/regist_funds", to: "auth#regist_funds"
+      post "/initial_regist_db", to: "auth#initial_regist_db"
+      get '/funds/index'
     end
   end
   
-  resources :accounts, only: [:new, :create, :index, :destroy]
-  resources :genres, only: [:index, :create, :new, :edit, :update, :destroy]
+  resources :accounts, only: [:new, :create, :index, :destroy, :show, :update]
+  resources :genres, only: [:index, :create, :new, :update, :destroy, :show]
   resources :cards
   resources :events, only: [:index, :create, :new, :edit, :update, :destroy]
   resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
   resources :fund_users, only: [:new, :create, :index, :destroy, :update] do
     resources :fund_user_histories, only: [:new, :create, :index, :destroy, :edit, :update]
   end
-  get "account_month" => "accounts#month_index"
-  get "explanation" => "homepages#explanation"
-  get "events/search" => "events#search"
+  get "/pay_not_for_cards/:id", to: "cards#pay_not_data", as: "pay_not_for_card"
+  get "/account_month", to: "accounts#month_index"
+  get "/explanation", to: "homepages#explanation"
+  get "/events/search", to: "events#search"
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 

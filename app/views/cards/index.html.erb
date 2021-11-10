@@ -27,18 +27,14 @@
         <tbody>
           <tr>
             <td>
-              <%= link_to card.name, events_search_path(
-                card: card.id
-              ) %>
+              <%= link_to card.name, card_path(card.id) %>
             </td>
             <td>
-              <%= link_to card.account.name, events_search_path(
-                account: card.account.id
-              ) %>
+              <%= link_to card.account.name, account_path(card.account.id) %>
             </td>
             <td><%= card.pay_date %></td>
             <td><%= card.month_date %></td>
-            <td><%=link_to "詳細", card_path(card.id) %></td>
+            <td><%=link_to "詳細", pay_not_for_card_path(card.id) %></td>
             <td><%=link_to "削除", card_path(card.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
             <td><%=link_to "編集", edit_card_path(card.id) %></td>
           </tr>

@@ -6,45 +6,4 @@
   </div>
 </div>
 
-<div class="table_contents">
-  <%= paginate @axs %>
-  <div class="table_head row">
-    <li class="col-sm-2">日付</li>
-    <li class="col-sm-2">振り替え元アカウント</li>
-    <li class="col-sm-2">振り替え先アカウント</li>
-    <li class="col-sm-1">金額</li>
-    <li class="col-sm-2">引き落とし日</li>
-  </div>
-
-  <% a=0 %>
-  <% @axs.each do |ax| %>
-  <div class="table_body row">
-    <li class="col-8 offset-2 mobile_date"><%= l ax.date %></li>
-    <li class="col-sm-2 offset-sm-0  pc_date"><%= l ax.date unless a==ax.date %></li>
-    <div class="col-6 col-sm-2">
-      <div class="mobile_th">振り替え元アカウント</div>
-      <li><%= ax.source_name %></li>
-    </div>
-    <div class="col-6 col-sm-2">
-      <div class="mobile_th">振り替え先アカウント</div>
-      <li><%= ax.to_account_name %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
-      <div class="mobile_th">金額</div>
-      <li>¥<%= ax.value.to_s(:delimited) %></li>
-    </div>
-    <div class="col-4 col-sm-2">
-      <div class="mobile_th"><%= "引き落とし日" if ax.pay_date %></div>
-      <li><%= l ax.pay_date if ax.pay_date %></li>
-    </div>
-    <li class="col-6 col-sm-1">
-      <%= link_to "削除", account_exchange_path(ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
-    </li>
-    <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_account_exchange_path(ax.id) %>
-    </li>
-  </div>
-  <% a=ax.date %>
-  <% end %>
-  <%= paginate @axs %>
-</div>
+<%= render "table" %>

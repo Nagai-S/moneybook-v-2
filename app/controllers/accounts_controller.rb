@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
-  before_action :to_explanation, only: :month_index
-  before_action :correct_user!, only: :destroy
+  before_action :to_explanation, only: [:month_index, :show]
+  before_action :correct_user!, only: [:destroy, :show]
   
   def index
     not_order_accounts = current_user.accounts.includes(:cards)
@@ -18,6 +18,20 @@ class AccountsController < ApplicationController
     set_previous_url
   end
 
+  def show
+    @events = @account.events
+    .includes(:account,:card,:genre)
+    .page(params[:event_page]).per(30)
+    ax_array = []
+    @account.account_exchanges_source.each{|ax| ax_array.push(ax)}
+    @account.account_exchanges_to.each{|ax| ax_array.push(ax)}
+    @axs = Kaminari.paginate_array(
+      ax_array.sort{|a, b| (-1) * (a.date <=> b.date)}
+    )
+    .page(params[:ax_page]).per(30)
+    @fund_user_histories = @account.fund_user_histories
+  end
+
   def create
     @account = current_user.accounts.build(accounts_params)
     if @account.save
@@ -25,6 +39,17 @@ class AccountsController < ApplicationController
     else
       flash.now[:danger] = "アカウントの作成に失敗しました。"
       render "new"
+    end
+  end
+  
+  def update
+    @account = current_user.accounts.find(params[:id])
+    if @account.update(
+      name: params[:account][:name]
+    )
+      render json: {status: "success"}
+    else
+      render json: {status: "error"}
     end
   end
   

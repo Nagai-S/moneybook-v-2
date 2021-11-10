@@ -28,7 +28,7 @@ def all_axs_create
       "date(3i)" => data["date"].split("-")[2],
       "to_id" => data["to_id"],
       "source_id" => data["source_id"],
-      "card" => data["card_id"],
+      "card_id" => data["card_id"],
       "value" => data["value"],
       "pon" => data["pon"],
     }

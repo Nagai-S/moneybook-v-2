@@ -1,6 +1,5 @@
 class AccountExchangesController < ApplicationController
   before_action :authenticate_user!
-  before_action :select_ax, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new]
   before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :set_previous_url, only: [:new, :edit]
@@ -9,7 +8,7 @@ class AccountExchangesController < ApplicationController
     @axs = current_user
     .account_exchanges
     .includes(:account,:card,:to_account)
-    .page(params[:page])
+    .page(params[:ax_page])
   end
 
   def new
@@ -66,10 +65,6 @@ class AccountExchangesController < ApplicationController
       params.require(:account_exchange).permit(:date, :value, :pay_date)
     end    
 
-    def select_ax
-      @ax = AccountExchange.find_by(id: params[:id])
-    end
-
     def association_model_update
       @ax.to_id = params[:account_exchange][:to_account]
       if params[:account_exchange][:account_or_card] == "0"
@@ -80,8 +75,9 @@ class AccountExchangesController < ApplicationController
         @ax.source_id = nil
       end
     end
-
+    
     def correct_user!
+      @ax = AccountExchange.find_by(id: params[:id])
       redirect_to root_path unless current_user == @ax.user
     end
     

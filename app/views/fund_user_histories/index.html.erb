@@ -21,48 +21,4 @@
 <% end %>
 </div>
 
-<div class="table_contents">
-  <div class="table_head row">
-    <li class="col-sm-2">日付</li>
-    <li class="col-sm-2">購入か売却</li>
-    <li class="col-sm-2">アカウント</li>
-    <li class="col-sm-1">手数料</li>
-    <li class="col-sm-1">金額</li>
-    <li class="col-sm-2">引き落とし日</li>
-  </div>
-
-  <% a=0 %>
-  <% @fund_user_histories.each do |fund_user_history| %>
-  <div class="table_body row">
-    <li class="col-8 offset-2 mobile_date"><%= l fund_user_history.date %></li>
-    <li class="col-sm-2 offset-sm-0  pc_date"><%= l fund_user_history.date unless a == fund_user_history.date %></li>
-    <div class="col-6 col-sm-2">
-      <div class="mobile_th">購入か売却</div>
-      <li><%= fund_user_history.buy_or_sell ? "購入" : "売却" %></li>
-    </div>
-    <div class="col-6 col-sm-2">
-      <div class="mobile_th">アカウント</div>
-      <li><%= fund_user_history.payment_source_name %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0">
-      <div class="mobile_th">手数料</div>
-      <li>¥<%= fund_user_history.commission.to_s(:delimited) %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
-      <div class="mobile_th">金額</div>
-      <li>¥<%= fund_user_history.value.to_s(:delimited) %></li>
-    </div>
-    <div class="col-4 col-sm-2">
-      <div class="mobile_th"><%= "引き落とし日" if fund_user_history.pay_date %></div>
-      <li><%= l fund_user_history.pay_date if fund_user_history.pay_date %></li>
-    </div>
-    <li class="col-6 col-sm-1">
-      <%= link_to "削除", fund_user_fund_user_history_path(@fund_user.id ,fund_user_history.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
-    </li>
-    <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_fund_user_fund_user_history_path(@fund_user.id ,fund_user_history.id) %>
-    </li>
-  </div>
-  <% a = fund_user_history.date %>
-  <% end %>
-</div>
+<%= render 'table' %>

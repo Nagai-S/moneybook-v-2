@@ -13,11 +13,8 @@
       <tbody>
         <tr>
           <td>
-            <%= link_to genre.name, events_search_path(
-              genre: genre.id
-            ) %>
+            <%= link_to genre.name, genre_path(genre.id) %>
           </td>
-          <td><%= link_to "編集", edit_genre_path(genre.id) %></td>
           <td><%= link_to "削除", genre_path(genre.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false}  %></td>
         </tr>
       </tbody>

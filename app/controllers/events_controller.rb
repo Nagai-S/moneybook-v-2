@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
   include MyFunction::Search
   before_action :authenticate_user!
-  before_action :select_event, only: [:destroy, :edit, :update]
   before_action :correct_user!, only: [:destroy, :edit, :update]
   before_action :to_explanation, only: [:index, :new, :search]
   before_action :set_previous_url, only: [:new, :edit]
@@ -10,7 +9,7 @@ class EventsController < ApplicationController
     @events = current_user
     .events
     .includes(:account,:card,:genre)
-    .page(params[:page]).per(50)
+    .page(params[:event_page]).per(50)
   end
 
   def new
@@ -35,7 +34,7 @@ class EventsController < ApplicationController
     @sum = value_array.sum
     @events = events
     .includes(:account,:card,:genre)
-    .page(params[:page]).per(80)
+    .page(params[:event_page]).per(80)
   end
 
   def create
@@ -87,10 +86,6 @@ class EventsController < ApplicationController
       params.require(:event).permit(:date, :value, :memo, :iae, :pay_date)
     end    
 
-    def select_event
-      @event = Event.find_by(id: params[:id])
-    end
-
     def association_model_update
       @event.genre_id = params[:event][:genre]
       if params[:event][:account_or_card] == "0"
@@ -101,8 +96,9 @@ class EventsController < ApplicationController
         @event.account_id = nil
       end
     end
-
+    
     def correct_user!
+      @event = Event.find_by(id: params[:id])
       redirect_to root_path unless current_user == @event.user
     end
 end

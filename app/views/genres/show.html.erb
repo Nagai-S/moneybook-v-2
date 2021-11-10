@@ -1,0 +1,23 @@
+<%= javascript_pack_tag 'genre' %>
+<h1><%= @genre.name %></h1>
+
+<div class="genre_update_form">
+<%= form_with model: @genre, id: "genre_update" do |f| %>
+  <div class="row">
+    <div class='<%= label_class %>'>
+      <%= f.label :name, "ジャンルの名前を入力してください。" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :name, class: "form-control genre_name", id: "name" %>
+    </div>
+  </div>
+  <Button class="btn btn-primary genre_update_button" %>名前を変更</Button>
+<% end %>
+</div>
+
+<h2>使用履歴</h2>
+<% if @events.exists? %>
+<%= render "events/table" %>
+<% else %>
+<p><%= @genre.name %>を利用した履歴はありません。</p>
+<% end %>

@@ -1,14 +1,13 @@
 class GenresController < ApplicationController
   before_action :authenticate_user!
-  before_action :select_genre, only: [:destroy, :edit, :update]
-  before_action :correct_user!, only: [:destroy, :edit, :update]
-  before_action :set_previous_url, only: [:new, :edit]
+  before_action :correct_user!, only: [:destroy, :show]
   
   def index
   end
 
   def new
     @genre = current_user.genres.build(iae: params[:iae])
+    set_previous_url
   end
 
   def create
@@ -21,6 +20,10 @@ class GenresController < ApplicationController
     end
   end
   
+  def show
+    @events = @genre.events.page(params[:event_page]).per(50)
+  end
+
   def destroy
     @genre.before_destroy_action
     if @genre.destroy
@@ -31,15 +34,14 @@ class GenresController < ApplicationController
     end
   end
   
-  def edit
-  end
-
   def update
-    if @genre.update(genres_params)
-      redirect_to_previou_url
+    @genre = current_user.genres.find(params[:id])
+    if @genre.update(
+      name: params[:genre][:name]
+    )
+      render json: {status: "success"}
     else
-      flash.now[:danger] = "ジャンルの編集に失敗しました。"
-      render "edit"
+      render json: {status: "error"}
     end
   end
   
@@ -48,11 +50,8 @@ class GenresController < ApplicationController
       params.require(:genre).permit(:name, :iae)
     end
 
-    def select_genre
-      @genre = Genre.find_by(id: params[:id])
-    end
-    
     def correct_user!
+      @genre = Genre.find_by(id: params[:id])
       redirect_to root_path unless current_user == @genre.user
     end
 end

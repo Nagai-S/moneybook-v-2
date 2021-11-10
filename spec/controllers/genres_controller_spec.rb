@@ -21,22 +21,4 @@ RSpec.describe GenresController do
     end
   end
 
-  describe "update" do
-    it "正しくないuserでupdateできない" do
-      uncorrect_user = create(:user)
-      uncorrect_user.confirm
-      sign_in uncorrect_user
-
-      params = {
-        genre: {
-          name: "updated_name",
-          iae: true,
-        },
-        id: @genre_ex.id,
-      }
-      put(:update, params: params)
-      expect(Genre.find(@genre_ex.id).name).to eq "genre_ex"
-      expect(Genre.find(@genre_ex.id).iae).to eq false
-    end
-  end
 end

@@ -1,5 +1,5 @@
 <div class="table_contents">
-  <%= paginate @events %>
+  <%= paginate @events, param_name: :event_page %>
   <div class="table_head row">
     <li class="col-sm-2">日付</li>
     <li class="col-sm-1">ジャンル</li>
@@ -43,5 +43,5 @@
   </div>
   <% a=event.date %>
   <% end %>
-  <%= paginate @events %>
+  <%= paginate @events, param_name: :event_page %>
 </div>
