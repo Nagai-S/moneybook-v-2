@@ -1,0 +1,81 @@
+<div class="tab-pane <%= active %>" id="<%= tab_id %>">
+  <%= form_with(url: api_user_session_path, method: :post, class: "form1", id: "create_shortcut_" + tab_id) do |f| %>
+  <div class="form_wrapper" id="<%= backcolor %>">
+
+    <%= f.select :iae, [["支出",false],["収入",true]], {selected: iae}, style: "display:none", class: "sc_iae" %>
+
+    <div class="row">
+      <div class='<%= label_class %>'>
+        <%= f.label :genre, "ジャンルを選択してください" %>
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.collection_select :genre, current_user.genres.where(iae: iae), :id, :name, {}, {class: "form-control sc_genre", id: "select"} %>
+      </div>
+    </div>
+
+    <% if !iae && current_user.cards.exists? %>
+    <ul class="nav nav-tabs <%= label_class %>" id="card-account">
+      <li class="nav-item">
+        <a class="nav-link active" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+      </li>
+    </ul>
+    <% else %>
+    <div class='<%= label_class %>'>
+      <%= f.label :account, "アカウントを選択してください" %>
+    </div>
+    <% end %>
+
+    <%= f.select :account_or_card, [["account",0],["card",1]], {selected: 0}, style: "display:none", class: 'sc_account_or_card', id: "account_or_card" %>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab_account">
+        <div class="row">
+          <div class="<%= form_class %>">
+            <%= f.collection_select :account, current_user.accounts, :id, :name, {}, {class: "form-control sc_account", id: "select"} %>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab_card">
+        <div class="row">
+          <div class="<%= form_class %>">
+            <%= f.collection_select :card, current_user.cards, :id, :name, {}, {class: "form-control sc_card", id: "select"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="<%= label_class %>">
+        <%= f.label :email, "メールアドレスを入力してください" %><br />
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.email_field :email, autocomplete: "email", value: current_user.email, class: "form-control sc_email", id: "user" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="<%= label_class %>">
+        <%= f.label :password, "パスワードを入力してください" %><br />
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control sc_password", id: "user" %>
+      </div>
+    </div>
+
+    <Button class="btn btn-primary create_shortcut_button_<%= iae %>" %>ショートカット作成</Button>
+
+  </div>
+  <% end %>
+
+  <div class="code_result_<%= iae %>">
+  <Button class="btn btn-primary code_copy">コピー</Button>
+  </div>
+  
+</div>
+
+
+

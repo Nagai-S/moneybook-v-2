@@ -87,6 +87,7 @@
 #                      account_exchange PATCH  /account_exchanges/:id(.:format)                                                         account_exchanges#update
 #                                       PUT    /account_exchanges/:id(.:format)                                                         account_exchanges#update
 #                                       DELETE /account_exchanges/:id(.:format)                                                         account_exchanges#destroy
+#                          new_shortcut GET    /shortcuts/new(.:format)                                                                 shortcuts#new
 #         fund_user_fund_user_histories GET    /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#index
 #                                       POST   /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#create
 #       new_fund_user_fund_user_history GET    /fund_users/:fund_user_id/fund_user_histories/new(.:format)                              fund_user_histories#new
@@ -157,6 +158,7 @@ Rails.application.routes.draw do
   resources :cards
   resources :events, only: [:index, :create, :new, :edit, :update, :destroy]
   resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
+  resources :shortcuts, only: :new
   resources :fund_users, only: [:new, :create, :index, :destroy, :update] do
     resources :fund_user_histories, only: [:new, :create, :index, :destroy, :edit, :update]
   end

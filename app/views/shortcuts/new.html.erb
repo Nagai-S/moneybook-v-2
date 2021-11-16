@@ -1,0 +1,20 @@
+<%= javascript_pack_tag 'shortcut' %>
+<h1>iPhone用ショートカット作成</h1>
+
+<%= render 'form_tab' %>
+
+<div class="tab-content">
+  <%= render 'form', {
+    active: "active",
+    tab_id: "tab_ex",
+    backcolor: "",
+    iae: false,
+  } %>
+
+  <%= render 'form', {
+    active: "",
+    tab_id: "tab_in",
+    backcolor: "income",
+    iae: true,
+  } %>
+</div>
