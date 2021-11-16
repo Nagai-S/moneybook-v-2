@@ -19,17 +19,17 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @events = @account.events
+    @events = @account.events.where(card_id: nil)
     .includes(:account,:card,:genre)
     .page(params[:event_page]).per(30)
     ax_array = []
-    @account.account_exchanges_source.each{|ax| ax_array.push(ax)}
+    @account.account_exchanges_source.where(card_id: nil).each{|ax| ax_array.push(ax)}
     @account.account_exchanges_to.each{|ax| ax_array.push(ax)}
     @axs = Kaminari.paginate_array(
       ax_array.sort{|a, b| (-1) * (a.date <=> b.date)}
     )
     .page(params[:ax_page]).per(30)
-    @fund_user_histories = @account.fund_user_histories
+    @fund_user_histories = @account.fund_user_histories.where(card_id: nil)
   end
 
   def create

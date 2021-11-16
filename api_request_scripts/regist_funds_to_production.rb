@@ -2,7 +2,7 @@ require "net/http"
 require "json"
 require 'dotenv/load'
 
-def regist_funds(name, value, string_id)
+def regist_funds(id, name, value, string_id)
   uri = URI.parse("https://moneybook-moneybook.herokuapp.com/api/v1/regist_funds")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === "https"
@@ -14,6 +14,7 @@ def regist_funds(name, value, string_id)
 
   params = {
     fund: {
+      id: id,
       name: name,
       value: value,
       string_id: string_id
@@ -26,15 +27,18 @@ def regist_funds(name, value, string_id)
 end
 
 datas = []
-File.open('./effective_all_funds.txt', "r") do |file|
+File.open('./complete_funds.csv', "r") do |file|
   datas = file.read.split("\n")
 end
 
-(datas.length/3).to_i.times do |i|
-  num = i * 3
+num = 1
+datas.each do |e|
+  data = e.split(',')
   regist_funds(
-    datas[num],
-    datas[num+1],
-    datas[num+2],
+    num,
+    data[0],
+    data[1],
+    data[2],
   )
+  num += 1
 end

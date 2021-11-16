@@ -114,7 +114,7 @@ def all_funds_create
   all_funds = get_all_funds
 
   all_funds.each do |fund|
-    regist_funds(fund["id"], fund["name"], fund["value"], fund["strin_id"])
+    regist_funds(fund["id"], fund["name"], fund["value"], fund["string_id"])
   end
 end
 
