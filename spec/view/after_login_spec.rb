@@ -63,6 +63,10 @@ RSpec.feature "AfterLoginView", type: :feature do
       visit new_account_exchange_path
       expect(page).to have_content 'All rights reserved by S.N.'
     end
+    it 'new_shortcut_path' do
+      visit new_shortcut_path
+      expect(page).to have_content 'All rights reserved by S.N.'
+    end
     it 'fund_users_path' do
       visit fund_users_path
       expect(page).to have_content 'All rights reserved by S.N.'

@@ -1,6 +1,9 @@
 <%= javascript_pack_tag 'shortcut' %>
 <h1>iPhone用ショートカット作成</h1>
 
+<p>
+  作成したいショートカットのジャンルとアカウントを選択してください。
+</p>
 <%= render 'form_tab' %>
 
 <div class="tab-content">
@@ -17,4 +20,30 @@
     backcolor: "income",
     iae: true,
   } %>
+</div>
+
+<div class='authentication'>
+  <div class="row">
+    <div class="<%= label_class %>">
+      <label for="email">メールアドレスを入力してください</label><br>
+    </div>
+    <div class="<%= form_class %>">
+      <input autocomplete="email" value="<%= current_user.email %>" class="form-control sc_email" id="user" type="email" name="email">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <label for="password">パスワードを入力してください</label><br>
+    </div>
+    <div class="<%= form_class %>">
+      <input autocomplete="current-password" class="form-control sc_password" id="user" type="password" name="password">
+    </div>
+  </div>
+
+  <Button class="btn btn-success create_shortcut_button ex" %>ショートカット作成</Button>
+</div>
+
+<div class="code_result">
+  <Button class="btn btn-primary code_copy">コピー</Button>
 </div>

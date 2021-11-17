@@ -29,13 +29,13 @@
 
     <ul class="nav nav-tabs <%= label_class %>" id="card-account">
       <li class="nav-item">
-        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+        <a class="aoc_link nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+        <a class="aoc_link nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:nothing] %>" href="#tab_nothing" data-toggle="tab" id='nothing'>選択しない</a>
+        <a class="aoc_link nav-link <%= active_is_account_or_card_for_fund_user_history(buy_or_sell, edit)[:nothing] %>" href="#tab_nothing" data-toggle="tab" id='nothing'>選択しない</a>
       </li>
     </ul>
 

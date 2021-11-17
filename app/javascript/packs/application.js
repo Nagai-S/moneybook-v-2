@@ -121,11 +121,12 @@ $(function () {
     }
   });
 
-  $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+  // select tab about account or card
+  $(".aoc_link").on("click", function (e) {
     var activated_tab = e.target; // activated tab
-    if (activated_tab.id === "account") {
+    if (activated_tab.id == "account") {
       $("#account_or_card").val("0");
-    } else if (activated_tab.id === "card") {
+    } else if (activated_tab.id == "card") {
       $("#account_or_card").val("1");
     } else {
       $("#account_or_card").val("2");

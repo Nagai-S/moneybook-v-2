@@ -16,10 +16,10 @@
     <% if !iae && current_user.cards.exists? %>
     <ul class="nav nav-tabs <%= label_class %>" id="card-account">
       <li class="nav-item">
-        <a class="nav-link active" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+        <a class="aoc_link nav-link active" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+        <a class="aoc_link nav-link" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
       </li>
     </ul>
     <% else %>
@@ -48,33 +48,9 @@
       </div>
     </div>
     
-    <div class="row">
-      <div class="<%= label_class %>">
-        <%= f.label :email, "メールアドレスを入力してください" %><br />
-      </div>
-      <div class="<%= form_class %>">
-        <%= f.email_field :email, autocomplete: "email", value: current_user.email, class: "form-control sc_email", id: "user" %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="<%= label_class %>">
-        <%= f.label :password, "パスワードを入力してください" %><br />
-      </div>
-      <div class="<%= form_class %>">
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control sc_password", id: "user" %>
-      </div>
-    </div>
-
-    <Button class="btn btn-primary create_shortcut_button_<%= iae %>" %>ショートカット作成</Button>
-
   </div>
   <% end %>
 
-  <div class="code_result_<%= iae %>">
-  <Button class="btn btn-primary code_copy">コピー</Button>
-  </div>
-  
 </div>
 
 
