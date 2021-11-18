@@ -29,7 +29,7 @@ class Card < ApplicationRecord
   has_many :fund_user_histories
 
   validates :name, presence: {message: "は１文字以上入力してください。"}, 
-  uniqueness: { scope: :user, message: "「%{value}」と同じ名前のカードが存在します。" }
+  uniqueness: { scope: :user, message: "「%{value}」と同じ名前のカードが存在します。", case_sensitive: false }
   validates :pay_date, presence: true,
   numericality: {
     only_integer: true,

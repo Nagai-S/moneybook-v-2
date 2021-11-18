@@ -40,7 +40,8 @@ module MyFunction
     def search_memo(events)
       @memo = params[:memo]
       if @memo
-        return @memo != "" ? events.where('memo LIKE ?', "%#{@memo}%") : events
+        down_memo = @memo.downcase
+        return @memo != "" ? events.where('lower(memo) LIKE ?', "%#{down_memo}%") : events
       else
         return events
       end

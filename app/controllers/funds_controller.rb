@@ -10,7 +10,8 @@ class FundsController < ApplicationController
   def search
     @name = params[:name]
     funds = Fund.all
-    funds_result = @name != "" ? funds.where('name LIKE ?', "%#{@name}%") : funds
+    down_name = @name.downcase if @name
+    funds_result = @name != "" ? funds.where('lower(name) LIKE ?', "%#{down_name}%") : funds
     @funds = funds_result.page(params[:page]).per(80)
     @result_num = funds_result.size
   end

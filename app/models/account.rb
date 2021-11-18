@@ -26,7 +26,7 @@ class Account < ApplicationRecord
   has_many :account_exchanges_source, class_name:"AccountExchange", foreign_key: :source_id
 
   validates :name, presence: {message: "は１文字以上入力してください。"}, 
-  uniqueness: { scope: :user, message: "「%{value}」と同じ名前のアカウントが存在します。" }
+  uniqueness: { scope: :user, message: "「%{value}」と同じ名前のアカウントが存在します。", case_sensitive: false}
   validates :value, presence: {message: "は１桁以上入力してください。"}, 
   numericality: {
     message: "は半角数字で入力してください。", 
