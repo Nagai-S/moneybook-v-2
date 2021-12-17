@@ -22,7 +22,7 @@ const scResultHtml = (
         "}</br>" +
       "</p>" +
     "</div>" +
-    '<p class="status_message add_sc"><a href="https://www.icloud.com/shortcuts/785de3d80b3b458aab44366d6f62d4b1">' +
+    '<p class="status_message add_sc"><a href="https://www.icloud.com/shortcuts/79254fc4dec1406fa264334b12dad7e4">' +
     "こちら" +
     "</a>からショートカットを追加してください</p>"
   );
