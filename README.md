@@ -42,14 +42,20 @@ $ cp env_file_model.txt .env
 ```
 and write necessary valuables into .env.
 
+##  How to test
+```
+$ docker-compose run --rm rails bundle exec rspec
+$ docker-compose run --rm rails bundle exec rspec spec/system/user_flow.rb
+```
+
 ## Main Function
 ### Account Management
 * You can manage your balance for each account (cash, bank, ...).
 * You can transfer between accounts (include from card to account).
 
-### Storing using history
-* You can register with an genre and note.
-* You can search by any method.
+### Storing used history
+* You can register history with an genre and note.
+* You can search history by any method.
 
 ### Card Management
 You can register a card specifying
@@ -67,13 +73,13 @@ Passing withdrawal date, update balance automatically.
 * Update market value of investment funds daily and, you can manage all assets include investment funds. 
 
 ### Pie Chart
-Displayed as a pie chart following percentage.
+Display as a pie chart following percentage.
 * Percentage of each account and investment funds of assets
 * Percentage of investment funds
 * Percentage of each genre of expence and income this month.
 
 ### With iPhone
-* Using ShortCutApplication of iOS, register using history easier.
+* Using ShortCutApplication of iOS, register used history easier.
 
 ## Outlook
 * Register periodic event
