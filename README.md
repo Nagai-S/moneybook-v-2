@@ -40,7 +40,7 @@ $ docker-compose up
 ```
 $ cp env_file_model.txt .env
 ```
-and write necessary valuables into .env.
+and write necessary variables into .env.
 
 ##  How to test
 ```
