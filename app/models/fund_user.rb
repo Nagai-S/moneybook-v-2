@@ -25,9 +25,15 @@ class FundUser < ApplicationRecord
   has_many :fund_user_histories, dependent: :delete_all
 
   validates(
-    :average_buy_value, 
-    presence: {message: "は必要項目です"}, 
-    numericality: {only_float: {message: "は数字を入力してください"}}
+    :average_buy_value,
+    presence: {
+      message: 'は必要項目です'
+    },
+    numericality: {
+      only_float: {
+        message: 'は数字を入力してください'
+      }
+    }
   )
 
   def total_buy_value
@@ -39,13 +45,21 @@ class FundUser < ApplicationRecord
   end
 
   def now_value
-    return_value = fund.value ? (
-      ((total_buy_value - total_buy_commission).to_f * 
-      fund.value.to_f/average_buy_value.to_f) - total_sell_value
-    ).round : (
-      total_buy_value.to_f - total_buy_commission.to_f - total_sell_value.to_f
-    ).round
-    
+    return_value =
+      if fund.value
+        (
+          (
+            (total_buy_value - total_buy_commission).to_f * fund.value.to_f /
+              average_buy_value.to_f
+          ) - total_sell_value
+        ).round
+      else
+        (
+          total_buy_value.to_f - total_buy_commission.to_f -
+            total_sell_value.to_f
+        ).round
+      end
+
     return return_value
   end
 
@@ -56,5 +70,4 @@ class FundUser < ApplicationRecord
   def gain_value
     return now_value - total_buy_value
   end
-
 end

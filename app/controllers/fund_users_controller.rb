@@ -1,19 +1,20 @@
 class FundUsersController < ApplicationController
   before_action :authenticate_user!
   before_action :correct_user!, only: :destroy
-  before_action :to_explanation, only: [:index, :new]
+  before_action :to_explanation, only: %i[index new]
   before_action :set_previous_url, only: :new
-  
+
   def index
     fund_users_not_order = current_user.fund_users
-    @fund_users = fund_users_not_order.sort{|a, b| (-1) * (a.now_value <=> b.now_value)}
+    @fund_users =
+      fund_users_not_order.sort { |a, b| (-1) * (a.now_value <=> b.now_value) }
   end
-  
+
   def new
     @fund = Fund.find(params[:fund_id])
     @fund_user = current_user.fund_users.build
   end
-  
+
   def create
     @fund = Fund.find(params[:fund_user][:fund_id])
     @fund_user = current_user.fund_users.build(fund_user_params)
@@ -28,12 +29,10 @@ class FundUsersController < ApplicationController
           pon: true
         )
       end
-      if @fund.update_on != Date.today
-        @fund.set_now_value_of_fund
-      end
+      @fund.set_now_value_of_fund if @fund.update_on != Date.today
       redirect_to fund_users_path
     else
-      flash.now[:danger] = "投資信託の登録に失敗しました。"
+      flash.now[:danger] = '投資信託の登録に失敗しました。'
       render 'new'
     end
   end
@@ -41,38 +40,40 @@ class FundUsersController < ApplicationController
   def destroy
     if @fund_user.destroy
       unless Rails.env.test?
-        redirect_to request.referer 
+        redirect_to request.referer
       else
         redirect_to root_path
       end
     else
-      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      flash.now[:danger] =
+        'エラーが発生しました。ブラウザをリロードしてやり直してください'
       unless Rails.env.test?
-        redirect_to request.referer 
+        redirect_to request.referer
       else
         redirect_to root_path
       end
     end
   end
-  
+
   def update
     @fund_user = current_user.fund_users.find(params[:id])
     if @fund_user.update(
-      average_buy_value: params[:fund_user][:average_buy_value]
-    )
-      render json: {status: "success"}
+         average_buy_value: params[:fund_user][:average_buy_value]
+       )
+      render json: { status: 'success' }
     else
-      render json: {status: "error"}
+      render json: { status: 'error' }
     end
   end
-  
-  private
-    def fund_user_params
-      params.require(:fund_user).permit(:fund_id, :average_buy_value)
-    end  
 
-    def correct_user!
-      @fund_user = FundUser.find(params[:id])
-      redirect_to root_path unless @fund_user.user == current_user
-    end
+  private
+
+  def fund_user_params
+    params.require(:fund_user).permit(:fund_id, :average_buy_value)
+  end
+
+  def correct_user!
+    @fund_user = FundUser.find(params[:id])
+    redirect_to root_path unless @fund_user.user == current_user
+  end
 end

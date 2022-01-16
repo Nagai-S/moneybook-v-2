@@ -131,47 +131,47 @@
 Rails.application.routes.draw do
   get '/funds/index', to: 'funds#index'
   get '/funds/search', to: 'funds#search'
-  devise_for :users, :controllers => {
-    :registrations => 'users/registrations',
-  }
+  devise_for :users, controllers: { registrations: 'users/registrations' }
 
   namespace :api do
     scope :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
 
-      resources :events, only: [:create, :index]
-      resources :account_exchanges, only: [:create, :index]
-      resources :fund_users, only: [:index] do
-        resources :fund_user_histories, only: [:index]
+      resources :events, only: %i[create index]
+      resources :account_exchanges, only: %i[create index]
+      resources :fund_users, only: :index do
+        resources :fund_user_histories, only: :index
       end
 
-      get "/daily_email", to: "auth#daily_email"
-      get "/update_fund_value", to: "auth#update_fund_value"
-      post "/regist_funds", to: "auth#regist_funds"
-      post "/initial_regist_db", to: "auth#initial_regist_db"
+      get '/daily_email', to: 'auth#daily_email'
+      get '/update_fund_value', to: 'auth#update_fund_value'
+      post '/register_funds', to: 'auth#register_funds'
+      post '/initial_register_db', to: 'auth#initial_register_db'
       get '/funds/index'
     end
   end
-  
-  resources :accounts, only: [:new, :create, :index, :destroy, :show, :update]
-  resources :genres, only: [:index, :create, :new, :update, :destroy, :show]
+
+  resources :accounts, only: %i[new create index destroy show update]
+  resources :genres, only: %i[index create new update destroy show]
   resources :cards
-  resources :events, only: [:index, :create, :new, :edit, :update, :destroy]
-  resources :account_exchanges, only: [:index, :create, :new, :edit, :update, :destroy]
+  resources :events, only: %i[index create new edit update destroy]
+  resources :account_exchanges, only: %i[index create new edit update destroy]
   resources :shortcuts, only: :new
-  resources :fund_users, only: [:new, :create, :index, :destroy, :update] do
-    resources :fund_user_histories, only: [:new, :create, :index, :destroy, :edit, :update]
+  resources :fund_users, only: %i[new create index destroy update] do
+    resources :fund_user_histories,
+              only: %i[new create index destroy edit update]
   end
-  get "/pay_not_for_cards/:id", to: "cards#pay_not_data", as: "pay_not_for_card"
-  get "/account_month", to: "accounts#month_index"
-  get "/explanation", to: "homepages#explanation"
-  get "/events/search", to: "events#search"
+  get '/pay_not_for_cards/:id', to: 'cards#pay_not_data', as: 'pay_not_for_card'
+  get '/account_month', to: 'accounts#month_index'
+  get '/explanation', to: 'homepages#explanation'
+  get '/events/search', to: 'events#search'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  get '/sitemap', to: redirect(
-    "https://s3-ap-northeast-1.amazonaws.com/#{ENV['S3_BUCKET_NAME']}/sitemap.xml.gz"
-  )
+  get '/sitemap',
+      to:
+        redirect(
+          "https://s3-ap-northeast-1.amazonaws.com/#{ENV['S3_BUCKET_NAME']}/sitemap.xml.gz"
+        )
   root 'homepages#home'
 end
-

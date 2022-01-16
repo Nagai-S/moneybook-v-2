@@ -22,43 +22,56 @@ class Account < ApplicationRecord
   has_many :cards
   has_many :events
   has_many :fund_user_histories
-  has_many :account_exchanges_to, class_name:"AccountExchange", foreign_key: :to_id
-  has_many :account_exchanges_source, class_name:"AccountExchange", foreign_key: :source_id
+  has_many :account_exchanges_to,
+           class_name: 'AccountExchange',
+           foreign_key: :to_id
+  has_many :account_exchanges_source,
+           class_name: 'AccountExchange',
+           foreign_key: :source_id
 
-  validates :name, presence: {message: "は１文字以上入力してください。"}, 
-  uniqueness: { scope: :user, message: "「%{value}」と同じ名前のアカウントが存在します。", case_sensitive: false}
-  validates :value, presence: {message: "は１桁以上入力してください。"}, 
-  numericality: {
-    message: "は半角数字で入力してください。", 
-    only_integer: {message: "は整数で入力してください。"}
-  }
+  validates :name,
+            presence: {
+              message: 'は１文字以上入力してください。'
+            },
+            uniqueness: {
+              scope: :user,
+              message: '「%{value}」と同じ名前のアカウントが存在します。',
+              case_sensitive: false
+            }
+  validates :value,
+            presence: {
+              message: 'は１桁以上入力してください。'
+            },
+            numericality: {
+              message: 'は半角数字で入力してください。',
+              only_integer: {
+                message: 'は整数で入力してください。'
+              }
+            }
 
   def after_pay_value
     event_in_sum = events.where(iae: true).sum(:value)
     event_ex_sum = events.where(iae: false).sum(:value)
     ax_source_sum = account_exchanges_source.sum(:value)
     ax_to_sum = account_exchanges_to.sum(:value)
-    fund_user_history_buy_sum = fund_user_histories.where(buy_or_sell: true).sum(:value)
-    fund_user_history_sell_sum = fund_user_histories.where(buy_or_sell: false).sum(:value)
-    fund_user_history_sell_commission_sum = fund_user_histories.where(
-      buy_or_sell: false
-    ).sum(:commission)
+    fund_user_history_buy_sum =
+      fund_user_histories.where(buy_or_sell: true).sum(:value)
+    fund_user_history_sell_sum =
+      fund_user_histories.where(buy_or_sell: false).sum(:value)
+    fund_user_history_sell_commission_sum =
+      fund_user_histories.where(buy_or_sell: false).sum(:commission)
 
-    return value + event_in_sum - event_ex_sum + 
-    ax_to_sum - ax_source_sum + 
-    fund_user_history_sell_sum - fund_user_history_buy_sum - fund_user_history_sell_commission_sum
+    return(
+      value + event_in_sum - event_ex_sum + ax_to_sum - ax_source_sum +
+        fund_user_history_sell_sum - fund_user_history_buy_sum -
+        fund_user_history_sell_commission_sum
+    )
   end
-  
+
   def before_destroy_action
-    events.each do |event|
-      event.update(account_id: nil)
-    end
-    account_exchanges_to.each do |ax|
-      ax.update(to_id: nil)
-    end
-    account_exchanges_source.each do |ax|
-      ax.update(source_id: nil)
-    end
+    events.each { |event| event.update(account_id: nil) }
+    account_exchanges_to.each { |ax| ax.update(to_id: nil) }
+    account_exchanges_source.each { |ax| ax.update(source_id: nil) }
     fund_user_histories.each do |fund_user_history|
       fund_user_history.update(account_id: nil)
     end
@@ -69,16 +82,17 @@ class Account < ApplicationRecord
     event_ex_sum = events.where(pon: true, iae: false).sum(:value)
     ax_source_sum = account_exchanges_source.where(pon: true).sum(:value)
     ax_to_sum = account_exchanges_to.sum(:value)
-    fund_user_history_buy_sum = fund_user_histories.where(pon: true, buy_or_sell: true).sum(:value)
-    fund_user_history_sell_sum = fund_user_histories.where(pon: true, buy_or_sell: false).sum(:value)
-    fund_user_history_sell_commission_sum = fund_user_histories.where(
-      pon: true,
-      buy_or_sell: false
-    ).sum(:commission)
+    fund_user_history_buy_sum =
+      fund_user_histories.where(pon: true, buy_or_sell: true).sum(:value)
+    fund_user_history_sell_sum =
+      fund_user_histories.where(pon: true, buy_or_sell: false).sum(:value)
+    fund_user_history_sell_commission_sum =
+      fund_user_histories.where(pon: true, buy_or_sell: false).sum(:commission)
 
-    return value + event_in_sum - event_ex_sum + 
-    ax_to_sum - ax_source_sum + 
-    fund_user_history_sell_sum - fund_user_history_buy_sum - fund_user_history_sell_commission_sum
+    return(
+      value + event_in_sum - event_ex_sum + ax_to_sum - ax_source_sum +
+        fund_user_history_sell_sum - fund_user_history_buy_sum -
+        fund_user_history_sell_commission_sum
+    )
   end
-  
 end

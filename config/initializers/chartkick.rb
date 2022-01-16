@@ -1,36 +1,36 @@
 Chartkick.options = {
   donut: true,
-  thousands: ",", 
-  suffix: "円",
+  thousands: ',',
+  suffix: '円',
   library: {
     title: {
       align: 'center',
       verticalAlign: 'middle',
       style: {
-        fontSize: "30px"
-      },
+        fontSize: '30px'
+      }
     },
     chart: {
       backgroundColor: 'none',
-      plotBorderWidth: 0, 
+      plotBorderWidth: 0,
       plotShadow: false
     },
     plotOptions: {
       pie: {
         dataLabels: {
-          enabled: true, 
+          enabled: true,
           distance: -40, # ラベルの位置調節
           allowOverlap: false, # ラベル重なったら消す
-          style: { 
-            color: "black",
-            textAlign: 'center', 
+          style: {
+            color: 'black',
+            textAlign: 'center',
             fontSize: '14px',
-            textOutline: 0,
+            textOutline: 0
           }
         },
         size: '100%',
         innerSize: '60%', # ドーナツグラフの中の円の大きさ
-        borderWidth: 0,
+        borderWidth: 0
       }
     }
   }

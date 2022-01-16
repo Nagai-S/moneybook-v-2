@@ -29,21 +29,27 @@
 #
 class Event < ApplicationRecord
   include MyFunction::FunctionForChange
-  
+
   belongs_to :user
   belongs_to :card, optional: true
   belongs_to :genre, optional: true
   belongs_to :account, optional: true
 
-  default_scope -> {order(date: :desc)}
+  default_scope -> { order(date: :desc) }
 
   validates :date, presence: true
-  validates :value, presence: {message: "は一桁以上入力してください。"},
-  numericality: {
-    message: "は半角数字で入力してください。", 
-    only_integer: {message: "は整数で入力してください。"},
-    buy_or_sell: true
-  }
+  validates(
+    :value,
+    presence: {
+      message: 'は一桁以上入力してください。'
+    },
+    numericality: {
+      message: 'は半角数字で入力してください。',
+      only_integer: {
+        message: 'は整数で入力してください。'
+      }
+    }
+  )
   validate :iae_equal_to_genre_iae
 
   def update_account(account_id)
@@ -56,23 +62,23 @@ class Event < ApplicationRecord
     elsif account
       account.name
     else
-      "削除済み"
+      '削除済み'
     end
   end
 
   def genre_name
-    genre ? genre.name : "削除済み"
+    genre ? genre.name : '削除済み'
   end
 
   def value_to_string
-    iae ? "¥" +  value.to_s(:delimited) :  "¥-" + value.to_s(:delimited)
+    iae ? '¥' + value.to_s(:delimited) : '¥-' + value.to_s(:delimited)
   end
 
   private
-    def iae_equal_to_genre_iae
-      if genre_id != nil && genre.iae != iae
-        errors.add(:genre_id, "支出・収入にあったジャンルを使用してください。")
-      end
+
+  def iae_equal_to_genre_iae
+    if genre_id != nil && genre.iae != iae
+      errors.add(:genre_id, '支出・収入にあったジャンルを使用してください。')
     end
-  
+  end
 end

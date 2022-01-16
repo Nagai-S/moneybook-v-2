@@ -6,7 +6,6 @@ class Api::FundUserHistoriesController < Api::ApplicationController
     user = currentUser
     fund_user = user.fund_users.find(params[:fund_user_id])
     fund_user_histories = fund_user.fund_user_histories
-    render json: {fund_user_histories: fund_user_histories}
+    render json: { fund_user_histories: fund_user_histories }
   end
-  
 end

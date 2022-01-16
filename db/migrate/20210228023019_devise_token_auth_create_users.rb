@@ -1,5 +1,5 @@
 class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
-  # create migration by running a command like this (where `User` is your USER_CLASS table): 
+  # create migration by running a command like this (where `User` is your USER_CLASS table):
   # `rails g migration AddTokensToUsers provider:string uid:string tokens:text`
 
   def up
@@ -24,7 +24,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
     end
 
     # to speed up lookups to these columns:
-    add_index :users, [:uid, :provider], unique: true
+    add_index :users, %i[uid provider], unique: true
   end
 
   def down

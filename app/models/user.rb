@@ -27,8 +27,12 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-  :recoverable, :rememberable, :validatable, :confirmable
+  devise :database_authenticatable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :validatable,
+         :confirmable
   include DeviseTokenAuth::Concerns::User
 
   has_many :events, dependent: :delete_all
@@ -41,44 +45,38 @@ class User < ApplicationRecord
 
   def total_account_value
     return_value = 0
-    accounts.each do |account|
-      return_value += account.now_value
-    end
+    accounts.each { |account| return_value += account.now_value }
     return return_value
   end
-  
+
   def after_pay_value
     return_value = 0
-    accounts.each do |account|
-      return_value += account.after_pay_value
-    end
+    accounts.each { |account| return_value += account.after_pay_value }
     return return_value
   end
 
   def how_long_months_years
     first_date = events.first.date
     last_date = events.last.date
-    months = (first_date.year - 1 - last_date.year) * 12 + first_date.month+ 12 - last_date.month + 1
+    months =
+      (first_date.year - 1 - last_date.year) * 12 + first_date.month + 12 -
+        last_date.month + 1
     years = (first_date.year - last_date.year + 1)
-    return {months: months, years: years}
+    return { months: months, years: years }
   end
 
   def total_fund_value
     return_value = 0
-    fund_users.each do |fund_user|
-      return_value += fund_user.now_value
-    end
+    fund_users.each { |fund_user| return_value += fund_user.now_value }
     return return_value
   end
 
   def total_fund_gain_value
     return_value = 0
-    fund_users.each do |fund_user|
-      return_value += fund_user.gain_value
-    end
+    fund_users.each { |fund_user| return_value += fund_user.gain_value }
     return return_value
   end
-  
+
   def total_assets
     total_account_value + total_fund_value
   end
@@ -86,5 +84,4 @@ class User < ApplicationRecord
   def total_after_pay_assets
     after_pay_value + total_fund_value
   end
-
 end

@@ -3,7 +3,6 @@ class Api::FundsController < Api::ApplicationController
 
   def index
     funds = Fund.all
-    render json: {funds: funds}
+    render json: { funds: funds }
   end
-  
 end

@@ -1,9 +1,8 @@
 class GenresController < ApplicationController
   before_action :authenticate_user!
-  before_action :correct_user!, only: [:destroy, :show]
-  
-  def index
-  end
+  before_action :correct_user!, only: %i[destroy show]
+
+  def index; end
 
   def new
     @genre = current_user.genres.build(iae: params[:iae])
@@ -15,11 +14,11 @@ class GenresController < ApplicationController
     if @genre.save
       redirect_to_previou_url
     else
-      flash.now[:danger] = "ジャンルの作成に失敗しました。"
+      flash.now[:danger] = 'ジャンルの作成に失敗しました。'
       render 'new'
     end
   end
-  
+
   def show
     @events = @genre.events.page(params[:event_page]).per(50)
   end
@@ -29,29 +28,29 @@ class GenresController < ApplicationController
     if @genre.destroy
       redirect_to genres_path
     else
-      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      flash.now[:danger] =
+        'エラーが発生しました。ブラウザをリロードしてやり直してください'
       redirect_to genres_path
     end
   end
-  
+
   def update
     @genre = current_user.genres.find(params[:id])
-    if @genre.update(
-      name: params[:genre][:name]
-    )
-      render json: {status: "success"}
+    if @genre.update(name: params[:genre][:name])
+      render json: { status: 'success' }
     else
-      render json: {status: "error"}
+      render json: { status: 'error' }
     end
   end
-  
-  private
-    def genres_params
-      params.require(:genre).permit(:name, :iae)
-    end
 
-    def correct_user!
-      @genre = Genre.find_by(id: params[:id])
-      redirect_to root_path unless current_user == @genre.user
-    end
+  private
+
+  def genres_params
+    params.require(:genre).permit(:name, :iae)
+  end
+
+  def correct_user!
+    @genre = Genre.find_by(id: params[:id])
+    redirect_to root_path unless current_user == @genre.user
+  end
 end

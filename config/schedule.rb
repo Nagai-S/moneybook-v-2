@@ -22,6 +22,6 @@
 set :output, 'log/crontab.log'
 set :environment, :development
 
-every 1.day, :at => '4:30 pm' do
-  rake "monthly_mail:send_card_mail"
+every 1.day, at: '4:30 pm' do
+  rake 'monthly_mail:send_card_mail'
 end

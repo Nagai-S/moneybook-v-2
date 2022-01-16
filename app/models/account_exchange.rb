@@ -29,20 +29,31 @@
 #
 class AccountExchange < ApplicationRecord
   include MyFunction::FunctionForChange
-  
+
   belongs_to :user
   belongs_to :card, optional: true
-  belongs_to :account, class_name:"Account", optional: true , foreign_key: :source_id
-  belongs_to :to_account, class_name:"Account", optional: true, foreign_key: :to_id
+  belongs_to :account,
+             class_name: 'Account',
+             optional: true,
+             foreign_key: :source_id
+  belongs_to :to_account,
+             class_name: 'Account',
+             optional: true,
+             foreign_key: :to_id
 
-  default_scope -> {order(date: :desc)}
-  
+  default_scope -> { order(date: :desc) }
+
   validates :date, presence: true
-  validates :value, presence: {message: "は一桁以上入力してください。"},
-  numericality: {
-    message: "は半角数字で入力してください。", 
-    only_integer: {message: "は整数で入力してください。"}
-  }
+  validates :value,
+            presence: {
+              message: 'は一桁以上入力してください。'
+            },
+            numericality: {
+              message: 'は半角数字で入力してください。',
+              only_integer: {
+                message: 'は整数で入力してください。'
+              }
+            }
 
   def source_name
     if card
@@ -50,19 +61,15 @@ class AccountExchange < ApplicationRecord
     elsif account
       account.name
     else
-      "削除済み"
+      '削除済み'
     end
   end
 
   def to_account_name
-    to_account ? to_account.name : "削除済み"
+    to_account ? to_account.name : '削除済み'
   end
-  
+
   def update_account(account_id)
     update(source_id: account_id)
   end
-
 end
-
-
-

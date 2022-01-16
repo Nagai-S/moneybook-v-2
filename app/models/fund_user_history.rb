@@ -32,22 +32,32 @@ class FundUserHistory < ApplicationRecord
   belongs_to :card, optional: true
   belongs_to :fund_user
 
-  default_scope -> {order(date: :desc)}
+  default_scope -> { order(date: :desc) }
 
   validates :date, presence: true
-  validates :value, presence: {message: "は一桁以上入力してください。"},
-  numericality: {
-    message: "は半角数字で入力してください。", 
-    only_integer: {message: "は整数で入力してください。"}
-  }
-  validates :commission, presence: {message: "は一桁以上入力してください。"},
-  numericality: {
-    message: "は半角数字で入力してください。", 
-    only_integer: {message: "は整数で入力してください。"}
-  }
+  validates :value,
+            presence: {
+              message: 'は一桁以上入力してください。'
+            },
+            numericality: {
+              message: 'は半角数字で入力してください。',
+              only_integer: {
+                message: 'は整数で入力してください。'
+              }
+            }
+  validates :commission,
+            presence: {
+              message: 'は一桁以上入力してください。'
+            },
+            numericality: {
+              message: 'は半角数字で入力してください。',
+              only_integer: {
+                message: 'は整数で入力してください。'
+              }
+            }
 
   def buy_or_sell_name
-    return buy_or_sell ? "購入" : "売却"
+    return buy_or_sell ? '購入' : '売却'
   end
 
   def payment_source_name
@@ -56,7 +66,7 @@ class FundUserHistory < ApplicationRecord
     elsif account
       account.name
     else
-      "ー"
+      'ー'
     end
   end
 

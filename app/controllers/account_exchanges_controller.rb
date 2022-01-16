@@ -1,14 +1,15 @@
 class AccountExchangesController < ApplicationController
   before_action :authenticate_user!
-  before_action :to_explanation, only: [:index, :new]
-  before_action :correct_user!, only: [:destroy, :edit, :update]
-  before_action :set_previous_url, only: [:new, :edit]
-  
+  before_action :to_explanation, only: %i[index new]
+  before_action :correct_user!, only: %i[destroy edit update]
+  before_action :set_previous_url, only: %i[new edit]
+
   def index
-    @axs = current_user
-    .account_exchanges
-    .includes(:account,:card,:to_account)
-    .page(params[:ax_page])
+    @axs =
+      current_user
+        .account_exchanges
+        .includes(:account, :card, :to_account)
+        .page(params[:ax_page])
   end
 
   def new
@@ -23,8 +24,8 @@ class AccountExchangesController < ApplicationController
       @ax.after_change_action
       redirect_to_previou_url
     else
-      flash.now[:danger] = "振替の作成に失敗しました。"
-      render "new"
+      flash.now[:danger] = '振替の作成に失敗しました。'
+      render 'new'
     end
   end
 
@@ -37,17 +38,17 @@ class AccountExchangesController < ApplicationController
         redirect_to root_path
       end
     else
-      flash.now[:danger] = "エラーが発生しました。ブラウザをリロードしてやり直してください"
+      flash.now[:danger] =
+        'エラーが発生しました。ブラウザをリロードしてやり直してください'
       unless Rails.env.test?
-        redirect_to request.referer 
+        redirect_to request.referer
       else
-        redirect_to root_path 
+        redirect_to root_path
       end
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     association_model_update
@@ -55,30 +56,30 @@ class AccountExchangesController < ApplicationController
       @ax.after_change_action
       redirect_to_previou_url
     else
-      flash.now[:danger] = "振替の編集に失敗しました。"
-      render "edit"
+      flash.now[:danger] = '振替の編集に失敗しました。'
+      render 'edit'
     end
   end
-  
-  private
-    def ax_params
-      params.require(:account_exchange).permit(:date, :value, :pay_date)
-    end    
 
-    def association_model_update
-      @ax.to_id = params[:account_exchange][:to_account]
-      if params[:account_exchange][:account_or_card] == "0"
-        @ax.source_id = params[:account_exchange][:source_account]
-        @ax.card_id = nil
-      elsif params[:account_exchange][:account_or_card] == "1"
-        @ax.card_id = params[:account_exchange][:card]
-        @ax.source_id = nil
-      end
+  private
+
+  def ax_params
+    params.require(:account_exchange).permit(:date, :value, :pay_date)
+  end
+
+  def association_model_update
+    @ax.to_id = params[:account_exchange][:to_account]
+    if params[:account_exchange][:account_or_card] == '0'
+      @ax.source_id = params[:account_exchange][:source_account]
+      @ax.card_id = nil
+    elsif params[:account_exchange][:account_or_card] == '1'
+      @ax.card_id = params[:account_exchange][:card]
+      @ax.source_id = nil
     end
-    
-    def correct_user!
-      @ax = AccountExchange.find_by(id: params[:id])
-      redirect_to root_path unless current_user == @ax.user
-    end
-    
+  end
+
+  def correct_user!
+    @ax = AccountExchange.find_by(id: params[:id])
+    redirect_to root_path unless current_user == @ax.user
+  end
 end

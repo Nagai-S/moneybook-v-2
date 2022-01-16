@@ -3,8 +3,7 @@ module CardsHelper
     if @card.account
       @card.account.id
     elsif current_user.cards.exists?
-      current_user.cards.first.account.id
+      current_user.cards.first.account_id
     end
   end
-  
 end

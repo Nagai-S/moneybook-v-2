@@ -7,8 +7,8 @@ class CreateAccountExchanges < ActiveRecord::Migration[6.0]
       t.boolean :pon
       t.date :pay_date
       t.references :card
-      t.references :source, foreign_key: {to_table: :accounts}
-      t.references :to, foreign_key: {to_table: :accounts}
+      t.references :source, foreign_key: { to_table: :accounts }
+      t.references :to, foreign_key: { to_table: :accounts }
 
       t.timestamps
     end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "AfterLoginView", type: :feature do
+RSpec.feature 'AfterLoginView', type: :feature do
   before do
     @user = create(:user)
     @user.confirm
@@ -9,7 +9,7 @@ RSpec.feature "AfterLoginView", type: :feature do
     fill_in 'user[password]', with: @user.password
     click_button 'ログイン'
   end
-  
+
   describe 'サインアップ直後の表示のテスト' do
     it 'root_path' do
       visit root_path
