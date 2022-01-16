@@ -49,8 +49,8 @@ class FundUser < ApplicationRecord
       if fund.value
         (
           (
-            (total_buy_value - total_buy_commission).to_f * fund.value.to_f /
-              average_buy_value.to_f
+            (total_buy_value - total_buy_commission).to_f * 
+            fund.value.to_f / average_buy_value.to_f
           ) - total_sell_value
         ).round
       else

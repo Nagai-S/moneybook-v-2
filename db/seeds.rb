@@ -35,7 +35,7 @@ user.accounts.create(
   [
     { id: 13, name: '楽天銀行', value: 0 },
     { id: 2, name: '京都中央信用金庫', value: 48_887 },
-    { id: 4, name: 'ゆうちょ', value: 278_080 },
+    # { id: 4, name: 'ゆうちょ', value: 278_080 },
     { id: 5, name: '現金', value: 54_835 },
     { id: 6, name: 'PayPay', value: 216 },
     { id: 12, name: 'メルペイ', value: 0 },
@@ -47,6 +47,7 @@ user.cards.create(
   [
     { name: 'YahooCard', account_id: 13, pay_date: 27, month_date: 31 },
     { name: 'RakutenCard', account_id: 13, pay_date: 27, month_date: 31 },
+    { id: 9, name: 'RakutenCard2', account_id: 13, pay_date: 27, month_date: 31 },
     {
       id: 7,
       name: 'メルペイMasterCard',
