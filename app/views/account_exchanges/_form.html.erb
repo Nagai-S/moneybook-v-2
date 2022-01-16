@@ -14,7 +14,7 @@
 
   <div class="row">
     <div class='<%= label_class %>'>
-      <%= f.label :source, "振替元アカウントを選択してください" %>
+      <%= f.label :source_id, "振替元アカウントを選択してください" %>
     </div>
   </div>
 
@@ -35,7 +35,7 @@
     <div class="tab-pane <%= active_is_account_or_card_for_ax[:account] %>" id="tab_account">
       <div class="row">
         <div class="<%= form_class %>">
-          <%= f.collection_select :source_account, current_user.accounts, :id, :name, {selected: account_id_for_ax}, {class: "form-control", id: "select"} %>
+          <%= f.collection_select :source_id, current_user.accounts, :id, :name, {selected: account_id_for_ax}, {class: "form-control", id: "select"} %>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
     <div class="tab-pane <%= active_is_account_or_card_for_ax[:card] %>" id="tab_card">
       <div class="row">
         <div class="<%= form_class %>">
-          <%= f.collection_select :card, current_user.cards, :id, :name, {selected: card_id_for_ax}, {class: "form-control", id: "select"} %>
+          <%= f.collection_select :card_id, current_user.cards, :id, :name, {selected: card_id_for_ax}, {class: "form-control", id: "select"} %>
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@
       <%= f.label :to_account, "振替先アカウントを入力してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.collection_select :to_account, current_user.accounts, :id, :name, {selected: to_id_for_new_ax}, {class: "form-control", id: "select"} %>
+      <%= f.collection_select :to_id, current_user.accounts, :id, :name, {selected: to_id_for_new_ax}, {class: "form-control", id: "select"} %>
     </div>
   </div>
 

@@ -16,8 +16,7 @@ class FundUserHistoriesController < ApplicationController
   def create
     @fund_user_history =
       @fund_user.fund_user_histories.build(fund_user_histories_params)
-    association_model_update
-
+      
     if @fund_user_history.save
       @fund_user_history.after_change_action
       redirect_to_previou_url
@@ -49,7 +48,6 @@ class FundUserHistoriesController < ApplicationController
   def edit; end
 
   def update
-    association_model_update
     if @fund_user_history.update(fund_user_histories_params)
       @fund_user_history.after_change_action
       redirect_to_previou_url
@@ -66,22 +64,26 @@ class FundUserHistoriesController < ApplicationController
   end
 
   def fund_user_histories_params
+    if params[:fund_user_history][:account_or_card] == '0'
+      params[:fund_user_history][:card_id] = nil
+    elsif params[:fund_user_history][:account_or_card] == '1'
+      card = Card.find_by(id: params[:fund_user_history][:card_id])
+      params[:fund_user_history][:account_id] = card.account_id
+    elsif params[:fund_user_history][:account_or_card] == '2'
+      params[:fund_user_history][:card_id] = nil
+      params[:fund_user_history][:account_id] = nil
+    end
     params
       .require(:fund_user_history)
-      .permit(:date, :value, :commission, :buy_or_sell, :pay_date)
-  end
-
-  def association_model_update
-    if params[:fund_user_history][:account_or_card] == '0'
-      @fund_user_history.account_id = params[:fund_user_history][:account]
-      @fund_user_history.card_id = nil
-    elsif params[:fund_user_history][:account_or_card] == '1'
-      @fund_user_history.card_id = params[:fund_user_history][:card]
-      @fund_user_history.account_id = nil
-    elsif params[:fund_user_history][:account_or_card] == '2'
-      @fund_user_history.card_id = nil
-      @fund_user_history.account_id = nil
-    end
+      .permit(
+        :date, 
+        :value, 
+        :commission, 
+        :buy_or_sell, 
+        :pay_date,
+        :card_id,
+        :account_id
+      )
   end
 
   def correct_user!

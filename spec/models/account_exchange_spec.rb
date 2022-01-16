@@ -64,7 +64,7 @@ RSpec.describe AccountExchange do
       ax =
         @user.account_exchanges.create(
           value: 100,
-          source_id: nil,
+          source_id: @card1.account_id,
           card_id: @card1.id,
           to_id: @account2.id,
           date: Date.today
@@ -80,7 +80,7 @@ RSpec.describe AccountExchange do
       ax =
         @user.account_exchanges.create(
           value: 100,
-          source_id: nil,
+          source_id: @card1.account_id,
           card_id: @card1.id,
           to_id: @account2.id,
           date: Date.today.prev_year
@@ -96,7 +96,7 @@ RSpec.describe AccountExchange do
       ax =
         @user.account_exchanges.create(
           value: 100,
-          source_id: nil,
+          source_id: @card1.account_id,
           card_id: @card1.id,
           to_id: @account2.id,
           date: Date.today.prev_year,
@@ -115,7 +115,7 @@ RSpec.describe AccountExchange do
       ax =
         @user.account_exchanges.create(
           value: 100,
-          source_id: nil,
+          source_id: @card1.account_id,
           card_id: @card1.id,
           to_id: @account2.id,
           date: Date.today.prev_year,

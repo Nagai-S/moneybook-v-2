@@ -52,10 +52,6 @@ class Event < ApplicationRecord
   )
   validate :iae_equal_to_genre_iae
 
-  def update_account(account_id)
-    update(account_id: account_id)
-  end
-
   def payment_source_name
     if card
       card.name

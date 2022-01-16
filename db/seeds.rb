@@ -34,7 +34,7 @@ user.genres.create(
 user.accounts.create(
   [
     { id: 13, name: '楽天銀行', value: 0 },
-    { id: 2, name: '京都中央信用金庫', value: 48_887 },
+    # { id: 2, name: '京都中央信用金庫', value: 48_887 },
     # { id: 4, name: 'ゆうちょ', value: 278_080 },
     { id: 5, name: '現金', value: 54_835 },
     { id: 6, name: 'PayPay', value: 216 },

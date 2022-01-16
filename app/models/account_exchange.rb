@@ -69,7 +69,4 @@ class AccountExchange < ApplicationRecord
     to_account ? to_account.name : '削除済み'
   end
 
-  def update_account(account_id)
-    update(source_id: account_id)
-  end
 end

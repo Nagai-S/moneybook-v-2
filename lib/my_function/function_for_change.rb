@@ -3,20 +3,12 @@ module MyFunction
   module FunctionForChange
     def after_change_action
       if card
-        update_account(card.account.id)
-        if pay_date
-          pay_day =
-            MyFunction::FlexDate.return_date(
-              pay_date.year,
-              pay_date.month,
-              card.pay_date
-            )
-        else
-          pay_day = decide_pay_day
-        end
-
+        pay_day = pay_date ? MyFunction::FlexDate.return_date(
+          pay_date.year,
+          pay_date.month,
+          card.pay_date
+        ) : decide_pay_day
         update(pay_date: pay_day)
-
         change_pon
       else
         update(pay_date: nil, pon: true)

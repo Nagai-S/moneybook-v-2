@@ -33,15 +33,15 @@ RSpec.describe AccountExchangesController do
           'date(2i)' => Date.today.month,
           'date(3i)' => Date.today.day,
           :value => 100,
-          :to_account => @account1.id
+          :to_id => @account1.id
         }
       }
     end
     describe 'association_model_update' do
       it '正しいsource, toで登録される' do
         params[:account_exchange][:account_or_card] = '0'
-        params[:account_exchange][:source_account] = @account2.id
-        params[:account_exchange][:card] = @card1.id
+        params[:account_exchange][:source_id] = @account2.id
+        params[:account_exchange][:card_id] = @card1.id
 
         expect { post :create, params: params }.to change {
           AccountExchange.all.length
@@ -53,8 +53,8 @@ RSpec.describe AccountExchangesController do
 
       it '正しいcard, toで登録される' do
         params[:account_exchange][:account_or_card] = '1'
-        params[:account_exchange][:source_account] = @account2.id
-        params[:account_exchange][:card] = @card1.id
+        params[:account_exchange][:source_id] = @account2.id
+        params[:account_exchange][:card_id] = @card1.id
 
         expect { post :create, params: params }.to change {
           AccountExchange.all.length
@@ -95,9 +95,9 @@ RSpec.describe AccountExchangesController do
           'date(2i)': Date.today.month,
           'date(3i)': Date.today.day,
           account_or_card: '0',
-          source_account: @account2.id,
-          card: @card1.id,
-          to_account: @account3.id
+          source_id: @account2.id,
+          card_id: @card1.id,
+          to_id: @account3.id
         }
       }
     end

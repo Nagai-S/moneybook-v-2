@@ -68,7 +68,7 @@ RSpec.describe FundUserHistory do
           @fund_user.fund_user_histories.create(
             value: 1000,
             commission: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today,
             buy_or_sell: false
@@ -85,7 +85,7 @@ RSpec.describe FundUserHistory do
           @fund_user.fund_user_histories.create(
             value: 1000,
             commission: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today.prev_year,
             buy_or_sell: false
@@ -102,7 +102,7 @@ RSpec.describe FundUserHistory do
           @fund_user.fund_user_histories.create(
             value: 1000,
             commission: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             buy_or_sell: false,
             date: Date.today.prev_year,
@@ -122,7 +122,7 @@ RSpec.describe FundUserHistory do
           @fund_user.fund_user_histories.create(
             value: 1000,
             commission: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today.prev_year,
             buy_or_sell: false,

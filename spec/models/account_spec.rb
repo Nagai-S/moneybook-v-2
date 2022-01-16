@@ -49,7 +49,7 @@ RSpec.describe Account do
       @user.events.create(
         iae: false,
         date: Date.today,
-        account_id: nil,
+        account_id: @card.account_id,
         card_id: @card.id,
         genre_id: @genre_ex.id,
         value: 200,
@@ -68,7 +68,7 @@ RSpec.describe Account do
     @ax2 =
       @user.account_exchanges.create(
         date: Date.today,
-        source_id: nil,
+        source_id: @card.account_id,
         card_id: @card.id,
         to_id: @account1.id,
         value: 400
@@ -93,7 +93,7 @@ RSpec.describe Account do
         buy_or_sell: true,
         commission: 250,
         value: 2000,
-        account_id: nil,
+        account_id: @card.account_id,
         card_id: @card.id
       )
     @fund_user_history2.after_change_action

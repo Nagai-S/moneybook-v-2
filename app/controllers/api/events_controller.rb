@@ -11,7 +11,6 @@ class Api::EventsController < Api::ApplicationController
   def create
     user = currentUser
     @event = user.events.build(events_params)
-    association_model_update
 
     if @event.save
       @event.after_change_action
@@ -24,17 +23,22 @@ class Api::EventsController < Api::ApplicationController
   private
 
   def events_params
-    params.require(:event).permit(:date, :value, :memo, :iae, :pay_date)
+    if params[:event][:account_or_card] == '0'
+      params[:event][:card_id] = nil
+    elsif params[:event][:account_or_card] == '1'
+      card = Card.find_by(id: params[:event][:card_id])
+      params[:event][:account_id] = card.account_id
+    end
+    params.require(:event).permit(
+      :date, 
+      :value, 
+      :memo, 
+      :iae, 
+      :pay_date, 
+      :genre_id, 
+      :account_id, 
+      :card_id
+    )
   end
 
-  def association_model_update
-    @event.genre_id = params[:event][:genre]
-    if params[:event][:account_or_card] == '0'
-      @event.account_id = params[:event][:account]
-      @event.card_id = nil
-    elsif params[:event][:account_or_card] == '1'
-      @event.card_id = params[:event][:card]
-      @event.account_id = nil
-    end
-  end
 end

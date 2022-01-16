@@ -17,11 +17,11 @@
 
     <div class="row">
       <div class='<%= label_class %>'>
-        <%= f.label :genre, "ジャンルを選択してください" %>
+        <%= f.label :genre_id, "ジャンルを選択してください" %>
         (<%= link_to "ジャンルを作成", new_genre_path %>)
       </div>
       <div class="<%= form_class %>">
-        <%= f.collection_select :genre, current_user.genres.where(iae: iae), :id, :name, {selected: genre_id_for_event(iae)}, {class: "form-control", id: "select"} %>
+        <%= f.collection_select :genre_id, current_user.genres.where(iae: iae), :id, :name, {selected: genre_id_for_event(iae)}, {class: "form-control", id: "select"} %>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
     </ul>
     <% else %>
     <div class='<%= label_class %>'>
-      <%= f.label :account, "アカウントを選択してください" %>
+      <%= f.label :account_id, "アカウントを選択してください" %>
     </div>
     <% end %>
 
@@ -46,7 +46,7 @@
       <div class="tab-pane <%= active_is_account_or_card_for_event(iae)[:account] %>" id="tab_account">
         <div class="row">
           <div class="<%= form_class %>">
-            <%= f.collection_select :account, current_user.accounts, :id, :name, {selected: account_id_for_event(iae)}, {class: "form-control", id: "select"} %>
+            <%= f.collection_select :account_id, current_user.accounts, :id, :name, {selected: account_id_for_event(iae)}, {class: "form-control", id: "select"} %>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
       <div class="tab-pane <%= active_is_account_or_card_for_event(iae)[:card] %>" id="tab_card">
         <div class="row">
           <div class="<%= form_class %>">
-            <%= f.collection_select :card, current_user.cards, :id, :name, {selected: card_id_for_event}, {class: "form-control", id: "select"} %>
+            <%= f.collection_select :card_id, current_user.cards, :id, :name, {selected: card_id_for_event}, {class: "form-control", id: "select"} %>
           </div>
         </div>
       </div>

@@ -40,8 +40,6 @@ class EventsController < ApplicationController
 
   def create
     @event = current_user.events.build(events_params)
-    association_model_update
-
     if @event.save
       @event.after_change_action
       redirect_to_previou_url
@@ -72,7 +70,6 @@ class EventsController < ApplicationController
   def edit; end
 
   def update
-    association_model_update
     if @event.update(events_params)
       @event.after_change_action
       redirect_to_previou_url
@@ -85,18 +82,22 @@ class EventsController < ApplicationController
   private
 
   def events_params
-    params.require(:event).permit(:date, :value, :memo, :iae, :pay_date)
-  end
-
-  def association_model_update
-    @event.genre_id = params[:event][:genre]
     if params[:event][:account_or_card] == '0'
-      @event.account_id = params[:event][:account]
-      @event.card_id = nil
+      params[:event][:card_id] = nil
     elsif params[:event][:account_or_card] == '1'
-      @event.card_id = params[:event][:card]
-      @event.account_id = nil
+      card = Card.find_by(id: params[:event][:card_id])
+      params[:event][:account_id] = card.account_id
     end
+    params.require(:event).permit(
+      :date, 
+      :value, 
+      :memo, 
+      :iae, 
+      :pay_date, 
+      :genre_id, 
+      :account_id, 
+      :card_id
+    )
   end
 
   def correct_user!

@@ -104,7 +104,7 @@ RSpec.describe Event do
         event =
           @user.events.create(
             value: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             genre_id: @genre_ex.id,
             date: Date.today,
@@ -121,7 +121,7 @@ RSpec.describe Event do
         event =
           @user.events.create(
             value: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             genre_id: @genre_ex.id,
             date: Date.today.prev_year,
@@ -138,7 +138,7 @@ RSpec.describe Event do
         event =
           @user.events.create(
             value: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             genre_id: @genre_ex.id,
             iae: false,
@@ -158,7 +158,7 @@ RSpec.describe Event do
         event =
           @user.events.create(
             value: 100,
-            account_id: nil,
+            account_id: @card1.account_id,
             card_id: @card1.id,
             genre_id: @genre_ex.id,
             date: Date.today.prev_year,

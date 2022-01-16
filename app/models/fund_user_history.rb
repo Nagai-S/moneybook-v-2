@@ -69,8 +69,4 @@ class FundUserHistory < ApplicationRecord
       'ー'
     end
   end
-
-  def update_account(account_id)
-    update(account_id: account_id)
-  end
 end

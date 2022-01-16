@@ -18,7 +18,6 @@ class AccountExchangesController < ApplicationController
 
   def create
     @ax = current_user.account_exchanges.build(ax_params)
-    association_model_update
 
     if @ax.save
       @ax.after_change_action
@@ -51,7 +50,6 @@ class AccountExchangesController < ApplicationController
   def edit; end
 
   def update
-    association_model_update
     if @ax.update(ax_params)
       @ax.after_change_action
       redirect_to_previou_url
@@ -64,18 +62,20 @@ class AccountExchangesController < ApplicationController
   private
 
   def ax_params
-    params.require(:account_exchange).permit(:date, :value, :pay_date)
-  end
-
-  def association_model_update
-    @ax.to_id = params[:account_exchange][:to_account]
     if params[:account_exchange][:account_or_card] == '0'
-      @ax.source_id = params[:account_exchange][:source_account]
-      @ax.card_id = nil
+      params[:account_exchange][:card_id] = nil
     elsif params[:account_exchange][:account_or_card] == '1'
-      @ax.card_id = params[:account_exchange][:card]
-      @ax.source_id = nil
+      card = Card.find_by(id: params[:account_exchange][:card_id])
+      params[:account_exchange][:source_id] = card.account_id
     end
+    params.require(:account_exchange).permit(
+      :date, 
+      :value, 
+      :pay_date, 
+      :to_id,
+      :source_id,
+      :card_id
+    )
   end
 
   def correct_user!

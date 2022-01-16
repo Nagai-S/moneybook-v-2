@@ -59,8 +59,8 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.year, from: 'event[date(1i)]'
         select "#{Date.today.month + 1}月", from: 'event[date(2i)]'
         select Date.today.day, from: 'event[date(3i)]'
-        select @user.genres.where(iae: true).first.name, from: 'event[genre]'
-        select @user.accounts.first.name, from: 'event[account]'
+        select @user.genres.where(iae: true).first.name, from: 'event[genre_id]'
+        select @user.accounts.first.name, from: 'event[account_id]'
         fill_in 'event[memo]', with: 'memo'
         fill_in 'event[value]', with: 100
         click_button 'イベント登録'
@@ -78,9 +78,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select "#{Date.today.month}月", from: 'event[date(2i)]'
         select Date.today.day, from: 'event[date(3i)]'
         select @user.genres.where(iae: false).order(:id).first.name,
-               from: 'event[genre]'
+               from: 'event[genre_id]'
         click_on 'アカウント'
-        select @user.accounts.first.name, from: 'event[account]'
+        select @user.accounts.first.name, from: 'event[account_id]'
         fill_in 'event[memo]', with: 'memo'
         fill_in 'event[value]', with: 200
         click_button 'イベント登録'
@@ -98,9 +98,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select "#{Date.today.month}月", from: 'event[date(2i)]'
         select Date.today.day, from: 'event[date(3i)]'
         select @user.genres.where(iae: false).order(:id).first.name,
-               from: 'event[genre]'
+               from: 'event[genre_id]'
         click_on 'クレジットカード'
-        select @user.cards.first.name, from: 'event[card]'
+        select @user.cards.first.name, from: 'event[card_id]'
         fill_in 'event[memo]', with: 'memo'
         fill_in 'event[value]', with: 150
         click_button 'イベント登録'
@@ -119,9 +119,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.year, from: 'event[date(1i)]'
         select "#{Date.today.month}月", from: 'event[date(2i)]'
         select Date.today.day + 1, from: 'event[date(3i)]'
-        select @user.genres.where(iae: false).first.name, from: 'event[genre]'
+        select @user.genres.where(iae: false).first.name, from: 'event[genre_id]'
         click_on 'アカウント'
-        select @user.accounts.first.name, from: 'event[account]'
+        select @user.accounts.first.name, from: 'event[account_id]'
         fill_in 'event[memo]', with: 'memo'
         fill_in 'event[value]', with: 300
         click_button 'イベント登録'
@@ -150,9 +150,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.day + 1, from: 'account_exchange[date(3i)]'
         click_on 'アカウント'
         select @user.accounts.order(:id).first.name,
-               from: 'account_exchange[source_account]'
+               from: 'account_exchange[source_id]'
         select @user.accounts.order(:id).second.name,
-               from: 'account_exchange[to_account]'
+               from: 'account_exchange[to_id]'
         fill_in 'account_exchange[value]', with: 100
         click_button '振替を登録'
       end
@@ -169,9 +169,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select "#{Date.today.month}月", from: 'account_exchange[date(2i)]'
         select Date.today.day, from: 'account_exchange[date(3i)]'
         click_on 'クレジットカード'
-        select @user.cards.order(:id).first.name, from: 'account_exchange[card]'
+        select @user.cards.order(:id).first.name, from: 'account_exchange[card_id]'
         select @user.accounts.order(:id).second.name,
-               from: 'account_exchange[to_account]'
+               from: 'account_exchange[to_id]'
         fill_in 'account_exchange[value]', with: 200
         click_button '振替を登録'
       end
@@ -191,9 +191,9 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.day + 1, from: 'account_exchange[date(3i)]'
         click_on 'アカウント'
         select @user.accounts.order(:id).second.name,
-               from: 'account_exchange[source_account]'
+               from: 'account_exchange[source_id]'
         select @user.accounts.order(:id).first.name,
-               from: 'account_exchange[to_account]'
+               from: 'account_exchange[to_id]'
         fill_in 'account_exchange[value]', with: 100
         click_button '振替を登録'
       end
@@ -256,7 +256,7 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.day + 1, from: 'fund_user_history[date(3i)]'
         click_on 'アカウント'
         select @user.accounts.order(:id).first.name,
-               from: 'fund_user_history[account]'
+               from: 'fund_user_history[account_id]'
         fill_in 'fund_user_history[commission]', with: 10
         fill_in 'fund_user_history[value]', with: 100
         click_button '購入'
@@ -281,7 +281,7 @@ RSpec.feature 'UserFlow', type: :feature do
         select Date.today.day, from: 'fund_user_history[date(3i)]'
         click_on 'クレジットカード'
         select @user.cards.order(:id).first.name,
-               from: 'fund_user_history[card]'
+               from: 'fund_user_history[card_id]'
         fill_in 'fund_user_history[commission]', with: 0
         fill_in 'fund_user_history[value]', with: 200
         click_button '購入'
@@ -306,7 +306,7 @@ RSpec.feature 'UserFlow', type: :feature do
         select "#{Date.today.month}月", from: 'fund_user_history[date(2i)]'
         select Date.today.day, from: 'fund_user_history[date(3i)]'
         select @user.accounts.order(:id).first.name,
-               from: 'fund_user_history[account]'
+               from: 'fund_user_history[account_id]'
         fill_in 'fund_user_history[commission]', with: 50
         fill_in 'fund_user_history[value]', with: 300
         click_button '売却'

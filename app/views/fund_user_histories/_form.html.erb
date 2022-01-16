@@ -42,7 +42,7 @@
     <% else %>
 
     <div class='<%= label_class %>'>
-      <%= f.label :account, "アカウントを選択してください" %>
+      <%= f.label :account_id, "アカウントを選択してください" %>
     </div>
     
     <% end %>
@@ -60,7 +60,7 @@
         <div class="row">
           <div class="<%= form_class %>">
             <%= f.collection_select(
-              :account,
+              :account_id,
               current_user.accounts,
               :id, 
               :name,
@@ -75,7 +75,7 @@
         <div class="row">
           <div class="<%= form_class %>">
             <%= f.collection_select(
-              :card,
+              :card_id,
               current_user.cards,
               :id,
               :name,

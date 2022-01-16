@@ -39,9 +39,9 @@ RSpec.describe EventsController do
     describe 'association_model_update' do
       it '正しいaccount, genre_inで登録される' do
         params[:event][:account_or_card] = '0'
-        params[:event][:account] = @account1.id
-        params[:event][:card] = @card1.id
-        params[:event][:genre] = @genre_in.id
+        params[:event][:account_id] = @account1.id
+        params[:event][:card_id] = @card1.id
+        params[:event][:genre_id] = @genre_in.id
         params[:event][:iae] = true
 
         expect { post :create, params: params }.to change { Event.all.length }
@@ -53,9 +53,9 @@ RSpec.describe EventsController do
 
       it '正しいcard, genre_exで登録される' do
         params[:event][:account_or_card] = '1'
-        params[:event][:account] = @account2.id
-        params[:event][:card] = @card1.id
-        params[:event][:genre] = @genre_ex.id
+        params[:event][:account_id] = @account2.id
+        params[:event][:card_id] = @card1.id
+        params[:event][:genre_id] = @genre_ex.id
         params[:event][:iae] = false
 
         expect { post :create, params: params }.to change { Event.all.length }
@@ -96,9 +96,9 @@ RSpec.describe EventsController do
           'date(2i)': Date.today.month,
           'date(3i)': Date.today.day,
           account_or_card: '0',
-          account: @account2.id,
-          card: @card2.id,
-          genre: @genre_ex.id,
+          account_id: @account2.id,
+          card_id: @card2.id,
+          genre_id: @genre_ex.id,
           iae: false
         }
       }

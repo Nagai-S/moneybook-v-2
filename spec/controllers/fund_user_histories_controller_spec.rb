@@ -36,8 +36,8 @@ RSpec.describe FundUserHistoriesController do
     describe 'association_model_update' do
       it '正しいaccountで登録される' do
         params[:fund_user_history][:account_or_card] = '0'
-        params[:fund_user_history][:account] = @account1.id
-        params[:fund_user_history][:card] = @card1.id
+        params[:fund_user_history][:account_id] = @account1.id
+        params[:fund_user_history][:card_id] = @card1.id
         params[:fund_user_history][:buy_or_sell] = false
 
         expect { post :create, params: params }.to change {
@@ -49,8 +49,8 @@ RSpec.describe FundUserHistoriesController do
 
       it '正しいcardで登録される' do
         params[:fund_user_history][:account_or_card] = '1'
-        params[:fund_user_history][:account] = @account2.id
-        params[:fund_user_history][:card] = @card1.id
+        params[:fund_user_history][:account_id] = @account2.id
+        params[:fund_user_history][:card_id] = @card1.id
         params[:fund_user_history][:buy_or_sell] = true
 
         expect { post :create, params: params }.to change {
@@ -63,8 +63,8 @@ RSpec.describe FundUserHistoriesController do
 
       it 'account:nil, card:nilで登録される' do
         params[:fund_user_history][:account_or_card] = '2'
-        params[:fund_user_history][:account] = @account2.id
-        params[:fund_user_history][:card] = @card1.id
+        params[:fund_user_history][:account_id] = @account2.id
+        params[:fund_user_history][:card_id] = @card1.id
         params[:fund_user_history][:buy_or_sell] = true
 
         expect { post :create, params: params }.to change {
@@ -112,8 +112,8 @@ RSpec.describe FundUserHistoriesController do
           :commission => 200,
           :buy_or_sell => true,
           :account_or_card => '0',
-          :account => @account2.id,
-          :card => @card1.id
+          :account_id => @account2.id,
+          :card_id => @card1.id
         },
         fund_user_id: @fund_user.id
       }
@@ -134,17 +134,7 @@ RSpec.describe FundUserHistoriesController do
         params[:fund_user_history][:value] = ''
         expect { put :update, params: params }.to change {
           FundUserHistory.find(fund_user_history.id).account_id
-        }.by(0).and change {
-                                                                                     FundUserHistory
-                                                                                       .find(
-                                                                                       fund_user_history
-                                                                                         .id
-                                                                                     )
-                                                                                       .card_id
-                                                                                   }
-                                                                                     .by(
-                                                                                     0
-                                                                                   )
+        }.by(0).and change{FundUserHistory.find(fund_user_history.id).card_id}.by(0)
       end
 
       it '正しいuserでなくて失敗' do
@@ -165,17 +155,7 @@ RSpec.describe FundUserHistoriesController do
         params[:fund_user_history][:value] = '1000'
         expect { put :update, params: params }.to change {
           FundUserHistory.find(fund_user_history.id).account_id
-        }.by(0).and change {
-                                                                                     FundUserHistory
-                                                                                       .find(
-                                                                                       fund_user_history
-                                                                                         .id
-                                                                                     )
-                                                                                       .card_id
-                                                                                   }
-                                                                                     .by(
-                                                                                     0
-                                                                                   )
+        }.by(0).and change{FundUserHistory.find(fund_user_history.id).card_id}.by(0)
       end
     end
   end

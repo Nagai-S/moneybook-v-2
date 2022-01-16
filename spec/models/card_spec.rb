@@ -49,7 +49,7 @@ RSpec.describe Card do
       @user.events.create(
         iae: false,
         date: Date.today,
-        account_id: nil,
+        account_id: @card.account_id,
         card_id: @card.id,
         genre_id: @genre_ex.id,
         value: 100,
@@ -60,7 +60,7 @@ RSpec.describe Card do
       @user.events.create(
         iae: false,
         date: Date.today.prev_month(2),
-        account_id: nil,
+        account_id: @card.account_id,
         card_id: @card.id,
         genre_id: @genre_ex.id,
         value: 200,
@@ -71,7 +71,7 @@ RSpec.describe Card do
       @user.events.create(
         iae: false,
         date: Date.today.prev_month(2),
-        account_id: nil,
+        account_id: @card_for_destroy.account_id,
         card_id: @card_for_destroy.id,
         genre_id: @genre_ex.id,
         value: 200,
@@ -81,7 +81,7 @@ RSpec.describe Card do
     @ax1 =
       @user.account_exchanges.create(
         date: Date.today.prev_month,
-        source_id: @card.account.id,
+        source_id: @card.account_id,
         card_id: @card.id,
         to_id: @account2.id,
         value: 300,
@@ -91,7 +91,7 @@ RSpec.describe Card do
     @ax2 =
       @user.account_exchanges.create(
         date: Date.today.prev_month(2),
-        source_id: nil,
+        source_id: @card.account_id,
         card_id: @card.id,
         to_id: @account1.id,
         value: 400
@@ -100,7 +100,7 @@ RSpec.describe Card do
     @ax3 =
       @user.account_exchanges.create(
         date: Date.today.prev_month(2),
-        source_id: nil,
+        source_id: @card_for_destroy.account_id,
         card_id: @card_for_destroy.id,
         to_id: @account1.id,
         value: 400
@@ -115,7 +115,7 @@ RSpec.describe Card do
         buy_or_sell: true,
         commission: 150,
         value: 1000,
-        account_id: @card.account.id,
+        account_id: @card.account_id,
         card_id: @card.id
       )
     @fund_user_history1.after_change_action
@@ -125,7 +125,7 @@ RSpec.describe Card do
         buy_or_sell: true,
         commission: 250,
         value: 2000,
-        account_id: nil,
+        account_id: @card.account_id,
         card_id: @card.id
       )
     @fund_user_history2.after_change_action
@@ -135,7 +135,7 @@ RSpec.describe Card do
         buy_or_sell: true,
         commission: 250,
         value: 2000,
-        account_id: nil,
+        account_id: @card_for_destroy.account_id,
         card_id: @card_for_destroy.id
       )
     @fund_user_history3.after_change_action
