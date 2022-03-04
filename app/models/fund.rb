@@ -25,7 +25,7 @@ class Fund < ApplicationRecord
       'https://www.rakuten-sec.co.jp/web/fund/rakuten-bank/detail.html?ID=' + id
     charset = nil
     html =
-      open(url) do |page|
+      URI.open(url) do |page|
         charset = page.charset
         page.read
       end

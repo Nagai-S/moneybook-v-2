@@ -167,14 +167,28 @@ RSpec.describe Card do
     it '他のuserはname:account1で作成できる' do
       different_user = create(:user)
       different_user.confirm
+      account = different_user.accounts.create(name: 'account',value: 1000)
       new_card =
         different_user.cards.build(
           name: 'account1',
           pay_date: 10,
           month_date: 1,
-          account_id: @account1.id
+          account_id: account.id
         )
       expect(new_card).to be_valid
+    end
+
+    it '別のuserのアカウントを使用してカードを作成できない' do
+      different_user = create(:user)
+      different_user.confirm
+      new_card =
+        different_user.cards.build(
+          name: 'card1',
+          pay_date: 10,
+          month_date: 1,
+          account_id: @account1.id
+        )
+      expect(new_card).to be_invalid
     end
   end
 

@@ -51,7 +51,7 @@ class Card < ApplicationRecord
               greater_than_or_equal_to: 1,
               less_than_or_equal_to: 31
             }
-  validate :pay_not_equal_to_month, :card_name_not_account_name
+  validate :pay_not_equal_to_month, :card_name_not_account_name, :same_user
 
   def before_destroy_action
     events.each { |event| event.update(card_id: nil) }
@@ -135,6 +135,15 @@ class Card < ApplicationRecord
       if account.name == name
         errors.add(:name, 'はアカウントでも使用されているので使えません。')
       end
+    end
+  end
+
+  def same_user
+    user_ids = [user_id]
+    account && user_ids << account.user_id
+
+    if user_ids.uniq.size != 1
+      errors.add(:user_id, ' different')
     end
   end
 end

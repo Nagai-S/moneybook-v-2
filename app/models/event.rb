@@ -50,7 +50,7 @@ class Event < ApplicationRecord
       }
     }
   )
-  validate :iae_equal_to_genre_iae
+  validate :iae_equal_to_genre_iae, :same_user
 
   def payment_source_name
     if card
@@ -77,4 +77,16 @@ class Event < ApplicationRecord
       errors.add(:genre_id, '支出・収入にあったジャンルを使用してください。')
     end
   end
+
+  def same_user
+    user_ids = [user_id]
+    account && user_ids << account.user_id
+    genre && user_ids << genre.user_id
+    card && user_ids << card.user_id
+
+    if user_ids.uniq.size != 1
+      errors.add(:user_id, ' different')
+    end
+  end
+
 end

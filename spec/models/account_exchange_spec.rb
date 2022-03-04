@@ -44,6 +44,22 @@ RSpec.describe AccountExchange do
       )
   end
 
+  describe "optional validation" do
+    it '別のuserのdataを使用してaxを作成できない' do
+      different_user = create(:user)
+      different_user.confirm
+      new_ax =
+        different_user.account_exchanges.build(
+          value: 100,
+          card_id: nil,
+          source_id: @account1.id,
+          to_id: @account2.id,
+          date: Date.today
+        )
+      expect(new_ax).to be_invalid
+    end    
+  end
+
   describe '#after_change_action' do
     it 'card_id:nilの時' do
       ax =

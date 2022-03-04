@@ -79,6 +79,24 @@ RSpec.describe Event do
         expect(new_event).to be_invalid
       end
     end
+    
+    it '別のuserのdataを使用してeventを作成できない' do
+      different_user = create(:user)
+      different_user.confirm
+      new_event =
+        different_user.events.build(
+          iae: false,
+          value: 100,
+          account_id: @account1.id,
+          card_id: nil,
+          genre_id: @genre_in.id,
+          date: Date.today,
+          memo: '',
+          pon: true,
+          pay_date: nil
+        )
+      expect(new_event).to be_invalid
+    end
   end
 
   describe 'with controller' do

@@ -54,7 +54,9 @@ class AccountExchange < ApplicationRecord
                 message: 'は整数で入力してください。'
               }
             }
-
+  
+  validate :same_user
+  
   def source_name
     if card
       card.name
@@ -67,6 +69,19 @@ class AccountExchange < ApplicationRecord
 
   def to_account_name
     to_account ? to_account.name : '削除済み'
+  end
+
+  private
+
+  def same_user
+    user_ids = [user_id]
+    account && user_ids << account.user_id
+    to_account && user_ids << to_account.user_id
+    card && user_ids << card.user_id
+
+    if user_ids.uniq.size != 1
+      errors.add(:user_id, ' different')
+    end
   end
 
 end

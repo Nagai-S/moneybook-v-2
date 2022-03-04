@@ -44,6 +44,24 @@ RSpec.describe FundUserHistory do
       @user.fund_users.create(fund_id: @fund.id, average_buy_value: 9000)
   end
 
+  describe "optional validation" do
+    it '別のuserのdataを使用してfuhを作成できない' do
+      different_user = create(:user)
+      different_user.confirm
+      dif_fund_user = different_user.fund_users.create(fund_id: @fund.id, average_buy_value: 9000)
+      fuh =
+        dif_fund_user.fund_user_histories.build(
+          value: 1000,
+          commission: 100,
+          card_id: nil,
+          account_id: @account1.id,
+          date: Date.today,
+          buy_or_sell: false
+        )
+        expect(fuh).to be_invalid
+    end    
+  end
+
   describe 'with controller' do
     describe '#after_change_action' do
       it 'card_id:nilの時' do

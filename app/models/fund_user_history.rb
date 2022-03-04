@@ -55,7 +55,9 @@ class FundUserHistory < ApplicationRecord
                 message: 'は整数で入力してください。'
               }
             }
-
+            
+  validate :same_user
+            
   def buy_or_sell_name
     return buy_or_sell ? '購入' : '売却'
   end
@@ -67,6 +69,18 @@ class FundUserHistory < ApplicationRecord
       account.name
     else
       'ー'
+    end
+  end
+
+  private
+
+  def same_user
+    user_ids = [fund_user.user_id]
+    account && user_ids << account.user_id
+    card && user_ids << card.user_id
+
+    if user_ids.uniq.size != 1
+      errors.add(:user_id, ' different')
     end
   end
 end
