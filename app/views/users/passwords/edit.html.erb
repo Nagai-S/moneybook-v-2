@@ -1,25 +1,27 @@
-<h2>パスワードを変更/h2>
+<h2>パスワードを変更</h2>
 
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
 
-  <div class="row">
-  <div class="<%= label_class %>">
-    <%= f.label :password, "新しいパスワードを入力してください。" %><br />
-  </div>
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> 文字以上)</em>
-      <% end %><br />
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control", id: "user" %>
-  </div>
+  <div class='form_wrapper'>
+    <%= render "users/shared/error_messages", resource: resource %>
+    <%= f.hidden_field :reset_password_token %>
+    <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :password, "新しいパスワードを入力してください。" %><br />
+    </div>
+      <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> 文字以上)</em>
+        <% end %><br />
+      <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control", id: "user" %>
+    </div>
 
-  <div class="row">
-    <%= f.label :password_confirmation, "確認のためもう一度入力してください。" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id: "user" %>
-  </div>
+    <div class="row">
+      <%= f.label :password_confirmation, "確認のためもう一度入力してください。" %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id: "user" %>
+    </div>
 
-  <%= f.submit "パスワードを変更", class: "btn btn-primary", role: "button" %>
+    <%= f.submit "パスワードを変更", class: "btn btn-primary", role: "button" %>
+    <%= render "users/shared/links" %>
+  </div>
 <% end %>
 
-<%= render "users/shared/links" %>
