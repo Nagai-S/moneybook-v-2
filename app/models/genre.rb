@@ -20,6 +20,7 @@
 class Genre < ApplicationRecord
   belongs_to :user
   has_many :events
+  has_many :shortcuts, dependent: :destroy
 
   validates :name,
             presence: {

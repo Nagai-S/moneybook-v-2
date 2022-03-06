@@ -21,6 +21,7 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :cards
   has_many :events
+  has_many :shortcuts, dependent: :destroy
   has_many :fund_user_histories
   has_many :account_exchanges_to,
            class_name: 'AccountExchange',

@@ -87,7 +87,13 @@
 #                      account_exchange PATCH  /account_exchanges/:id(.:format)                                                         account_exchanges#update
 #                                       PUT    /account_exchanges/:id(.:format)                                                         account_exchanges#update
 #                                       DELETE /account_exchanges/:id(.:format)                                                         account_exchanges#destroy
+#                             shortcuts GET    /shortcuts(.:format)                                                                     shortcuts#index
+#                                       POST   /shortcuts(.:format)                                                                     shortcuts#create
 #                          new_shortcut GET    /shortcuts/new(.:format)                                                                 shortcuts#new
+#                         edit_shortcut GET    /shortcuts/:id/edit(.:format)                                                            shortcuts#edit
+#                              shortcut PATCH  /shortcuts/:id(.:format)                                                                 shortcuts#update
+#                                       PUT    /shortcuts/:id(.:format)                                                                 shortcuts#update
+#                                       DELETE /shortcuts/:id(.:format)                                                                 shortcuts#destroy
 #         fund_user_fund_user_histories GET    /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#index
 #                                       POST   /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#create
 #       new_fund_user_fund_user_history GET    /fund_users/:fund_user_id/fund_user_histories/new(.:format)                              fund_user_histories#new
@@ -156,7 +162,7 @@ Rails.application.routes.draw do
   resources :cards
   resources :events, only: %i[index create new edit update destroy]
   resources :account_exchanges, only: %i[index create new edit update destroy]
-  resources :shortcuts, only: :new
+  resources :shortcuts, only: %i[index show create new update destroy]
   resources :fund_users, only: %i[new create index destroy update] do
     resources :fund_user_histories,
               only: %i[new create index destroy edit update]
@@ -165,6 +171,7 @@ Rails.application.routes.draw do
   get '/account_month', to: 'accounts#month_index'
   get '/explanation', to: 'homepages#explanation'
   get '/events/search', to: 'events#search'
+  post '/shortcuts/run', to: 'shortcuts#run'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 

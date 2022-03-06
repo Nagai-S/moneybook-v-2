@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_17_084148) do
+ActiveRecord::Schema.define(version: 2022_03_04_160812) do
 
   create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -114,6 +114,21 @@ ActiveRecord::Schema.define(version: 2021_10_17_084148) do
     t.index ["user_id"], name: "index_genres_on_user_id"
   end
 
+  create_table "shortcuts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "token"
+    t.boolean "iae"
+    t.bigint "card_id"
+    t.bigint "account_id", null: false
+    t.bigint "genre_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_shortcuts_on_account_id"
+    t.index ["card_id"], name: "index_shortcuts_on_card_id"
+    t.index ["genre_id"], name: "index_shortcuts_on_genre_id"
+    t.index ["user_id"], name: "index_shortcuts_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -145,4 +160,7 @@ ActiveRecord::Schema.define(version: 2021_10_17_084148) do
   add_foreign_key "fund_users", "funds"
   add_foreign_key "fund_users", "users"
   add_foreign_key "genres", "users"
+  add_foreign_key "shortcuts", "accounts"
+  add_foreign_key "shortcuts", "genres"
+  add_foreign_key "shortcuts", "users"
 end

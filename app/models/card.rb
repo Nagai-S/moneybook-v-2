@@ -25,6 +25,7 @@ class Card < ApplicationRecord
   belongs_to :user
   belongs_to :account
   has_many :events
+  has_many :shortcuts, dependent: :destroy
   has_many :account_exchanges
   has_many :fund_user_histories
 

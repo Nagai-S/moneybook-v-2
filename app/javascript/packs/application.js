@@ -57,7 +57,7 @@ $(function () {
 
   $(document).ready(function () {
     if (document.getElementById("login_footer")) {
-      $("footer").css("height", 310 + "px");
+      $("footer").css("height", 340 + "px");
     } else {
       $("footer").css("height", 100 + "px");
     }

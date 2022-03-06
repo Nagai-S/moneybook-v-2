@@ -36,6 +36,7 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   has_many :events, dependent: :delete_all
+  has_many :shortcuts, dependent: :delete_all
   has_many :account_exchanges, dependent: :delete_all
   has_many :genres, dependent: :delete_all
   has_many :cards, dependent: :delete_all

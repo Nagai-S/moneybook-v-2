@@ -1,0 +1,60 @@
+<%= javascript_pack_tag 'shortcut' %>
+<h1>iPhone用ショートカット</h1>
+<div class="row">
+  <div class="table_contents col-12 offset-sm-2 col-sm-8">
+    <div class="table-responsive">
+      <table class="table" id="table_accounts">
+        <thead>
+          <tr>
+            <th>アカウント</th>
+            <th>ジャンル</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <%= @shortcut.payment_source_name %>
+            </td>
+            <td><%= @shortcut.genre.name %></td>
+            <td><%=link_to "削除", shortcut_path(@shortcut.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<% if @token %>
+  <p class="status_message">こちらに表示されている文字列をコピーしてください。</p> 
+  <div class="status_message sc_message"> 
+    <p class="sc_code"> 
+      {"access-token":"<%= @token %>","shortcut_id":<%= @shortcut.id %>}
+    </p>
+    <div class="code_result">
+      <Button class="btn btn-primary code_copy">コピー</Button>
+    </div>
+  </div>
+  <p class="status_message add_sc">
+    <a href="https://www.icloud.com/shortcuts/cf7fd61b76264b138627339cdb9e6a5f"> 
+      こちら
+    </a>
+    からショートカットを追加してください
+  </p>
+<% else %>
+  <%= form_with(model: @shortcut, method: :put, local: true, class: "form1") do |f| %>
+    <div class="row">
+      <div class='<%= label_class %>'>
+        <%= f.label :password, "パスワードを入力してください。" %>
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control", id: "user" %>
+      </div>
+    </div>
+      
+    <%= f.submit "ショートカットを追加", class: "btn btn-primary", role: "button" %>
+  <% end %>
+<% end %>

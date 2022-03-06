@@ -1,0 +1,40 @@
+<h1>iPhone用ショートカット一覧</h1>
+<div class="row">
+  <div class="col-10 offset-1 col-sm-6 offset-sm-6 col-md-4 offset-md-8 page_top_menu">
+    <li><%= link_to "ショートカット作成", new_shortcut_path, class: "square" %></li>
+  </div>
+</div>
+
+<div class="row">
+  <div class="table_contents col-12 offset-sm-2 col-sm-8">
+    <div class="table-responsive">
+      <table class="table" id="table_accounts">
+        <thead>
+          <tr>
+            <th>アカウント</th>
+            <th>ジャンル</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <% @shortcuts.each do |shortcut| %>
+
+        <tbody>
+          <tr>
+            <td>
+              <%= shortcut.payment_source_name %>
+            </td>
+            <td><%= shortcut.genre.name %></td>
+            <td><%=link_to "詳細", shortcut_path(shortcut.id) %></td>
+            <td><%=link_to "削除", shortcut_path(shortcut.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          </tr>
+        </tbody>
+
+        <% end %>
+
+      </table>
+    </div>
+  </div>
+</div>
