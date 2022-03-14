@@ -13,10 +13,10 @@
 
   <div class="row">
     <div class='<%= label_class %>'>
-      <%= f.label :account, "引き落とし先のアカウントを選択してください" %>
+      <%= f.label :account_id, "引き落とし先のアカウントを選択してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.collection_select :account, current_user.accounts, :id, :name, {selected: account_id_for_card}, {class: "form-control"} %>
+      <%= f.collection_select :account_id, current_user.accounts, :id, :name, {selected: account_id_for_card}, {class: "form-control"} %>
     </div>
   </div>
 

@@ -43,7 +43,7 @@ RSpec.feature 'UserFlow', type: :feature do
       click_on 'クレジットカード登録'
       expect(page).to have_content '新規クレジットカード作成'
       fill_in 'card[name]', with: 'card_name'
-      select @user.accounts.first.name, from: 'card[account]'
+      select @user.accounts.first.name, from: 'card[account_id]'
       select 27, from: 'card[pay_date]'
       select 31, from: 'card[month_date]'
       click_button 'クレジットカード登録'
@@ -377,7 +377,7 @@ RSpec.feature 'UserFlow', type: :feature do
     scenario 'edit card' do
       visit cards_path
       click_link '編集', href: edit_card_path(@user.cards.order(:id).first.id)
-      select @user.accounts.order(:id).second.name, from: 'card[account]'
+      select @user.accounts.order(:id).second.name, from: 'card[account_id]'
       select 25, from: 'card[pay_date]'
       click_button 'クレジットカード登録'
       sleep 0.5

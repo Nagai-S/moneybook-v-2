@@ -36,6 +36,19 @@ class FundUser < ApplicationRecord
     }
   )
 
+  def after_save_action(total_buy_value)
+    if total_buy_value.to_i != 0
+      fund_user_histories.create(
+        value: total_buy_value,
+        date: Date.today,
+        commission: 0,
+        buy_or_sell: true,
+        pon: true
+      )
+    end
+    fund.set_now_value_of_fund if fund.update_on != Date.today
+  end
+
   def total_buy_value
     return fund_user_histories.where(buy_or_sell: true).sum(:value)
   end

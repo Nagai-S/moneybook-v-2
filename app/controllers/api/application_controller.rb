@@ -3,7 +3,7 @@ class Api::ApplicationController < ActionController::API
 
   def currentUser
     uid = request.headers[:uid]
-    return User.find_by(uid: uid)
+    @user = User.find_by(uid: uid)
   end
 
   def auth_user

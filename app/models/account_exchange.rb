@@ -56,6 +56,8 @@ class AccountExchange < ApplicationRecord
             }
   
   validate :same_user
+
+  after_save { self.after_change_action }
   
   def source_name
     if card

@@ -8,15 +8,15 @@ module MyFunction
           pay_date.month,
           card.pay_date
         ) : decide_pay_day
-        update(pay_date: pay_day)
+        update_columns(pay_date: pay_day)
         change_pon
       else
-        update(pay_date: nil, pon: true)
+        update_columns(pay_date: nil, pon: true)
       end
     end
 
     def change_pon
-      pay_date <= Date.today ? update(pon: true) : update(pon: false)
+      pay_date <= Date.today ? update_columns(pon: true) : update_columns(pon: false)
     end
 
     def decide_pay_day

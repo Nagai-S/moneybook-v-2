@@ -14,7 +14,6 @@ class CardsController < ApplicationController
 
   def create
     @card = current_user.cards.build(cards_params)
-    @card.account_id = params[:card][:account]
     if @card.save
       redirect_to_previou_url
     else
@@ -24,22 +23,12 @@ class CardsController < ApplicationController
   end
 
   def destroy
-    if @card.events.exists?(pon: false) ||
-         @card.account_exchanges.exists?(pon: false) ||
-         @card.fund_user_histories.exists?(pon: false)
-      index
-      flash.now[:danger] =
-        'このカードを使用した未引き落としのものが存在するため削除できません。'
-      render 'index'
+    index
+    if @card.destroy
+      redirect_to cards_path
     else
-      @card.before_destroy_action
-      if @card.destroy
-        redirect_to cards_path
-      else
-        flash.now[:danger] =
-          'エラーが発生しました。ブラウザをリロードしてやり直してください'
-        redirect_to cards_path
-      end
+      flash.now[:danger] = 'このカードを使用した未引き落としのものが存在するため削除できません。'
+      render 'index'
     end
   end
 
@@ -61,9 +50,7 @@ class CardsController < ApplicationController
   def edit; end
 
   def update
-    @card.account_id = params[:card][:account]
     if @card.update(cards_params)
-      @card.after_update_action
       redirect_to_previou_url
     else
       flash.now[:danger] = 'クレジットカードの編集に失敗しました。'
@@ -74,7 +61,7 @@ class CardsController < ApplicationController
   private
 
   def cards_params
-    params.require(:card).permit(:name, :pay_date, :month_date)
+    params.require(:card).permit(:name, :pay_date, :month_date, :account_id)
   end
 
   def correct_user!

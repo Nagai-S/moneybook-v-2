@@ -49,6 +49,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_to_referer
+    unless Rails.env.test?
+      redirect_to request.referer
+    else
+      redirect_to root_path
+    end
+  end
+
   private
 
   def set_host

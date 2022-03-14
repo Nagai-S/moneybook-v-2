@@ -57,6 +57,8 @@ class FundUserHistory < ApplicationRecord
             }
             
   validate :same_user
+
+  after_save { self.after_change_action }
             
   def buy_or_sell_name
     return buy_or_sell ? '購入' : '売却'

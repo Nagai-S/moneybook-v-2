@@ -41,7 +41,6 @@ class EventsController < ApplicationController
   def create
     @event = current_user.events.build(events_params)
     if @event.save
-      @event.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = 'イベントの作成に失敗しました。'
@@ -50,28 +49,14 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    if @event.destroy
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    else
-      flash.now[:danger] =
-        'エラーが発生しました。ブラウザをリロードしてやり直してください'
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    end
+    @event.destroy
+    redirect_to_referer
   end
 
   def edit; end
 
   def update
     if @event.update(events_params)
-      @event.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = 'イベントの編集に失敗しました。'

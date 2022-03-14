@@ -54,6 +54,20 @@ class Card < ApplicationRecord
             }
   validate :pay_not_equal_to_month, :card_name_not_account_name, :same_user
 
+  before_destroy do
+    if events.exists?(pon: false) ||
+      account_exchanges.exists?(pon: false) ||
+      fund_user_histories.exists?(pon: false)
+      throw :abort
+    else
+      before_destroy_action
+    end
+  end
+
+  after_update do
+    after_update_action
+  end
+
   def before_destroy_action
     events.each { |event| event.update(card_id: nil) }
     account_exchanges.each { |ax| ax.update(card_id: nil) }
@@ -66,24 +80,28 @@ class Card < ApplicationRecord
     events
       .includes(:card, :account)
       .each do |event|
-        event.update(pay_date: event.decide_pay_day)
-        event.change_pon
-        event.update(account_id: account_id) unless event.pon
+        unless event.pon
+          event.update_columns(pay_date: event.decide_pay_day)
+          event.change_pon
+          event.update_columns(account_id: account_id)
+        end
       end
     account_exchanges
       .includes(:card, :account)
       .each do |ax|
-        ax.update(pay_date: ax.decide_pay_day)
-        ax.change_pon
-        ax.update(source_id: account_id) unless ax.pon
+        unless ax.pon
+          ax.update_columns(pay_date: ax.decide_pay_day)
+          ax.change_pon
+          ax.update_columns(source_id: account_id)
+        end
       end
     fund_user_histories
       .includes(:card, :account)
       .each do |fund_user_history|
-        fund_user_history.update(pay_date: fund_user_history.decide_pay_day)
-        fund_user_history.change_pon
         unless fund_user_history.pon
-          fund_user_history.update(account_id: account_id)
+          fund_user_history.update_columns(pay_date: fund_user_history.decide_pay_day)
+          fund_user_history.change_pon
+          fund_user_history.update_columns(account_id: account_id)
         end
       end
   end

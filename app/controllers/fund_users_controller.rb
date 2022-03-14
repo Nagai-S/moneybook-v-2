@@ -20,16 +20,7 @@ class FundUsersController < ApplicationController
     @fund_user = current_user.fund_users.build(fund_user_params)
     total_buy_value = params[:fund_user][:total_buy_value]
     if @fund_user.save
-      if total_buy_value.to_i != 0
-        @fund_user.fund_user_histories.create(
-          value: total_buy_value,
-          date: Date.today,
-          commission: 0,
-          buy_or_sell: true,
-          pon: true
-        )
-      end
-      @fund.set_now_value_of_fund if @fund.update_on != Date.today
+      @fund_user.after_save_action total_buy_value
       redirect_to fund_users_path
     else
       flash.now[:danger] = '投資信託の登録に失敗しました。'
@@ -38,21 +29,8 @@ class FundUsersController < ApplicationController
   end
 
   def destroy
-    if @fund_user.destroy
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    else
-      flash.now[:danger] =
-        'エラーが発生しました。ブラウザをリロードしてやり直してください'
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    end
+    @fund_user.destroy
+    redirect_to_referer
   end
 
   def update

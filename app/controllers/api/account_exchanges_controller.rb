@@ -3,17 +3,14 @@ class Api::AccountExchangesController < Api::ApplicationController
   before_action :currentUser
 
   def index
-    user = currentUser
-    axs = user.account_exchanges
+    axs = @user.account_exchanges
     render json: { axs: axs }
   end
 
   def create
-    user = currentUser
-    @ax = user.account_exchanges.build(ax_params)
+    @ax = @user.account_exchanges.build(ax_params)
 
     if @ax.save
-      @ax.after_change_action
       render json: { message: 'success' }
     else
       render json: { message: 'error', errors: @ax.errors }, status: 404

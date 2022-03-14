@@ -47,12 +47,8 @@ class ShortcutsController < ApplicationController
   end
   
   def destroy
-    if @shortcut.destroy
-      redirect_to shortcuts_path
-    else
-      flash.now[:danger] = 'エラーが発生しました。ページをリロードしてください。'
-      redirect_to shortcuts_path
-    end
+    @shortcut.destroy
+    redirect_to_referer
   end
   
   def run

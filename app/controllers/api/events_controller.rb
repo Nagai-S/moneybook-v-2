@@ -3,17 +3,14 @@ class Api::EventsController < Api::ApplicationController
   before_action :currentUser
 
   def index
-    user = currentUser
-    events = user.events
+    events = @user.events
     render json: { events: events }
   end
 
   def create
-    user = currentUser
-    @event = user.events.build(events_params)
+    @event = @user.events.build(events_params)
 
     if @event.save
-      @event.after_change_action
       render json: { message: 'success' }
     else
       render json: { message: 'error', errors: @event.errors }, status: 404

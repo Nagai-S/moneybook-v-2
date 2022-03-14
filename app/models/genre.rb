@@ -32,6 +32,10 @@ class Genre < ApplicationRecord
               case_sensitive: false
             }
 
+  before_destroy do
+    before_destroy_action
+  end
+
   def before_destroy_action
     events.each { |event| event.update(genre_id: nil) }
   end

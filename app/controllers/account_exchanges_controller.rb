@@ -20,7 +20,6 @@ class AccountExchangesController < ApplicationController
     @ax = current_user.account_exchanges.build(ax_params)
 
     if @ax.save
-      @ax.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = '振替の作成に失敗しました。'
@@ -30,28 +29,13 @@ class AccountExchangesController < ApplicationController
 
   def destroy
     @ax.destroy
-    if @ax.destroy
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    else
-      flash.now[:danger] =
-        'エラーが発生しました。ブラウザをリロードしてやり直してください'
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    end
+    redirect_to_referer
   end
 
   def edit; end
 
   def update
     if @ax.update(ax_params)
-      @ax.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = '振替の編集に失敗しました。'

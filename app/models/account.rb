@@ -49,6 +49,23 @@ class Account < ApplicationRecord
                 message: 'は整数で入力してください。'
               }
             }
+  
+  before_destroy do
+    if cards.exists?
+      throw :abort
+    else
+      before_destroy_action
+    end
+  end
+
+  def before_destroy_action
+    events.each { |event| event.update(account_id: nil) }
+    account_exchanges_to.each { |ax| ax.update(to_id: nil) }
+    account_exchanges_source.each { |ax| ax.update(source_id: nil) }
+    fund_user_histories.each do |fund_user_history|
+      fund_user_history.update(account_id: nil)
+    end
+  end
 
   def after_pay_value
     event_in_sum = events.where(iae: true).sum(:value)
@@ -62,20 +79,16 @@ class Account < ApplicationRecord
     fund_user_history_sell_commission_sum =
       fund_user_histories.where(buy_or_sell: false).sum(:commission)
 
-    return(
-      value + event_in_sum - event_ex_sum + ax_to_sum - ax_source_sum +
-        fund_user_history_sell_sum - fund_user_history_buy_sum -
-        fund_user_history_sell_commission_sum
-    )
-  end
-
-  def before_destroy_action
-    events.each { |event| event.update(account_id: nil) }
-    account_exchanges_to.each { |ax| ax.update(to_id: nil) }
-    account_exchanges_source.each { |ax| ax.update(source_id: nil) }
-    fund_user_histories.each do |fund_user_history|
-      fund_user_history.update(account_id: nil)
-    end
+    return [
+      value,
+      event_in_sum,
+      event_ex_sum * (-1),
+      ax_to_sum,
+      ax_source_sum * (-1),
+      fund_user_history_sell_sum,
+      fund_user_history_buy_sum * (-1),
+      fund_user_history_sell_commission_sum * (-1),
+    ].sum
   end
 
   def now_value
@@ -90,10 +103,15 @@ class Account < ApplicationRecord
     fund_user_history_sell_commission_sum =
       fund_user_histories.where(pon: true, buy_or_sell: false).sum(:commission)
 
-    return(
-      value + event_in_sum - event_ex_sum + ax_to_sum - ax_source_sum +
-        fund_user_history_sell_sum - fund_user_history_buy_sum -
-        fund_user_history_sell_commission_sum
-    )
+    return [
+      value,
+      event_in_sum,
+      event_ex_sum * (-1),
+      ax_to_sum,
+      ax_source_sum * (-1),
+      fund_user_history_sell_sum,
+      fund_user_history_buy_sum * (-1),
+      fund_user_history_sell_commission_sum * (-1),
+    ].sum
   end
 end

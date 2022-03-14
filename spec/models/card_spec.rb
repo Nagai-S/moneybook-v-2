@@ -222,7 +222,7 @@ RSpec.describe Card do
       expect(Event.find(@event2.id).pay_date).to eq Date
            .today
            .prev_month
-           .change(day: 1)
+           .change(day: 27)
       expect(Event.find(@event2.id).account_id).to eq @account1.id
       expect(AccountExchange.find(@ax1.id).pay_date).to eq Date.new(
            Date.today.year,
@@ -230,11 +230,11 @@ RSpec.describe Card do
            1
          )
       expect(AccountExchange.find(@ax1.id).pon).to eq true
-      expect(AccountExchange.find(@ax1.id).source_id).to eq @account1.id
+      expect(AccountExchange.find(@ax1.id).source_id).to eq @account2.id
       expect(AccountExchange.find(@ax2.id).pay_date).to eq Date
            .today
            .prev_month
-           .change(day: 1)
+           .change(day: 27)
       expect(AccountExchange.find(@ax2.id).source_id).to eq @account1.id
       expect(FundUserHistory.find(@fund_user_history1.id).pay_date).to eq Date
            .today
@@ -246,7 +246,7 @@ RSpec.describe Card do
       expect(FundUserHistory.find(@fund_user_history2.id).pay_date).to eq Date
            .today
            .prev_month(2)
-           .change(day: 1)
+           .change(day: 27)
       expect(
         FundUserHistory.find(@fund_user_history2.id).account_id
       ).to eq @account1.id

@@ -62,19 +62,11 @@ class AccountsController < ApplicationController
 
   def destroy
     index
-    if @account.cards.exists?
-      flash.now[:danger] =
-        'このアカウントに連携したクレジットカードが存在するため削除できません'
-      render 'index'
+    if @account.destroy
+      redirect_to accounts_path
     else
-      @account.before_destroy_action
-      if @account.destroy
-        redirect_to accounts_path
-      else
-        flash.now[:danger] =
-          'エラーが発生しました。ブラウザをリロードしてやり直してください'
-        redirect_to accounts_path
-      end
+      flash.now[:danger] = 'このアカウントに連携したクレジットカードが存在するため削除できません。'
+      render 'index'
     end
   end
 

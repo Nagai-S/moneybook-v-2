@@ -16,9 +16,7 @@ class FundUserHistoriesController < ApplicationController
   def create
     @fund_user_history =
       @fund_user.fund_user_histories.build(fund_user_histories_params)
-      
     if @fund_user_history.save
-      @fund_user_history.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] =
@@ -28,28 +26,14 @@ class FundUserHistoriesController < ApplicationController
   end
 
   def destroy
-    if @fund_user_history.destroy
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    else
-      flash.now[:danger] =
-        'エラーが発生しました。ブラウザをリロードしてやり直してください'
-      unless Rails.env.test?
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
-    end
+    @fund_user_history.destroy
+    redirect_to_referer
   end
 
   def edit; end
 
   def update
     if @fund_user_history.update(fund_user_histories_params)
-      @fund_user_history.after_change_action
       redirect_to_previou_url
     else
       flash.now[:danger] = '編集に失敗しました。'
