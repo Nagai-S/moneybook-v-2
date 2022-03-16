@@ -660,13 +660,22 @@ form .btn {
   align-items: center;
   justify-content: space-between;
   border: solid 1px #3e3e3e;
-  width: 50%;
+  width: 100%;
+  flex-wrap: wrap;
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 25%;
-  margin-right: 25%;
   padding: 10px;
+}
+
+.sc_code {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.code_result {
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .add_sc {

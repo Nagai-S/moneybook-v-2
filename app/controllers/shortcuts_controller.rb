@@ -8,7 +8,7 @@ class ShortcutsController < ApplicationController
   end
   
   def show
-    @token = params[:token]
+    @token = nil
   end
   
   def new
@@ -24,7 +24,7 @@ class ShortcutsController < ApplicationController
     end
     @token = @shortcut.create_token
     if @shortcut.save
-      redirect_to shortcut_path(id: @shortcut.id, token: @token)
+      render 'show'
     else
       flash.now[:danger] = "ショートカットの作成に失敗しました。"
       render 'new'
@@ -39,7 +39,7 @@ class ShortcutsController < ApplicationController
     end
     @token = @shortcut.create_token
     if @shortcut.save
-      redirect_to shortcut_path(id: @shortcut.id, token: @token)
+      render 'show'
     else
       flash.now[:danger] = "エラーが発生しました。"
       render 'show'

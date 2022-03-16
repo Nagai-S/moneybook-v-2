@@ -32,7 +32,10 @@
   <p class="status_message">こちらに表示されている文字列をコピーしてください。</p> 
   <div class="status_message sc_message"> 
     <p class="sc_code"> 
-      {"access-token":"<%= @token %>","shortcut_id":<%= @shortcut.id %>}
+      {<br/>
+        "access-token":"<%= @token %>",<br/>
+        "shortcut_id":<%= @shortcut.id %><br/>
+      }
     </p>
     <div class="code_result">
       <Button class="btn btn-primary code_copy">コピー</Button>
