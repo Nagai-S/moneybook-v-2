@@ -15,11 +15,11 @@ $(function () {
         $(".status_message").remove();
         if (data.status === "success") {
           $(".account_update_form").append(
-            '<p class="status_message loss_value">更新しました。</p>'
+            '<p class="status_message gain_value">更新しました。</p>'
           );
         } else if (data.status === "error") {
           $(".account_update_form").append(
-            '<p class="status_message gain_value">更新に失敗しました。</p>'
+            '<p class="status_message loss_value">更新に失敗しました。</p>'
           );
         }
       })
