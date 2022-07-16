@@ -23,6 +23,7 @@ class Fund < ApplicationRecord
     id = string_id
     url =
     'https://www.rakuten-sec.co.jp/web/fund/detail/?ID=' + id
+    charset = ''
     html =
       URI.open(url) do |page|
         charset = page.charset
