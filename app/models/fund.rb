@@ -22,8 +22,7 @@ class Fund < ApplicationRecord
   def set_now_value_of_fund
     id = string_id
     url =
-      'https://www.rakuten-sec.co.jp/web/fund/rakuten-bank/detail.html?ID=' + id
-    charset = nil
+    'https://www.rakuten-sec.co.jp/web/fund/detail/?ID=' + id
     html =
       URI.open(url) do |page|
         charset = page.charset
