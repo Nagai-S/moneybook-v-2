@@ -1,53 +1,53 @@
-def get_all_axs
+def get_all_axs(auth_info)
   uri2 =
     URI.parse(
       'https://moneybook-moneybook.herokuapp.com/api/v1/account_exchanges'
     )
   headers = {
     'Content-Type' => 'application/json',
-    'access-token' => ENV['PRODUCTION_ACCESS_TOKEN'],
-    'client' => ENV['PRODUCTION_CLIENT'],
-    'uid' => ENV['PRODUCTION_UID']
+    'access-token' => auth_info['access_token'],
+    'client' => auth_info['client'],
+    'uid' => auth_info['uid']
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return JSON.parse(response.body)['axs']
+  return {body: JSON.parse(response.body)['axs'], auth_info: get_auth_info(response)}
 end
 
-def get_all_events
+def get_all_events(auth_info)
   uri2 = URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/events')
   headers = {
     'Content-Type' => 'application/json',
-    'access-token' => ENV['PRODUCTION_ACCESS_TOKEN'],
-    'client' => ENV['PRODUCTION_CLIENT'],
-    'uid' => ENV['PRODUCTION_UID']
+    'access-token' => auth_info['access_token'],
+    'client' => auth_info['client'],
+    'uid' => auth_info['uid']
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return JSON.parse(response.body)['events']
+  return {body: JSON.parse(response.body)['events'], auth_info: get_auth_info(response)}
 end
 
-def get_all_fund_users
+def get_all_fund_users(auth_info)
   uri2 =
     URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/fund_users')
   headers = {
     'Content-Type' => 'application/json',
-    'access-token' => ENV['PRODUCTION_ACCESS_TOKEN'],
-    'client' => ENV['PRODUCTION_CLIENT'],
-    'uid' => ENV['PRODUCTION_UID']
+    'access-token' => auth_info['access_token'],
+    'client' => auth_info['client'],
+    'uid' => auth_info['uid']
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return JSON.parse(response.body)['fund_users']
+  return {body: JSON.parse(response.body)['fund_users'], auth_info: get_auth_info(response)}
 end
 
-def get_all_fuh(fund_user_id)
+def get_all_fuh(fund_user_id,auth_info)
   uri2 =
     URI.parse(
       'https://moneybook-moneybook.herokuapp.com/api/v1/fund_users/' +
@@ -55,29 +55,29 @@ def get_all_fuh(fund_user_id)
     )
   headers = {
     'Content-Type' => 'application/json',
-    'access-token' => ENV['PRODUCTION_ACCESS_TOKEN'],
-    'client' => ENV['PRODUCTION_CLIENT'],
-    'uid' => ENV['PRODUCTION_UID']
+    'access-token' => auth_info['access_token'],
+    'client' => auth_info['client'],
+    'uid' => auth_info['uid']
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return JSON.parse(response.body)['fund_user_histories']
+  return {body: JSON.parse(response.body)['fund_user_histories'],auth_info: get_auth_info(response)}
 end
 
-def get_all_funds
+def get_all_funds(auth_info)
   uri2 =
     URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/funds/index')
   headers = {
     'Content-Type' => 'application/json',
-    'access-token' => ENV['PRODUCTION_ACCESS_TOKEN'],
-    'client' => ENV['PRODUCTION_CLIENT'],
-    'uid' => ENV['PRODUCTION_UID']
+    'access-token' => auth_info['access_token'],
+    'client' => auth_info['client'],
+    'uid' => auth_info['uid']
   }
   http = Net::HTTP.new(uri2.host, uri2.port)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return JSON.parse(response.body)['funds']
+  return {body: JSON.parse(response.body)['funds'], auth_info: get_auth_info(response)}
 end

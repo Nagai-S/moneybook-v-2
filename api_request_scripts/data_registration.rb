@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 require 'dotenv/load'
 require './api_request_scripts/get_real_data'
+require './api_request_scripts/login'
 
 def create_data(params)
   uri = URI.parse('http://localhost:8080/api/v1/initial_register_db')
@@ -17,8 +18,10 @@ def create_data(params)
   p response.body
 end
 
-def all_axs_create
-  all_axs = get_all_axs
+def all_axs_create(auth_info)
+  info = get_all_axs(auth_info)
+  new_auth_info = info[:auth_info]
+  all_axs = info[:body]
 
   all_axs.each do |data|
     params = {
@@ -41,10 +44,14 @@ def all_axs_create
 
     create_data(params)
   end
+
+  return new_auth_info
 end
 
-def all_events_create
-  all_events = get_all_events
+def all_events_create(auth_info)
+  info = get_all_events(auth_info)
+  new_auth_info = info[:auth_info]
+  all_events = info[:body]
 
   all_events.each do |data|
     params = {
@@ -69,10 +76,15 @@ def all_events_create
 
     create_data(params)
   end
+  
+  return new_auth_info
 end
 
-def all_fuh_create
-  all_fund_users = get_all_fund_users
+def all_fuh_create(auth_info)
+  info = get_all_fund_users(auth_info)
+
+  new_auth_info = info[:auth_info]
+  all_fund_users = info[:body]
 
   all_fund_users.each do |data|
     params = {
@@ -108,14 +120,21 @@ def all_fuh_create
     params['fuh'] = fuh_array
     create_data(params)
   end
+
+  return new_auth_info
 end
 
-def all_funds_create
-  all_funds = get_all_funds
+def all_funds_create(auth_info)
+  info = get_all_funds(auth_info)
+
+  new_auth_info = info[:auth_info]
+  all_funds = info[:body]
 
   all_funds.each do |fund|
     register_funds(fund['id'], fund['name'], fund['value'], fund['string_id'])
   end
+
+  return new_auth_info
 end
 
 def register_funds(id, name, value, string_id)
@@ -135,7 +154,8 @@ def register_funds(id, name, value, string_id)
   p JSON.parse(response.body)
 end
 
-all_events_create
-all_axs_create
-all_funds_create
-all_fuh_create
+auth_info = login
+auth_info = all_events_create(auth_info)
+auth_info = all_axs_create(auth_info)
+auth_info = all_funds_create(auth_info)
+auth_info = all_fuh_create(auth_info)

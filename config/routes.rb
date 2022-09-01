@@ -90,8 +90,8 @@
 #                             shortcuts GET    /shortcuts(.:format)                                                                     shortcuts#index
 #                                       POST   /shortcuts(.:format)                                                                     shortcuts#create
 #                          new_shortcut GET    /shortcuts/new(.:format)                                                                 shortcuts#new
-#                         edit_shortcut GET    /shortcuts/:id/edit(.:format)                                                            shortcuts#edit
-#                              shortcut PATCH  /shortcuts/:id(.:format)                                                                 shortcuts#update
+#                              shortcut GET    /shortcuts/:id(.:format)                                                                 shortcuts#show
+#                                       PATCH  /shortcuts/:id(.:format)                                                                 shortcuts#update
 #                                       PUT    /shortcuts/:id(.:format)                                                                 shortcuts#update
 #                                       DELETE /shortcuts/:id(.:format)                                                                 shortcuts#destroy
 #         fund_user_fund_user_histories GET    /fund_users/:fund_user_id/fund_user_histories(.:format)                                  fund_user_histories#index
@@ -111,6 +111,7 @@
 #                         account_month GET    /account_month(.:format)                                                                 accounts#month_index
 #                           explanation GET    /explanation(.:format)                                                                   homepages#explanation
 #                         events_search GET    /events/search(.:format)                                                                 events#search
+#                         shortcuts_run POST   /shortcuts/run(.:format)                                                                 shortcuts#run
 #                               sitemap GET    /sitemap(.:format)                                                                       redirect(301, https://s3-ap-northeast-1.amazonaws.com/my-sitemap/sitemap.xml.gz)
 #                                  root GET    /                                                                                        homepages#home
 #         rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
