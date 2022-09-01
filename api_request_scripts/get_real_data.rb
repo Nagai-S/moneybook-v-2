@@ -13,7 +13,9 @@ def get_all_axs(auth_info)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return {body: JSON.parse(response.body)['axs'], auth_info: get_auth_info(response)}
+  new_auth_info = response['access-token']!='' ? get_auth_info(response) : auth_info
+
+  return {body: JSON.parse(response.body)['axs'], auth_info: new_auth_info}
 end
 
 def get_all_events(auth_info)
@@ -28,7 +30,9 @@ def get_all_events(auth_info)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return {body: JSON.parse(response.body)['events'], auth_info: get_auth_info(response)}
+  new_auth_info = response['access-token']!='' ? get_auth_info(response) : auth_info
+
+  return {body: JSON.parse(response.body)['events'], auth_info: new_auth_info}
 end
 
 def get_all_fund_users(auth_info)
@@ -44,7 +48,9 @@ def get_all_fund_users(auth_info)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return {body: JSON.parse(response.body)['fund_users'], auth_info: get_auth_info(response)}
+  new_auth_info = response['access-token']!='' ? get_auth_info(response) : auth_info
+
+  return {body: JSON.parse(response.body)['fund_users'], auth_info: new_auth_info}
 end
 
 def get_all_fuh(fund_user_id,auth_info)
@@ -63,7 +69,9 @@ def get_all_fuh(fund_user_id,auth_info)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return {body: JSON.parse(response.body)['fund_user_histories'],auth_info: get_auth_info(response)}
+  new_auth_info = response['access-token']!='' ? get_auth_info(response) : auth_info
+
+  return {body: JSON.parse(response.body)['fund_user_histories'],auth_info: new_auth_info}
 end
 
 def get_all_funds(auth_info)
@@ -79,5 +87,7 @@ def get_all_funds(auth_info)
   http.use_ssl = uri2.scheme === 'https'
   response = http.get(uri2.path, headers)
 
-  return {body: JSON.parse(response.body)['funds'], auth_info: get_auth_info(response)}
+  new_auth_info = response['access-token']!='' ? get_auth_info(response) : auth_info
+
+  return {body: JSON.parse(response.body)['funds'], auth_info: new_auth_info}
 end

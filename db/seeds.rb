@@ -39,15 +39,17 @@ user.accounts.create(
     { id: 5, name: '現金', value: 54_835 },
     { id: 6, name: 'PayPay', value: 216 },
     { id: 12, name: 'メルペイ', value: 0 },
-    { id: 16, name: '楽天Pay', value: 0 }
+    { id: 16, name: '楽天Pay', value: 0 },
+    { id: 18, name: 'スタバカード', value: 0 },
+    { id: 19, name: '学生証', value: 102 },
   ]
 )
 
 user.cards.create(
   [
     { name: 'YahooCard', account_id: 13, pay_date: 27, month_date: 31 },
-    { name: 'RakutenCard', account_id: 13, pay_date: 27, month_date: 31 },
-    { id: 9, name: 'RakutenCard2', account_id: 13, pay_date: 27, month_date: 31 },
+    { name: 'RakutenCardJCB', account_id: 13, pay_date: 27, month_date: 31 },
+    { id: 9, name: 'RakutenCardVISA', account_id: 13, pay_date: 27, month_date: 31 },
     {
       id: 7,
       name: 'メルペイMasterCard',

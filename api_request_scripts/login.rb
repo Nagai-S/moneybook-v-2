@@ -14,7 +14,7 @@ def login
   }
   response = http.post(uri.path, params.to_json, headers)
 
-  puts response.to_hash
+  # puts response.to_hash
 
   return get_auth_info(response)
 end

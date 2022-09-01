@@ -94,7 +94,9 @@ def all_fuh_create(auth_info)
     }
 
     fuh_array = []
-    all_fuh = get_all_fuh(data['id'])
+    info = get_all_fuh(data['id'],new_auth_info)
+    all_fuh = info[:body]
+    new_auth_info = info[:auth_info]
     all_fuh.each do |fuh|
       fuh_params = {
         'buy_or_sell' => fuh['buy_or_sell'],
