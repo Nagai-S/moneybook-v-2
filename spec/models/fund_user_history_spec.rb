@@ -7,7 +7,6 @@
 #  commission   :integer
 #  date         :date
 #  pay_date     :date
-#  pon          :boolean          default(FALSE)
 #  value        :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -77,7 +76,6 @@ RSpec.describe FundUserHistory do
         fuh.after_change_action
         expect(fuh.account_id).to eq @account1.id
         expect(fuh.card_id).to eq nil
-        expect(fuh.pon).to eq true
         expect(fuh.pay_date).to eq nil
       end
 
@@ -94,7 +92,6 @@ RSpec.describe FundUserHistory do
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
         expect(fuh.account_id).to eq @card1.account_id
-        expect(fuh.pon).to eq false
         expect(fuh.pay_date).to eq fuh.decide_pay_day
       end
 
@@ -111,7 +108,6 @@ RSpec.describe FundUserHistory do
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
         expect(fuh.account_id).to eq @card1.account_id
-        expect(fuh.pon).to eq true
         expect(fuh.pay_date).to eq fuh.decide_pay_day
       end
 
@@ -129,7 +125,6 @@ RSpec.describe FundUserHistory do
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
         expect(fuh.account_id).to eq @card1.account_id
-        expect(fuh.pon).to eq true
         expect(fuh.pay_date).to eq Date.today.prev_month.change(
              day: @card1.pay_date
            )
@@ -149,7 +144,6 @@ RSpec.describe FundUserHistory do
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
         expect(fuh.account_id).to eq @card1.account_id
-        expect(fuh.pon).to eq false
         expect(fuh.pay_date).to eq Date.today.next_month.change(
              day: @card1.pay_date
            )

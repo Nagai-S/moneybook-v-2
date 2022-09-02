@@ -42,8 +42,7 @@ class FundUser < ApplicationRecord
         value: total_buy_value,
         date: Date.today,
         commission: 0,
-        buy_or_sell: true,
-        pon: true
+        buy_or_sell: true,        
       )
     end
     fund.set_now_value_of_fund if fund.update_on != Date.today

@@ -85,7 +85,6 @@ RSpec.describe Card do
         card_id: @card.id,
         to_id: @account2.id,
         value: 300,
-        pon: false,
         pay_date: Date.new(Date.today.year, Date.today.month, 27)
       )
     @ax2 =
@@ -229,7 +228,6 @@ RSpec.describe Card do
            Date.today.month,
            1
          )
-      expect(AccountExchange.find(@ax1.id).pon).to eq true
       expect(AccountExchange.find(@ax1.id).source_id).to eq @account2.id
       expect(AccountExchange.find(@ax2.id).pay_date).to eq Date
            .today

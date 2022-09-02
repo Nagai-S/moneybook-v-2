@@ -55,7 +55,6 @@ class Api::AuthController < Api::ApplicationController
           account_id: params[:account_id],
           card_id: params[:card_id],
           genre_id: params[:genre_id],
-          pon: params[:pon]
         )
       if params['pay_date(1i)']
         event.update(
@@ -81,7 +80,6 @@ class Api::AuthController < Api::ApplicationController
           source_id: params[:source_id],
           card_id: params[:card_id],
           to_id: params[:to_id],
-          pon: params[:pon]
         )
       if params['pay_date(1i)']
         ax.update(
@@ -112,7 +110,6 @@ class Api::AuthController < Api::ApplicationController
             buy_or_sell: fuh['buy_or_sell'],
             commission: fuh['commission'],
             value: fuh['value'],
-            pon: fuh['pon'],
             account_id: fuh['account_id'],
             card_id: fuh['card_id']
           )

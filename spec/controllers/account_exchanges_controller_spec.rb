@@ -79,7 +79,6 @@ RSpec.describe AccountExchangesController do
           card_id: nil,
           date: Date.today.prev_year(1),
           to_id: @account2.id,
-          pon: true
         )
       expect { delete :destroy, params: { id: ax.id } }.to change {
         AccountExchange.all.length
@@ -110,7 +109,6 @@ RSpec.describe AccountExchangesController do
             card_id: nil,
             date: Date.today,
             to_id: @account2.id,
-            pon: true
           )
         params[:id] = ax.id
         params[:account_exchange][:value] = ''
@@ -130,7 +128,6 @@ RSpec.describe AccountExchangesController do
             card_id: nil,
             date: Date.today,
             to_id: @account2.id,
-            pon: true
           )
         params[:id] = ax.id
         params[:account_exchange][:value] = '100'

@@ -68,14 +68,14 @@ class Account < ApplicationRecord
   end
 
   def after_pay_value
-    event_in_sum = events.where(iae: true).sum(:value)
-    event_ex_sum = events.where(iae: false).sum(:value)
-    ax_source_sum = account_exchanges_source.sum(:value)
-    ax_to_sum = account_exchanges_to.sum(:value)
+    event_in_sum = events.where(iae: true).sum(&:value)
+    event_ex_sum = events.where(iae: false).sum(&:value)
+    ax_source_sum = account_exchanges_source.sum(&:value)
+    ax_to_sum = account_exchanges_to.sum(&:value)
     fund_user_history_buy_sum =
-      fund_user_histories.where(buy_or_sell: true).sum(:value)
+      fund_user_histories.where(buy_or_sell: true).sum(&:value)
     fund_user_history_sell_sum =
-      fund_user_histories.where(buy_or_sell: false).sum(:value)
+      fund_user_histories.where(buy_or_sell: false).sum(&:value)
     fund_user_history_sell_commission_sum =
       fund_user_histories.where(buy_or_sell: false).sum(:commission)
 
@@ -92,16 +92,16 @@ class Account < ApplicationRecord
   end
 
   def now_value
-    event_in_sum = events.where(pon: true, iae: true).sum(:value)
-    event_ex_sum = events.where(pon: true, iae: false).sum(:value)
-    ax_source_sum = account_exchanges_source.where(pon: true).sum(:value)
-    ax_to_sum = account_exchanges_to.sum(:value)
+    event_in_sum = events.where(iae: true).select(&:payed?).sum(&:value)
+    event_ex_sum = events.where(iae: false).select(&:payed?).sum(&:value)
+    ax_source_sum = account_exchanges_source.select(&:payed?).sum(&:value)
+    ax_to_sum = account_exchanges_to.sum(&:value)
     fund_user_history_buy_sum =
-      fund_user_histories.where(pon: true, buy_or_sell: true).sum(:value)
+      fund_user_histories.where(buy_or_sell: true).select(&:payed?).sum(&:value)
     fund_user_history_sell_sum =
-      fund_user_histories.where(pon: true, buy_or_sell: false).sum(:value)
+      fund_user_histories.where(buy_or_sell: false).select(&:payed?).sum(&:value)
     fund_user_history_sell_commission_sum =
-      fund_user_histories.where(pon: true, buy_or_sell: false).sum(:commission)
+      fund_user_histories.where(buy_or_sell: false).select(&:payed?).sum(&:commission)
 
     return [
       value,

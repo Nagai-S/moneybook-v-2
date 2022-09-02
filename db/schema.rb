@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_04_160812) do
+ActiveRecord::Schema.define(version: 2022_09_02_014942) do
 
   create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.date "date"
     t.integer "value"
-    t.boolean "pon"
     t.date "pay_date"
     t.bigint "card_id"
     t.bigint "source_id"
@@ -56,7 +55,6 @@ ActiveRecord::Schema.define(version: 2022_03_04_160812) do
     t.string "memo"
     t.integer "value"
     t.boolean "iae", default: false
-    t.boolean "pon", default: false
     t.bigint "user_id", null: false
     t.bigint "genre_id"
     t.bigint "account_id"
@@ -80,7 +78,6 @@ ActiveRecord::Schema.define(version: 2022_03_04_160812) do
     t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "pon", default: false
     t.index ["account_id"], name: "index_fund_user_histories_on_account_id"
     t.index ["card_id"], name: "index_fund_user_histories_on_card_id"
     t.index ["fund_user_id"], name: "index_fund_user_histories_on_fund_user_id"

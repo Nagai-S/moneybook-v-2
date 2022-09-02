@@ -5,7 +5,6 @@
 #  id         :bigint           not null, primary key
 #  date       :date
 #  pay_date   :date
-#  pon        :boolean
 #  value      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

@@ -53,7 +53,6 @@ RSpec.describe FundUser do
         buy_or_sell: true,
         commission: 100,
         date: Date.today,
-        pon: true,
         value: 1000,
         account_id: @account.id
       )
@@ -62,7 +61,6 @@ RSpec.describe FundUser do
         buy_or_sell: false,
         commission: 100,
         date: Date.today,
-        pon: true,
         value: 300,
         account_id: @account.id
       )
@@ -71,7 +69,6 @@ RSpec.describe FundUser do
         buy_or_sell: true,
         commission: 100,
         date: Date.today,
-        pon: true,
         value: 1000,
         account_id: @account.id
       )
@@ -80,7 +77,6 @@ RSpec.describe FundUser do
         buy_or_sell: false,
         commission: 100,
         date: Date.today,
-        pon: true,
         value: 300,
         account_id: @account.id
       )

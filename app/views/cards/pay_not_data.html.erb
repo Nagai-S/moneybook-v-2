@@ -1,120 +1,116 @@
 <h1><%= @card.name %></h1>
 
-<% if @card.events.where(pon: false).exists? || 
-@card.account_exchanges.where(pon: false).exists? ||
-@card.fund_user_histories.where(pon: false).exists? %>
+<% if @card.events.select{ |e| !e.payed? }.any? || 
+@card.account_exchanges.select{ |e| !e.payed? }.any? ||
+@card.fund_user_histories.select{ |e| !e.payed? }.any? %>
 
-<p class="explanation"><%= @card.name %>での未引き落としのイベントは以下です</p>
+  <p class="explanation"><%= @card.name %>での未引き落としのイベントは以下です</p>
 
-<% @card.not_pay_dates.each do |date| %>
-<h2 class="credit-title">
-  引き落とし日 <%= l date %>：¥<%= @card.not_pay_value(date).to_s(:delimited) %>
-</h2>
-<div class="table_contents row">
-  <div class="table-responsive col-xs-12 col-md-6">
-    <table class="table" id="table_accounts">
-      <caption>
-        イベント
-      </caption>
-      <thead>
-        <tr>
-          <th>日付</th>
-          <th>ジャンル</th>
-          <th>メモ</th>
-          <th>金額</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
+  <% @card.not_pay_dates.each do |date| %>
+    <h2 class="credit-title">
+      引き落とし日 <%= l date %>：¥<%= @card.not_pay_value(date).to_s(:delimited) %>
+    </h2>
+    <div class="table_contents row">
+      <div class="table-responsive col-xs-12 col-md-6">
+        <table class="table" id="table_accounts">
+          <caption>
+            イベント
+          </caption>
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>ジャンル</th>
+              <th>メモ</th>
+              <th>金額</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
 
-      <% if @card.events.where(pon: false, pay_date: date).exists? %>
+          <% if @card.events.where(pay_date: date).select{ |e| !e.payed? }.any? %>
 
-      <% @card.events.where(pon: false, pay_date: date).each do |not_pay_event| %>
-      <tbody>
-        <tr>
-          <td><%= l not_pay_event.date %></td>
-          <td><%= not_pay_event.genre_name %></td>
-          <td><%= not_pay_event.memo if not_pay_event.memo %></td>
-          <td><%= not_pay_event.value_to_string %></td>
-          <td><%= link_to "削除", event_path(not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
-          <td><%= link_to "編集", edit_event_path(not_pay_event.id) %></td>
-        </tr>
-      </tbody>
-      <% end %>
+            <% @card.events.where(pay_date: date).select{ |e| !e.payed? }.each do |not_pay_event| %>
+              <tbody>
+                <tr>
+                  <td><%= l not_pay_event.date %></td>
+                  <td><%= not_pay_event.genre_name %></td>
+                  <td><%= not_pay_event.memo if not_pay_event.memo %></td>
+                  <td><%= not_pay_event.value_to_string %></td>
+                  <td><%= link_to "削除", event_path(not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= link_to "編集", edit_event_path(not_pay_event.id) %></td>
+                </tr>
+              </tbody>
+            <% end %>
 
-      <% end %>
-    </table>
-  </div>
+          <% end %>
+        </table>
+      </div>
 
-  <div class="table-responsive col-xs-12 col-md-6">
-    <table class="table" id="table_accounts">
-      <caption>
-        振替
-      </caption>
-      <thead>
-        <tr>
-          <th>日付</th>
-          <th>振替先アカウント</th>
-          <th>金額</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
+      <div class="table-responsive col-xs-12 col-md-6">
+        <table class="table" id="table_accounts">
+          <caption>
+            振替
+          </caption>
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>振替先アカウント</th>
+              <th>金額</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
 
-      <% if @card.account_exchanges.where(pon: false, pay_date: date).exists? %>
+          <% if @card.account_exchanges.where(pay_date: date).select{ |e| !e.payed? }.any? %>
 
-      <% @card.account_exchanges.where(pon: false, pay_date: date).each do |not_pay_ax| %>
+            <% @card.account_exchanges.where(pay_date: date).select{ |e| !e.payed? }.each do |not_pay_ax| %>
+              <tbody>
+                <tr>
+                  <td><%= l not_pay_ax.date %></td>
+                  <td><%= not_pay_ax.to_account_name %></td>
+                  <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
+                  <td><%= link_to "削除", account_exchange_path(not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= link_to "編集", edit_account_exchange_path(not_pay_ax.id) %></td>
+                </tr>
+              </tbody>
+            <% end %>
 
-      <tbody>
-        <tr>
-          <td><%= l not_pay_ax.date %></td>
-          <td><%= not_pay_ax.to_account_name %></td>
-          <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
-          <td><%= link_to "削除", account_exchange_path(not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
-          <td><%= link_to "編集", edit_account_exchange_path(not_pay_ax.id) %></td>
-        </tr>
-      </tbody>
-      <% end %>
+          <% end %>
+        </table>
+      </div>
 
-      <% end %>
-    </table>
-  </div>
+      <div class="table-responsive col-xs-12 col-md-10 offset-md-1">
+        <table class="table" id="table_accounts">
+          <caption>
+            投資信託購入
+          </caption>
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>投資信託名</th>
+              <th>金額</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
 
-  <div class="table-responsive col-xs-12 col-md-10 offset-md-1">
-    <table class="table" id="table_accounts">
-      <caption>
-        投資信託購入
-      </caption>
-      <thead>
-        <tr>
-          <th>日付</th>
-          <th>投資信託名</th>
-          <th>金額</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-
-      <% if @card.fund_user_histories.where(pon: false, pay_date: date).exists? %>
-
-      <% @card.fund_user_histories.where(pon: false, pay_date: date).each do |not_pay_fund| %>
-
-      <tbody>
-        <tr>
-          <td><%= l not_pay_fund.date %></td>
-          <td><%= not_pay_fund.fund_user.fund.name %></td>
-          <td>¥<%= not_pay_fund.value.to_s(:delimited) %></td>
-          <td><%= link_to "削除", fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
-          <td><%= link_to "編集", edit_fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id) %></td>
-        </tr>
-      </tbody>
-      <% end %>
-
-      <% end %>
-    </table>
-  </div>
-</div>
-<% end %>
+          <% if @card.fund_user_histories.where(pay_date: date).select{ |e| !e.payed? }.any? %>
+            <% @card.fund_user_histories.where(pay_date: date).select{ |e| !e.payed? }.each do |not_pay_fund| %>
+              <tbody>
+                <tr>
+                  <td><%= l not_pay_fund.date %></td>
+                  <td><%= not_pay_fund.fund_user.fund.name %></td>
+                  <td>¥<%= not_pay_fund.value.to_s(:delimited) %></td>
+                  <td><%= link_to "削除", fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= link_to "編集", edit_fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id) %></td>
+                </tr>
+              </tbody>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  <% end %>
 <% else %>
-<p>このクレジットカードを使用した未引き落としイベントはありません</p>
+  <p>このクレジットカードを使用した未引き落としイベントはありません</p>
 <% end %>
