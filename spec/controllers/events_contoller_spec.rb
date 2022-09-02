@@ -80,7 +80,6 @@ RSpec.describe EventsController do
           date: Date.today.prev_year(1),
           genre_id: @genre_ex.id,
           iae: false,
-          pon: true
         )
       expect { delete :destroy, params: { id: event.id } }.to change {
         Event.all.length
@@ -112,7 +111,6 @@ RSpec.describe EventsController do
             card_id: nil,
             date: Date.today,
             genre_id: @genre_in.id,
-            pon: true,
             iae: true
           )
         params[:id] = event.id
@@ -133,7 +131,6 @@ RSpec.describe EventsController do
             card_id: nil,
             date: Date.today,
             genre_id: @genre_ex.id,
-            pon: true,
             iae: false
           )
         params[:id] = event.id

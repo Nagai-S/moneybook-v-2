@@ -14,7 +14,7 @@ module MyFunction
     end
 
     def self.valid_date?(year, month, day)
-      return Date.valid_date?(year, month, 10) && day >= 1 && day <= 31
+      return super(year, month, 10) && day >= 1 && day <= 31
     end
 
   end

@@ -7,7 +7,6 @@
 #  iae        :boolean          default(FALSE)
 #  memo       :string(255)
 #  pay_date   :date
-#  pon        :boolean          default(FALSE)
 #  value      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

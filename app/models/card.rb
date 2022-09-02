@@ -55,9 +55,9 @@ class Card < ApplicationRecord
   validate :pay_not_equal_to_month, :card_name_not_account_name, :same_user
 
   before_destroy do
-    if events.exists?(pon: false) ||
-      account_exchanges.exists?(pon: false) ||
-      fund_user_histories.exists?(pon: false)
+    if events.any?{ |e| !e.payed? } ||
+      account_exchanges.any?{ |e| !e.payed? } ||
+      fund_user_histories.any?{ |e| !e.payed? }
       throw :abort
     else
       before_destroy_action
@@ -80,27 +80,24 @@ class Card < ApplicationRecord
     events
       .includes(:card, :account)
       .each do |event|
-        unless event.pon
+        unless event.payed?
           event.update_columns(pay_date: event.decide_pay_day)
-          event.change_pon
           event.update_columns(account_id: account_id)
         end
       end
     account_exchanges
       .includes(:card, :account)
       .each do |ax|
-        unless ax.pon
+        unless ax.payed?
           ax.update_columns(pay_date: ax.decide_pay_day)
-          ax.change_pon
           ax.update_columns(source_id: account_id)
         end
       end
     fund_user_histories
       .includes(:card, :account)
       .each do |fund_user_history|
-        unless fund_user_history.pon
+        unless fund_user_history.payed?
           fund_user_history.update_columns(pay_date: fund_user_history.decide_pay_day)
-          fund_user_history.change_pon
           fund_user_history.update_columns(account_id: account_id)
         end
       end
@@ -110,19 +107,19 @@ class Card < ApplicationRecord
   def not_pay_dates
     not_pay_date_array = []
 
-    if events.where(pon: false).exists?
+    if events.select{ |e| !e.payed? }.any?
       events
-        .where(pon: false)
+        .select{ |e| !e.payed? }
         .each { |event| not_pay_date_array.push(event.pay_date) }
     end
-    if account_exchanges.where(pon: false).exists?
+    if account_exchanges.select{ |e| !e.payed? }.any?
       account_exchanges
-        .where(pon: false)
+        .select{ |e| !e.payed? }
         .each { |ax| not_pay_date_array.push(ax.pay_date) }
     end
-    if fund_user_histories.where(pon: false).exists?
+    if fund_user_histories.select{ |e| !e.payed? }.any?
       fund_user_histories
-        .where(pon: false)
+        .select{ |e| !e.payed? }
         .each do |fund_user_history|
           not_pay_date_array.push(fund_user_history.pay_date)
         end
@@ -132,10 +129,10 @@ class Card < ApplicationRecord
   end
 
   def not_pay_value(pay_date)
-    event = events.where(pon: false, pay_date: pay_date).sum(:value)
-    ax = account_exchanges.where(pon: false, pay_date: pay_date).sum(:value)
+    event = events.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
+    ax = account_exchanges.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
     fund_user_history =
-      fund_user_histories.where(pon: false, pay_date: pay_date).sum(:value)
+      fund_user_histories.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
     return event + ax + fund_user_history
   end
 

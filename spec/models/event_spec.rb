@@ -7,7 +7,6 @@
 #  iae        :boolean          default(FALSE)
 #  memo       :string(255)
 #  pay_date   :date
-#  pon        :boolean          default(FALSE)
 #  value      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -57,7 +56,6 @@ RSpec.describe Event do
             genre_id: @genre_ex.id,
             date: Date.today,
             memo: '',
-            pon: true,
             pay_date: nil
           )
         expect(new_event).to be_invalid
@@ -73,7 +71,6 @@ RSpec.describe Event do
             genre_id: @genre_in.id,
             date: Date.today,
             memo: '',
-            pon: true,
             pay_date: nil
           )
         expect(new_event).to be_invalid
@@ -92,7 +89,6 @@ RSpec.describe Event do
           genre_id: @genre_in.id,
           date: Date.today,
           memo: '',
-          pon: true,
           pay_date: nil
         )
       expect(new_event).to be_invalid
@@ -114,7 +110,6 @@ RSpec.describe Event do
         event.after_change_action
         expect(event.account_id).to eq @account1.id
         expect(event.card_id).to eq nil
-        expect(event.pon).to eq true
         expect(event.pay_date).to eq nil
       end
 
@@ -131,7 +126,6 @@ RSpec.describe Event do
         event.after_change_action
         expect(event.card_id).to eq @card1.id
         expect(event.account_id).to eq @card1.account_id
-        expect(event.pon).to eq false
         expect(event.pay_date).to eq event.decide_pay_day
       end
 
@@ -148,7 +142,6 @@ RSpec.describe Event do
         event.after_change_action
         expect(event.card_id).to eq @card1.id
         expect(event.account_id).to eq @card1.account_id
-        expect(event.pon).to eq true
         expect(event.pay_date).to eq event.decide_pay_day
       end
 
@@ -166,7 +159,6 @@ RSpec.describe Event do
         event.after_change_action
         expect(event.card_id).to eq @card1.id
         expect(event.account_id).to eq @card1.account_id
-        expect(event.pon).to eq true
         expect(event.pay_date).to eq Date.today.prev_month.change(
              day: @card1.pay_date
            )
@@ -186,7 +178,6 @@ RSpec.describe Event do
         event.after_change_action
         expect(event.card_id).to eq @card1.id
         expect(event.account_id).to eq @card1.account_id
-        expect(event.pon).to eq false
         expect(event.pay_date).to eq Date.today.next_month.change(
              day: @card1.pay_date
            )

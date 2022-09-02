@@ -5,7 +5,6 @@
 #  id         :bigint           not null, primary key
 #  date       :date
 #  pay_date   :date
-#  pon        :boolean
 #  value      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -72,7 +71,6 @@ RSpec.describe AccountExchange do
         )
       ax.after_change_action
       expect(ax.card_id).to eq nil
-      expect(ax.pon).to eq true
       expect(ax.pay_date).to eq nil
     end
 
@@ -88,7 +86,6 @@ RSpec.describe AccountExchange do
       ax.after_change_action
       expect(ax.card_id).to eq @card1.id
       expect(ax.source_id).to eq @card1.account.id
-      expect(ax.pon).to eq false
       expect(ax.pay_date).to eq ax.decide_pay_day
     end
 
@@ -104,7 +101,6 @@ RSpec.describe AccountExchange do
       ax.after_change_action
       expect(ax.card_id).to eq @card1.id
       expect(ax.source_id).to eq @card1.account.id
-      expect(ax.pon).to eq true
       expect(ax.pay_date).to eq ax.decide_pay_day
     end
 
@@ -121,7 +117,6 @@ RSpec.describe AccountExchange do
       ax.after_change_action
       expect(ax.card_id).to eq @card1.id
       expect(ax.source_id).to eq @card1.account.id
-      expect(ax.pon).to eq true
       expect(ax.pay_date).to eq Date.today.prev_month.change(
            day: @card1.pay_date
          )
@@ -140,7 +135,6 @@ RSpec.describe AccountExchange do
       ax.after_change_action
       expect(ax.card_id).to eq @card1.id
       expect(ax.source_id).to eq @card1.account.id
-      expect(ax.pon).to eq false
       expect(ax.pay_date).to eq Date.today.next_month.change(
            day: @card1.pay_date
          )
