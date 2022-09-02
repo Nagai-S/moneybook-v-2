@@ -85,7 +85,7 @@ module MyFunction
     def search_date(events)
       @date_or_not = params[:date_or_not]
       @early_date =
-        MyFunction::FlexDate.return_date(
+        MyFunction::FlexDate.new(
           params['date1(1i)'].to_i,
           params['date1(2i)'].to_i,
           params['date1(3i)'].to_i
@@ -95,7 +95,7 @@ module MyFunction
         params['date1(3i)'].to_i
       )
       @late_date =
-        MyFunction::FlexDate.return_date(
+        MyFunction::FlexDate.new(
           params['date2(1i)'].to_i,
           params['date2(2i)'].to_i,
           params['date2(3i)'].to_i

@@ -3,7 +3,7 @@ namespace :monthly_mail do
   task send_card_mail: :environment do
     aweek_later = Date.today.next_day(7)
     Card.all.each do |card|
-      pay_date = MyFunction::FlexDate.return_date(
+      pay_date = MyFunction::FlexDate.new(
         aweek_later.year,
         aweek_later.month,
         card.pay_date

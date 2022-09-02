@@ -3,7 +3,7 @@ module MyFunction
   module FunctionForChange
     def after_change_action
       if card
-        pay_day = pay_date ? MyFunction::FlexDate.return_date(
+        pay_day = pay_date ? MyFunction::FlexDate.new(
           pay_date.year,
           pay_date.month,
           card.pay_date
@@ -12,6 +12,14 @@ module MyFunction
         change_pon
       else
         update_columns(pay_date: nil, pon: true)
+      end
+    end
+
+    def payed?
+      if pay_date
+        return pay_date <= Date.today ? true : false
+      else
+        return false
       end
     end
 
@@ -24,10 +32,10 @@ module MyFunction
         if card.month_date < date.day
           a = date.next_month
           pay_day =
-            MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
+            MyFunction::FlexDate.new(a.year, a.month, card.pay_date)
         else
           pay_day =
-            MyFunction::FlexDate.return_date(
+            MyFunction::FlexDate.new(
               date.year,
               date.month,
               card.pay_date
@@ -37,11 +45,11 @@ module MyFunction
         if card.month_date < date.day
           a = date.next_month(2)
           pay_day =
-            MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
+            MyFunction::FlexDate.new(a.year, a.month, card.pay_date)
         else
           a = date.next_month
           pay_day =
-            MyFunction::FlexDate.return_date(a.year, a.month, card.pay_date)
+            MyFunction::FlexDate.new(a.year, a.month, card.pay_date)
         end
       end
       return pay_day
