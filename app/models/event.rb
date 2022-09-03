@@ -51,7 +51,7 @@ class Event < ApplicationRecord
   )
   validate :iae_equal_to_genre_iae, :same_user
 
-  after_save { self.after_change_action }
+  after_save { after_change_action }
 
   def payment_source_name
     if card

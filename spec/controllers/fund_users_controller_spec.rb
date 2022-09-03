@@ -31,20 +31,8 @@ RSpec.describe FundUsersController do
         expect { post :create, params: params }.to change {
           FundUserHistory.all.length
         }.by(1).and change { FundUser.all.length }.by(1).and change {
-                                                                                                   Fund
-                                                                                                     .find(
-                                                                                                     @fund
-                                                                                                       .id
-                                                                                                   )
-                                                                                                     .update_on
-                                                                                                 }.and change {
-                                                                                                                                                Fund
-                                                                                                                                                  .find(
-                                                                                                                                                  @fund
-                                                                                                                                                    .id
-                                                                                                                                                )
-                                                                                                                                                  .value
-                                                                                                                                              }
+          Fund.find(@fund.id).update_on
+        }.and change { Fund.find(@fund.id).value }
       end
 
       it 'valueとupdate_onが更新されない' do
@@ -53,26 +41,8 @@ RSpec.describe FundUsersController do
         expect { post :create, params: params }.to change {
           FundUserHistory.all.length
         }.by(1).and change { FundUser.all.length }.by(1).and change {
-                                                                                                   Fund
-                                                                                                     .find(
-                                                                                                     @fund_updated
-                                                                                                       .id
-                                                                                                   )
-                                                                                                     .update_on
-                                                                                                 }
-                                                                                                   .by(
-                                                                                                   0
-                                                                                                 ).and change {
-                                                                                                                                                              Fund
-                                                                                                                                                                .find(
-                                                                                                                                                                @fund_updated
-                                                                                                                                                                  .id
-                                                                                                                                                              )
-                                                                                                                                                                .value
-                                                                                                                                                            }
-                                                                                                                                                              .by(
-                                                                                                                                                              0
-                                                                                                                                                            )
+          Fund.find( @fund_updated .id ).update_on
+        }.by(0).and change { Fund.find(@fund_updated.id).value }.by(0)
       end
     end
 

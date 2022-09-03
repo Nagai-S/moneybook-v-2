@@ -3,6 +3,7 @@
 # Table name: fund_user_histories
 #
 #  id           :bigint           not null, primary key
+#  buy_date     :date
 #  buy_or_sell  :boolean          default(TRUE)
 #  commission   :integer
 #  date         :date
@@ -87,7 +88,7 @@ RSpec.describe FundUserHistory do
             account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today,
-            buy_or_sell: false
+            buy_or_sell: true
           )
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
@@ -103,7 +104,8 @@ RSpec.describe FundUserHistory do
             account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today.prev_year,
-            buy_or_sell: false
+            buy_date: Date.today.prev_year,
+            buy_or_sell: true
           )
         fuh.after_change_action
         expect(fuh.card_id).to eq @card1.id
@@ -118,8 +120,9 @@ RSpec.describe FundUserHistory do
             commission: 100,
             account_id: @card1.account_id,
             card_id: @card1.id,
-            buy_or_sell: false,
+            buy_or_sell: true,
             date: Date.today.prev_year,
+            buy_date: Date.today.prev_year,
             pay_date: Date.today.prev_month.change(day: @card1.pay_date)
           )
         fuh.after_change_action
@@ -138,7 +141,8 @@ RSpec.describe FundUserHistory do
             account_id: @card1.account_id,
             card_id: @card1.id,
             date: Date.today.prev_year,
-            buy_or_sell: false,
+            buy_date: Date.today.prev_year,
+            buy_or_sell: true,
             pay_date: Date.today.next_month.change(day: @card1.pay_date)
           )
         fuh.after_change_action

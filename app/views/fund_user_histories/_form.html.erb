@@ -13,7 +13,7 @@
 
     <div class="row">
       <div class='<%= label_class %>'>
-        <%= f.label :date, "日付を選択してください", class: "date_label" %>
+        <%= f.label :date, "#{buy_or_sell ? '支払日' : '日付'}を選択してください", class: "date_label" %>
       </div>
       <div class="<%= form_class %>">
         <%= f.date_select(
@@ -24,6 +24,22 @@
         ) %>
       </div>
     </div>
+
+    <% if buy_or_sell %>
+    <div class="row">
+      <div class='<%= label_class %>'>
+        <%= f.label :buy_date, "投資信託買付日を選択してください", class: "date_label" %>
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.date_select(
+          :buy_date,
+          {selected: buy_date_for_new},
+          class: "form-control",
+          id: "date"
+        ) %>
+      </div>
+    </div>
+    <% end %>
 
     <% if buy_or_sell && current_user.cards.exists? %>
 
@@ -136,8 +152,11 @@
     </div>
     <% end %>
 
+    <% if edit %>
+    <%= f.submit "編集", class: "btn btn-primary", role: "button" %>
+    <% else %>
     <%= f.submit buy_or_sell ? "購入" : "売却", class: "btn btn-primary", role: "button" %>
-
+    <% end %>
   </div>
   <% end %>
 </div>

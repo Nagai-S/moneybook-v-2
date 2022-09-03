@@ -39,8 +39,9 @@ class FundUser < ApplicationRecord
   def after_save_action(total_buy_value)
     if total_buy_value.to_i != 0
       fund_user_histories.create(
-        value: total_buy_value,
+        value: total_buy_value,        
         date: Date.today,
+        buy_date: Date.today,
         commission: 0,
         buy_or_sell: true,        
       )
@@ -49,11 +50,11 @@ class FundUser < ApplicationRecord
   end
 
   def total_buy_value
-    return fund_user_histories.where(buy_or_sell: true).sum(:value)
+    return fund_user_histories.where(buy_or_sell: true).select(&:bought?).sum(&:value)
   end
 
   def total_sell_value
-    return fund_user_histories.where(buy_or_sell: false).sum(:value)
+    return fund_user_histories.where(buy_or_sell: false).sum(&:value)
   end
 
   def now_value
@@ -76,7 +77,7 @@ class FundUser < ApplicationRecord
   end
 
   def total_buy_commission
-    return fund_user_histories.where(buy_or_sell: true).sum(:commission)
+    return fund_user_histories.where(buy_or_sell: true).select(&:bought?).sum(&:commission)
   end
 
   def gain_value

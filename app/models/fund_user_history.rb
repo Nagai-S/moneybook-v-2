@@ -3,6 +3,7 @@
 # Table name: fund_user_histories
 #
 #  id           :bigint           not null, primary key
+#  buy_date     :date
 #  buy_or_sell  :boolean          default(TRUE)
 #  commission   :integer
 #  date         :date
@@ -57,7 +58,18 @@ class FundUserHistory < ApplicationRecord
             
   validate :same_user
 
-  after_save { self.after_change_action }
+  after_save do 
+    update_columns(buy_date: nil) unless buy_or_sell
+    after_change_action
+  end
+
+  def bought?
+    if buy_or_sell && buy_date
+      buy_date <= Date.today
+    else
+      true
+    end
+  end
             
   def buy_or_sell_name
     return buy_or_sell ? '購入' : '売却'
