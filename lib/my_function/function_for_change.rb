@@ -16,7 +16,7 @@ module MyFunction
 
     def payed?
       if pay_date
-        return pay_date <= Date.today ? true : false
+        return pay_date <= Date.today
       else
         return true
       end

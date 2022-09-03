@@ -27,6 +27,9 @@ RSpec.describe FundUserHistoriesController do
           'date(1i)' => Date.today.year,
           'date(2i)' => Date.today.month,
           'date(3i)' => Date.today.day,
+          'buy_date(1i)' => Date.today.year,
+          'buy_date(2i)' => Date.today.month,
+          'buy_date(3i)' => Date.today.day,
           :value => 1000,
           :commission => 100
         },
@@ -88,6 +91,7 @@ RSpec.describe FundUserHistoriesController do
           account_id: @account1.id,
           card_id: nil,
           date: Date.today.prev_year(1),
+          date: Date.today.prev_year(1),
           buy_or_sell: true
         )
       fund_user_history.after_change_action
@@ -108,6 +112,9 @@ RSpec.describe FundUserHistoriesController do
           'date(1i)' => Date.today.year,
           'date(2i)' => Date.today.month,
           'date(3i)' => Date.today.day,
+          'buy_date(1i)' => Date.today.year,
+          'buy_date(2i)' => Date.today.month,
+          'buy_date(3i)' => Date.today.day,
           :value => 2000,
           :commission => 200,
           :buy_or_sell => true,

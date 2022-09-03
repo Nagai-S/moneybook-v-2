@@ -6,7 +6,7 @@ class FundUserHistoriesController < ApplicationController
   before_action :set_previous_url, only: %i[new edit]
 
   def index
-    @fund_user_histories = @fund_user.fund_user_histories
+    @fund_user_histories = @fund_user.fund_user_histories.includes(:card, :account)
   end
 
   def new
@@ -61,6 +61,7 @@ class FundUserHistoriesController < ApplicationController
       .require(:fund_user_history)
       .permit(
         :date, 
+        :buy_date,
         :value, 
         :commission, 
         :buy_or_sell, 

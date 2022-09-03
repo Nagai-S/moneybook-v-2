@@ -1,7 +1,8 @@
 <div class="table_contents">
   <div class="table_head row">
-    <li class="col-sm-2">日付</li>
-    <li class="col-sm-2">購入か売却</li>
+    <li class="col-sm-2">日付(支払日)</li>
+    <li class="col-sm-1">買or売</li>
+    <li class="col-sm-1">買付日</li>
     <li class="col-sm-2">アカウント</li>
     <li class="col-sm-1">手数料</li>
     <li class="col-sm-1">金額</li>
@@ -13,11 +14,16 @@
   <div class="table_body row">
     <li class="col-8 offset-2 mobile_date"><%= l fund_user_history.date %></li>
     <li class="col-sm-2 offset-sm-0  pc_date"><%= l fund_user_history.date unless a == fund_user_history.date %></li>
-    <div class="col-6 col-sm-2">
+    <div class="col-6 col-sm-1">
       <div class="mobile_th">購入か売却</div>
       <li><%= fund_user_history.buy_or_sell_name %></li>
     </div>
-    <div class="col-6 col-sm-2">
+    <div class="col-6 col-sm-1">
+      <div class="mobile_th">買付日</div>
+      <li><%= l fund_user_history.buy_date if fund_user_history.buy_date %></li>
+    </div>
+    
+    <div class="col-6 offset-3 col-sm-2 offset-sm-0">
       <div class="mobile_th">アカウント</div>
       <li><%= fund_user_history.payment_source_name %></li>
     </div>

@@ -251,9 +251,9 @@ RSpec.feature 'UserFlow', type: :feature do
       click_on '購入または売却'
       expect(page).to have_content 'fund1'
       within find('#tab_buy') do
-        select Date.today.year, from: 'fund_user_history[date(1i)]'
-        select "#{Date.today.month}月", from: 'fund_user_history[date(2i)]'
-        select Date.today.day + 1, from: 'fund_user_history[date(3i)]'
+        select Date.today.next_day.year, from: 'fund_user_history[date(1i)]'
+        select "#{Date.today.next_day.month}月", from: 'fund_user_history[date(2i)]'
+        select Date.today.next_day.day, from: 'fund_user_history[date(3i)]'
         click_on 'アカウント'
         select @user.accounts.order(:id).first.name,
                from: 'fund_user_history[account_id]'
@@ -270,7 +270,7 @@ RSpec.feature 'UserFlow', type: :feature do
       )
     end
 
-    scenario 'create fuh_buy by card no commission' do
+    scenario 'create fuh_buy by card without commission' do
       visit fund_users_path
       click_link 'fund1'
       click_on '購入または売却'
@@ -325,13 +325,16 @@ RSpec.feature 'UserFlow', type: :feature do
       click_link 'fund1'
       page.all('a', text: '編集')[0].click
       within find('#tab_buy') do
+        select Date.today.next_day.year, from: 'fund_user_history[buy_date(1i)]'
+        select "#{Date.today.next_day.month}月", from: 'fund_user_history[buy_date(2i)]'
+        select Date.today.next_day.day, from: 'fund_user_history[buy_date(3i)]'
         fill_in 'fund_user_history[commission]', with: 0
-        click_button '購入'
+        click_button '編集'
       end
       sleep 0.5
       expect(@user.fund_users.first.fund_user_histories.length).to eq 4
       expect(@user.fund_users.first.now_value).to eq(
-        ((1300.to_f * 10_000.to_f / 9500.to_f) - 300).round
+        ((1200.to_f * 10_000.to_f / 9500.to_f) - 300).round
       )
     end
 

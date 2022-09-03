@@ -1,4 +1,8 @@
 module FundUserHistoriesHelper
+  def buy_date_for_new
+    @fund_user_history.buy_date ? @fund_user_history.buy_date : Date.today
+  end
+  
   def active_is_buy_or_sell
     if @fund_user_history.buy_or_sell
       return { buy: 'active', sell: '' }

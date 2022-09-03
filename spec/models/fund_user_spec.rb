@@ -53,6 +53,7 @@ RSpec.describe FundUser do
         buy_or_sell: true,
         commission: 100,
         date: Date.today,
+        buy_date: Date.today,
         value: 1000,
         account_id: @account.id
       )
@@ -69,6 +70,7 @@ RSpec.describe FundUser do
         buy_or_sell: true,
         commission: 100,
         date: Date.today,
+        buy_date: Date.today,
         value: 1000,
         account_id: @account.id
       )
@@ -85,12 +87,27 @@ RSpec.describe FundUser do
   describe '#now_value' do
     it 'fundのvalueがある時' do
       expect(@fund_user1.now_value).to eq (
-           (900.to_f * 10_000.to_f / 9000.to_f) - 300
-         ).round
+        (900.to_f * 10_000.to_f / 9000.to_f) - 300
+      ).round
     end
 
     it 'fundのvalueがない時' do
       expect(@fund_user2.now_value).to eq 600.to_f.round
+    end
+
+    it '買付日が未来の時' do
+      fuh = @fund_user1.fund_user_histories.create(
+        buy_or_sell: true,
+        commission: 100,
+        date: Date.today,
+        buy_date: Date.today.next_day,
+        value: 1000,
+        account_id: @account.id
+      )
+      expect(FundUser.find(@fund_user1.id).now_value).to eq (
+        (900.to_f * 10_000.to_f / 9000.to_f) - 300
+      ).round
+      expect(fuh.bought?).to eq false
     end
   end
 end
