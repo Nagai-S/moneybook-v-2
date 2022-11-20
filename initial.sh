@@ -21,7 +21,7 @@ if [ -e ".env" ]; then
   echo ".env exists--------------------------------------------------------------"
   ruby api_request_scripts/data_registration.rb
   docker-compose run --rm rails bundle exec rake daily_change:update_fund_value
-  echo "complete all event and ax database from production-----------------------"
+  echo "complete migration of all data from production-----------------------"
 fi
 
 echo "finish!!!------------------------------------------------------------------"

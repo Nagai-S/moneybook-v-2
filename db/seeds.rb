@@ -27,7 +27,8 @@ user.genres.create(
     { name: '利子', iae: true },
     { id: 18, name: '売上金', iae: true },
     { id: 20, name: '立替金返金', iae: true },
-    { id: 21, name: '本', iae: false }
+    { id: 21, name: '本', iae: false },
+    { id: 30, name: '通信費', iae: false }
   ]
 )
 

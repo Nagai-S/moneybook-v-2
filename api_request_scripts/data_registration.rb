@@ -8,6 +8,7 @@ def create_data(params)
   uri = URI.parse('http://localhost:8080/api/v1/initial_register_db')
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme == 'https'
+  http.read_timeout = nil
 
   headers = {
     'Content-Type' => 'application/json',
@@ -15,17 +16,17 @@ def create_data(params)
   }
 
   response = http.post(uri.path, params.to_json, headers)
-  p response.body
+  p JSON.parse(response.body)
 end
 
 def all_axs_create(auth_info)
   info = get_all_axs(auth_info)
   new_auth_info = info[:auth_info]
   all_axs = info[:body]
+  data_array = [];
 
   all_axs.each do |data|
-    params = {
-      'kind' => '1',
+    params = {      
       'date(1i)' => data['date'].split('-')[0],
       'date(2i)' => data['date'].split('-')[1],
       'date(3i)' => data['date'].split('-')[2],
@@ -41,10 +42,14 @@ def all_axs_create(auth_info)
       params['pay_date(2i)'] = data['pay_date'].split('-')[1]
       params['pay_date(3i)'] = data['pay_date'].split('-')[2]
     end
-
-    create_data(params)
+    data_array.push params
   end
-
+  
+  params = {
+    'kind' => '1',
+    'data_array' => data_array
+  }
+  create_data(params)
   return new_auth_info
 end
 
@@ -52,10 +57,10 @@ def all_events_create(auth_info)
   info = get_all_events(auth_info)
   new_auth_info = info[:auth_info]
   all_events = info[:body]
+  data_array = []
 
   all_events.each do |data|
     params = {
-      'kind' => '0',
       'date(1i)' => data['date'].split('-')[0],
       'date(2i)' => data['date'].split('-')[1],
       'date(3i)' => data['date'].split('-')[2],
@@ -73,10 +78,14 @@ def all_events_create(auth_info)
       params['pay_date(2i)'] = data['pay_date'].split('-')[1]
       params['pay_date(3i)'] = data['pay_date'].split('-')[2]
     end
-
-    create_data(params)
+    data_array.push params
   end
   
+  params = {
+    'kind' => '0',
+    'data_array' => data_array
+  }
+  create_data(params)
   return new_auth_info
 end
 
@@ -107,7 +116,10 @@ def all_fuh_create(auth_info)
         'pon' => fuh['pon'],
         'value' => fuh['value'],
         'account_id' => fuh['account_id'],
-        'card_id' => fuh['card_id']
+        'card_id' => fuh['card_id'],
+        'buy_date(1i)' => fuh['buy_date'].split('-')[0],
+        'buy_date(2i)' => fuh['buy_date'].split('-')[1],
+        'buy_date(3i)' => fuh['buy_date'].split('-')[2],
       }
 
       if fuh['pay_date']
@@ -116,7 +128,7 @@ def all_fuh_create(auth_info)
         fuh_params['pay_date(3i)'] = fuh['pay_date'].split('-')[2]
       end
 
-      fuh_array.push(fuh_params)
+      fuh_array.push fuh_params
     end
 
     params['fuh'] = fuh_array
@@ -131,25 +143,36 @@ def all_funds_create(auth_info)
 
   new_auth_info = info[:auth_info]
   all_funds = info[:body]
+  data_array = []
 
   all_funds.each do |fund|
-    register_funds(fund['id'], fund['name'], fund['value'], fund['string_id'])
+    params = {
+      fund: {
+        id: fund['id'],
+        name: fund['name'],
+        value: fund['value'],
+        string_id: fund['string_id'],
+      }
+    }
+    data_array.push params
   end
-
+  
+  register_funds(data_array)
   return new_auth_info
 end
 
-def register_funds(id, name, value, string_id)
+def register_funds(data_array)
   uri = URI.parse('http://localhost:8080/api/v1/register_funds')
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === 'https'
+  http.read_timeout = nil
 
   headers = {
     'access-token' => ENV['AUTH_API_ACCESS_KEY'],
     'Content-Type' => 'application/json'
   }
 
-  params = { fund: { id: id, name: name, value: value, string_id: string_id } }
+  params = { funds: data_array }
 
   response = http.post(uri.path, params.to_json, headers)
 
@@ -157,7 +180,7 @@ def register_funds(id, name, value, string_id)
 end
 
 auth_info = login
-auth_info = all_events_create(auth_info)
-auth_info = all_axs_create(auth_info)
+# auth_info = all_events_create(auth_info)
+# auth_info = all_axs_create(auth_info)
 auth_info = all_funds_create(auth_info)
 auth_info = all_fuh_create(auth_info)
