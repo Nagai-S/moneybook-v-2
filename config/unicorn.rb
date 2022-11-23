@@ -11,7 +11,7 @@ working_directory root_path
 pid "#{root_path}/tmp/pids/unicorn.pid"
 
 # ポート番号を指定
-listen "#{root_path}/tmp/sockets/unicorn.sock"
+listen 3000
 
 # エラーのログを記録するファイルを指定
 stderr_path "#{root_path}/log/unicorn.stderr.log"
