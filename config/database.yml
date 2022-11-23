@@ -46,7 +46,6 @@ test:
 
 # for aws-ec2 and GCE
 production:
-  <<: *default
   adapter: mysql2
   encoding: utf8
   pool: 10
