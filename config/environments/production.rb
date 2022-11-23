@@ -67,8 +67,13 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # for heroku
+  # config.action_mailer.default_url_options = {
+  #   host: 'https://moneybook-moneybook.herokuapp.com'
+  # }
+
+  # for GCE
   config.action_mailer.default_url_options = {
-    host: 'https://moneybook-moneybook.herokuapp.com'
+    host: 'http://35.212.202.66/'
   }
 
   # config.action_mailer.default_url_options = {  :host => 'https://japan-moneybook.com' }
