@@ -10,6 +10,7 @@ module MyFunction
             break
           end
         end
+        super(year, month, day)
       end
     end
 
