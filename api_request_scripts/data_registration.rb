@@ -4,8 +4,11 @@ require 'dotenv/load'
 require './api_request_scripts/get_real_data'
 require './api_request_scripts/login'
 
+# $migrationURL = 'http://localhost:8080/api/v1'
+$migrationURL = 'http://35.212.202.66/api/v1'
+
 def create_data(params)
-  uri = URI.parse('http://localhost:8080/api/v1/initial_register_db')
+  uri = URI.parse($migrationURL+'/initial_register_db')  
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme == 'https'
   http.read_timeout = nil
@@ -146,23 +149,23 @@ def all_funds_create(auth_info)
   data_array = []
 
   all_funds.each do |fund|
-    params = {
-      fund: {
-        id: fund['id'],
-        name: fund['name'],
-        value: fund['value'],
-        string_id: fund['string_id'],
+      params = {
+        fund: {
+          id: fund['id'],
+          name: fund['name'],
+          value: fund['value'],
+          string_id: fund['string_id'],
+        }
       }
-    }
-    data_array.push params
-  end
+      data_array.push params
+    end
   
   register_funds(data_array)
   return new_auth_info
 end
 
 def register_funds(data_array)
-  uri = URI.parse('http://localhost:8080/api/v1/register_funds')
+  uri = URI.parse($migrationURL+'/register_funds')
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = uri.scheme === 'https'
   http.read_timeout = nil
@@ -180,7 +183,7 @@ def register_funds(data_array)
 end
 
 auth_info = login
-# auth_info = all_events_create(auth_info)
-# auth_info = all_axs_create(auth_info)
+auth_info = all_events_create(auth_info)
+auth_info = all_axs_create(auth_info)
 auth_info = all_funds_create(auth_info)
 auth_info = all_fuh_create(auth_info)
