@@ -19,9 +19,10 @@
 
 # Learn more: http://github.com/javan/whenever
 
-rails_env = ENV['RAILS_ENV'] || :development
+require File.expand_path(File.dirname(__FILE__) + "/environment")
 
-set :output, 'log/crontab.log'
+rails_env = ENV['RAILS_ENV'] || :development
+set :output, "#{Rails.root}/log/cron.log"
 set :environment, rails_env
 
 every 1.day, at: '9:00 am' do
