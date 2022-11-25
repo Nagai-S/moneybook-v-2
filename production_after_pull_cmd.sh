@@ -1,5 +1,5 @@
 sudo kill -9 $(ps aux | grep 'unicorn_rails master' | grep -v grep | awk '{print $2}')
-bundle install
+bundle install --without development test
 bundle exec rails db:migrate
 bundle exec whenever --clear-crontab
 bundle exec whenever --update-crontab
