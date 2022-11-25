@@ -45,8 +45,8 @@ class Api::AuthController < Api::ApplicationController
     render json: { message: 'All funds are created' }, status: 200
   end
 
-  def initial_register_db
-    if params['kind'] == '0'
+  def initial_register_db    
+    if params['kind'] == '0' # create events
       data_params = []
       params['data_array'].each do |data|
         event = {
@@ -74,7 +74,7 @@ class Api::AuthController < Api::ApplicationController
       end
       User.first.events.create(data_params)
       render json: { message: 'All events are created' }
-    elsif params['kind'] == '1'
+    elsif params['kind'] == '1' # create account exchange
       data_params = []
       params['data_array'].each do |data|
         ax = {
@@ -100,7 +100,7 @@ class Api::AuthController < Api::ApplicationController
       end
       User.first.account_exchanges.create(data_params)
       render json: { message: 'All account exchanges are created' }
-    elsif params['kind'] == '2'
+    elsif params['kind'] == '2' # create fund_user history
       fund_user =
         User.first.fund_users.create(
           fund_id: params['fund_id'],

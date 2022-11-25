@@ -4,13 +4,17 @@ module MyFunction
       if Date.valid_date?(year, month, day)
         super(year, month, day)
       else
+        status = false;
         10.times do |i|
           if Date.valid_date?(year, month, day - i - 1)
             super(year, month, day - i - 1)
+            status = true
             break
           end
         end
-        super(year, month, day)
+        unless status
+          super(year, month, day)
+        end
       end
     end
 

@@ -4,8 +4,7 @@ require 'dotenv/load'
 require './api_request_scripts/get_real_data'
 require './api_request_scripts/login'
 
-# $migrationURL = 'http://localhost:8080/api/v1'
-$migrationURL = 'http://35.212.202.66/api/v1'
+$migrationURL = 'http://localhost:8080/api/v1'
 
 def create_data(params)
   uri = URI.parse($migrationURL+'/initial_register_db')  

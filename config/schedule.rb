@@ -19,9 +19,15 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, 'log/crontab.log'
-set :environment, :development
+rails_env = ENV['RAILS_ENV'] || :development
 
-every 1.day, at: '4:30 pm' do
+set :output, 'log/crontab.log'
+set :environment, rails_env
+
+every 1.day, at: '9:00 am' do
   rake 'monthly_mail:send_card_mail'
+end
+
+every 6.hours do
+  rake 'daily_change:update_fund_value'
 end

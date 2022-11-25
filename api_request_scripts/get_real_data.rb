@@ -1,8 +1,6 @@
 def get_all_axs(auth_info)
   uri2 =
-    URI.parse(
-      'https://moneybook-moneybook.herokuapp.com/api/v1/account_exchanges'
-    )
+    URI.parse($productionURL + '/api/v1/account_exchanges')
   headers = {
     'Content-Type' => 'application/json',
     'access-token' => auth_info['access_token'],
@@ -19,7 +17,7 @@ def get_all_axs(auth_info)
 end
 
 def get_all_events(auth_info)
-  uri2 = URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/events')
+  uri2 = URI.parse($productionURL + '/api/v1/events')
   headers = {
     'Content-Type' => 'application/json',
     'access-token' => auth_info['access_token'],
@@ -36,8 +34,7 @@ def get_all_events(auth_info)
 end
 
 def get_all_fund_users(auth_info)
-  uri2 =
-    URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/fund_users')
+  uri2 = URI.parse($productionURL + '/api/v1/fund_users')
   headers = {
     'Content-Type' => 'application/json',
     'access-token' => auth_info['access_token'],
@@ -54,11 +51,12 @@ def get_all_fund_users(auth_info)
 end
 
 def get_all_fuh(fund_user_id,auth_info)
-  uri2 =
-    URI.parse(
-      'https://moneybook-moneybook.herokuapp.com/api/v1/fund_users/' +
-        fund_user_id.to_s + '/fund_user_histories'
-    )
+  uri2 = URI.parse(
+    $productionURL + 
+    '/api/v1/fund_users/' + 
+    fund_user_id.to_s + 
+    '/fund_user_histories'
+  )
   headers = {
     'Content-Type' => 'application/json',
     'access-token' => auth_info['access_token'],
@@ -75,8 +73,7 @@ def get_all_fuh(fund_user_id,auth_info)
 end
 
 def get_all_funds(auth_info)
-  uri2 =
-    URI.parse('https://moneybook-moneybook.herokuapp.com/api/v1/funds/index')
+  uri2 =URI.parse($productionURL + '/api/v1/funds/index')
   headers = {
     'Content-Type' => 'application/json',
     'access-token' => auth_info['access_token'],
