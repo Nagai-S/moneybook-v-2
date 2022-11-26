@@ -32,7 +32,3 @@ end
 every 6.hours do
   rake 'daily_change:update_fund_value'
 end
-
-every 1.month do
-  rake 'letsencrypt:renew'
-end

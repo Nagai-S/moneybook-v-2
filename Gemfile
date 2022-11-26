@@ -51,8 +51,6 @@ gem "annotate"
 gem 'chartkick'
 # database
 gem 'mysql2'
-# Let's Encrypt
-gem 'rails-letsencrypt'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
