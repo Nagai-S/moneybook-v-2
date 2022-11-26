@@ -73,7 +73,7 @@ Rails.application.configure do
 
   # for GCE
   config.action_mailer.default_url_options = {
-    host: 'http://35.212.202.66/'
+    host: 'https://assetsmanagement.xyz'
   }
 
   # config.action_mailer.default_url_options = {  :host => 'https://japan-moneybook.com' }
