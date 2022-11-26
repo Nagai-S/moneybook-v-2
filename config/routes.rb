@@ -136,6 +136,7 @@
 #                  rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
 
 Rails.application.routes.draw do
+  mount LetsEncrypt::Engine => '/.well-known'
   get '/funds/index', to: 'funds#index'
   get '/funds/search', to: 'funds#search'
   devise_for :users, controllers: { registrations: 'users/registrations' }
