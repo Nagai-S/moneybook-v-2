@@ -92,5 +92,5 @@ Display as a pie chart following percentage.
 4. Next time to access with API, send requests with headers [access-token, client, uid].
 
 ## Production Environment
-http://35.212.202.66/
+https://assetsmanagement.xyz
 
