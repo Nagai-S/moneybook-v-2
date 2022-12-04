@@ -48,7 +48,7 @@ class ShortcutsController < ApplicationController
   
   def destroy
     @shortcut.destroy
-    redirect_to_referer
+    redirect_to shortcuts_path
   end
   
   def run
