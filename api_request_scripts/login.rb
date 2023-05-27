@@ -1,7 +1,7 @@
 require 'net/http'
 require 'json'
 
-$productionURL = 'http://35.212.202.66'
+$productionURL = 'https://assetsmanagement.xyz'
 
 def login
   # params = { 'email' => 'a@gmail.com', 'password' => 'asdfghjkl' }

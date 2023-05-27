@@ -31,8 +31,8 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable,
-         :validatable,
-         :confirmable
+         :validatable
+        #  :confirmable
   include DeviseTokenAuth::Concerns::User
 
   has_many :events, dependent: :delete_all

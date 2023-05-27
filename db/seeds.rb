@@ -8,7 +8,7 @@
 
 user = User.first
 
-user.confirm
+# user.confirm
 
 user.genres.create(
   [
@@ -29,6 +29,7 @@ user.genres.create(
     { id: 20, name: '立替金返金', iae: true },
     { id: 21, name: '本', iae: false },
     { id: 30, name: '通信費', iae: false }
+    { id: 31, name: '交際費', iae: false }
   ]
 )
 
