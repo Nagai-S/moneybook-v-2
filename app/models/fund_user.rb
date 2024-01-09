@@ -32,7 +32,8 @@ class FundUser < ApplicationRecord
     numericality: {
       only_float: {
         message: 'は数字を入力してください'
-      }
+      },
+      greater_than: 0
     }
   )
 
