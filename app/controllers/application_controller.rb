@@ -37,7 +37,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_previous_url
-    session[:previous_url] = request.referer unless Rails.env.test?
+    if !Rails.env.test? && request.referer
+      session[:previous_url] = request.referer
+    else
+      session[:previous_url] = root_path
+    end
   end
 
   def redirect_to_previou_url
@@ -50,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_referer
-    unless Rails.env.test?
+    if !Rails.env.test? && request.referer
       redirect_to request.referer
     else
       redirect_to root_path
