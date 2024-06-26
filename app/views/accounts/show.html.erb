@@ -1,5 +1,5 @@
 <%= javascript_pack_tag 'account' %>
-<h1><%= @account.name %>:¥<%= account.now_value.to_s(:delimited) %></h1>
+<h1><%= @account.name %>:¥<%= @account.now_value.to_s(:delimited) %></h1>
 
 <div class="account_update_form">
 <%= form_with model: @account, id: "account_update" do |f| %>
