@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe FundUsersController do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     sign_in @user
 
     @fund =
@@ -65,7 +65,7 @@ RSpec.describe FundUsersController do
   describe 'destroy' do
     it '正しくないuserでdestroyできない' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
 
       fund_user =

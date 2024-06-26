@@ -22,7 +22,7 @@ require 'rails_helper'
 RSpec.describe Genre do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @account1 = @user.accounts.create(name: 'account1', value: 10_000)
     @genre_ex = @user.genres.create(iae: false, name: 'genre_ex')
     @genre_in = @user.genres.create(iae: true, name: 'genre_in')

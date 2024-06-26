@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe FundUserHistoriesController do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     sign_in @user
 
     @account1 = @user.accounts.create(value: 10_000, name: 'account1')
@@ -82,7 +82,7 @@ RSpec.describe FundUserHistoriesController do
   describe 'destroy' do
     it '正しいuserでなくて失敗' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
       fund_user_history =
         @fund_user.fund_user_histories.create(
@@ -146,7 +146,7 @@ RSpec.describe FundUserHistoriesController do
 
       it '正しいuserでなくて失敗' do
         uncorrect_user = create(:user)
-        uncorrect_user.confirm
+        # uncorrect_user.confirm
         sign_in uncorrect_user
         fund_user_history =
           @fund_user.fund_user_histories.create(

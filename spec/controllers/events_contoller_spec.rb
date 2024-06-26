@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe EventsController do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     sign_in @user
     @genre_ex = @user.genres.create(name: 'genre_ex', iae: false)
     @genre_in = @user.genres.create(name: 'genre_in', iae: true)
@@ -70,7 +70,7 @@ RSpec.describe EventsController do
   describe 'destroy' do
     it '正しいuserでなくて失敗' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
       event =
         @user.events.create(
@@ -122,7 +122,7 @@ RSpec.describe EventsController do
 
       it '正しいuserでなくて失敗' do
         uncorrect_user = create(:user)
-        uncorrect_user.confirm
+        # uncorrect_user.confirm
         sign_in uncorrect_user
         event =
           @user.events.create(

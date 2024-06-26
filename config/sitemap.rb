@@ -38,5 +38,5 @@ SitemapGenerator::Sitemap.create do
   add new_user_session_path
   add new_user_password_path
   add new_user_registration_path
-  add new_user_confirmation_path
+  # add new_user_confirmation_path
 end

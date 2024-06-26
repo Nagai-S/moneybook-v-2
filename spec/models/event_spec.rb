@@ -31,7 +31,7 @@ require 'rails_helper'
 RSpec.describe Event do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @genre_ex = @user.genres.create(name: 'genre_ex', iae: false)
     @genre_in = @user.genres.create(name: 'genre_in', iae: true)
     @account1 = @user.accounts.create(name: 'account1', value: 1000)
@@ -79,7 +79,7 @@ RSpec.describe Event do
     
     it '別のuserのdataを使用してeventを作成できない' do
       different_user = create(:user)
-      different_user.confirm
+      # different_user.confirm
       new_event =
         different_user.events.build(
           iae: false,

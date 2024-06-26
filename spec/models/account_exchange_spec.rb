@@ -31,7 +31,7 @@ require 'rails_helper'
 RSpec.describe AccountExchange do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @account1 = @user.accounts.create(name: 'account1', value: 1000)
     @account2 = @user.accounts.create(name: 'account2', value: 1000)
     @card1 =
@@ -46,7 +46,7 @@ RSpec.describe AccountExchange do
   describe "optional validation" do
     it '別のuserのdataを使用してaxを作成できない' do
       different_user = create(:user)
-      different_user.confirm
+      # different_user.confirm
       new_ax =
         different_user.account_exchanges.build(
           value: 100,

@@ -7,7 +7,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  
+
 RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
@@ -25,7 +25,7 @@ WORKDIR /rails_app
 ADD Gemfile /rails_app/Gemfile
 ADD Gemfile.lock /rails_app/Gemfile.lock
 
-RUN gem install bundler
+RUN gem install bundler -v 2.4.22
 RUN bundle install
 
 ADD . /rails_app

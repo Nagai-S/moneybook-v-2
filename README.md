@@ -3,12 +3,12 @@
 ## How to build development environment
 before building -> Install [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
-1. Run a follow command.
+1. Run the following command to clone the code from this repository.
 ```
 $ git clone https://github.com/Nagai-S/moneybook-v-2.git
 ```
 2. In terminal, change directory to cloned repository.
-3. Run a follow command.
+3. Run the following command.
 ```
 $ bash initial.sh
 ```
@@ -40,7 +40,7 @@ $ docker-compose up
 ```
 $ cp env_file_model.txt .env
 ```
-and write necessary variables into .env.
+and write necessary variables on .env.
 
 ##  How to test
 ```
@@ -49,44 +49,42 @@ $ docker-compose run --rm rails bundle exec rspec spec/system/user_flow.rb
 ```
 
 ## Main Function
-### Account Management
-* You can manage your balance for each account (cash, bank, ...).
-* You can transfer between accounts (include from card to account).
+### Account management
+* You can manage your balance related to each account (cash, bank, ...).
+* You can transfer the balance from an account to another as well as from a card to an account.
 
-### Storing used history
-* You can register history with an genre and note.
-* You can search history by any method.
+### History management regarding your expence and income
+* You can register histories about your expence and income with used accounts or cards, related genres, and short note.
+* You can look up the histories in a various ways.
 
 ### Card Management
-You can register a card specifying
+You can register cards which have the following information
 1. Closing date
 2. Withdrawal date
 3. Linked account
 
-and you can register history with a card.
-You can find out balance now and after withdrawal.
+You can figure out the balance of the account linked to the card at the current and after withdrawal.
 
-Passing withdrawal date, update balance automatically.
+Passing the withdrawal date, the balance of the account linked to the card can be updated automatically.
 
 ### Investment Funds
 * You can register investment funds in Japan.
-* Update market value of investment funds daily and, you can manage all assets include investment funds. 
+* The market value of investment funds can be updated daily and, you can manage your entire assets including investment funds. 
 
 ### Pie Chart
-Display as a pie chart following percentage.
-* Percentage of each account and investment funds of assets
-* Percentage of investment funds
-* Percentage of each genre of expence and income this month.
+The following value is displayed as pie charts.
+* The balance of each account and investment funds.
+* The amount of your expence and income related to each genre within a current month.
 
 ### With iPhone
-* Using ShortCutApplication of iOS, register used history easier.
+* You can eacily register your financial histories by using Short Cut Application of iOS.
 
 ## Outlook
-* Register periodic event
-* In addition to investment funds, to register stocks, bonds and commodities and you can manage all your assets.
+* To register periodic event
+* To register stocks, bonds and commodities in addition to investment funds
 
 ## About API
-1. Sign up on web page
+1. Sign up on the web page
 2. POST /api/v1/auth/sign_in with body:{email: "your-email", password: "your-password"}
 3. Write down [access-token, client, uid] in response.header
 4. Next time to access with API, send requests with headers [access-token, client, uid].

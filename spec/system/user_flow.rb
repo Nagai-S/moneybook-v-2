@@ -9,7 +9,7 @@ RSpec.feature 'UserFlow', type: :feature do
 
   scenario 'create user' do
     user = create(:user)
-    user.confirm
+    # user.confirm
     expect(User.all.length).to eq 1
   end
 

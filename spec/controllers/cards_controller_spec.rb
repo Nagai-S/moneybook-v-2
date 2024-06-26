@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CardsController do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     sign_in @user
     @genre_ex = @user.genres.create(name: 'genre_ex', iae: false)
     @account1 = @user.accounts.create(name: 'account1', value: 1000)
@@ -24,7 +24,7 @@ RSpec.describe CardsController do
   describe 'update' do
     it 'userが正しくなくて失敗' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
 
       params = {
@@ -96,7 +96,7 @@ RSpec.describe CardsController do
 
     it '正しくないuserでdestroyできない' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
 
       expect { delete :destroy, params: params }.to change { Card.all.length }

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'AfterLoginView', type: :feature do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     visit new_user_session_path
     fill_in 'user[email]', with: @user.email
     fill_in 'user[password]', with: @user.password

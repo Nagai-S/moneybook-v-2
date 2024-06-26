@@ -30,7 +30,7 @@ require 'rails_helper'
 RSpec.describe FundUserHistory do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @account1 = @user.accounts.create(name: 'account1', value: 1000)
     @card1 =
       @user.cards.create(
@@ -47,7 +47,7 @@ RSpec.describe FundUserHistory do
   describe "optional validation" do
     it '別のuserのdataを使用してfuhを作成できない' do
       different_user = create(:user)
-      different_user.confirm
+      # different_user.confirm
       dif_fund_user = different_user.fund_users.create(fund_id: @fund.id, average_buy_value: 9000)
       fuh =
         dif_fund_user.fund_user_histories.build(

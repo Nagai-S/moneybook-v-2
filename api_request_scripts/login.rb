@@ -5,7 +5,7 @@ $productionURL = 'https://assetsmanagement.xyz'
 
 def login
   # params = { 'email' => 'a@gmail.com', 'password' => 'asdfghjkl' }
-  params = { 'email' => 'shogo0407baseball@icloud.com', 'password' => 'RMcr7m0neyb00k' }
+  params = { 'email' => 'shogo0407baseball@icloud.com', 'password' => 'Sh05-m0neyb00k' }
 
   # uri = URI.parse('http://localhost:8080/api/v1/auth/sign_in')
   uri = URI.parse($productionURL + '/api/v1/auth/sign_in')

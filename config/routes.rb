@@ -18,9 +18,6 @@
 #                                       PUT    /users(.:format)                                                                         users/registrations#update
 #                                       DELETE /users(.:format)                                                                         users/registrations#destroy
 #                                       POST   /users(.:format)                                                                         users/registrations#create
-#                 new_user_confirmation GET    /users/confirmation/new(.:format)                                                        devise/confirmations#new
-#                     user_confirmation GET    /users/confirmation(.:format)                                                            devise/confirmations#show
-#                                       POST   /users/confirmation(.:format)                                                            devise/confirmations#create
 #                  new_api_user_session GET    /api/v1/auth/sign_in(.:format)                                                           devise_token_auth/sessions#new
 #                      api_user_session POST   /api/v1/auth/sign_in(.:format)                                                           devise_token_auth/sessions#create
 #              destroy_api_user_session DELETE /api/v1/auth/sign_out(.:format)                                                          devise_token_auth/sessions#destroy
@@ -36,9 +33,6 @@
 #                                       PUT    /api/v1/auth(.:format)                                                                   devise_token_auth/registrations#update
 #                                       DELETE /api/v1/auth(.:format)                                                                   devise_token_auth/registrations#destroy
 #                                       POST   /api/v1/auth(.:format)                                                                   devise_token_auth/registrations#create
-#             new_api_user_confirmation GET    /api/v1/auth/confirmation/new(.:format)                                                  devise_token_auth/confirmations#new
-#                 api_user_confirmation GET    /api/v1/auth/confirmation(.:format)                                                      devise_token_auth/confirmations#show
-#                                       POST   /api/v1/auth/confirmation(.:format)                                                      devise_token_auth/confirmations#create
 #            api_v1_auth_validate_token GET    /api/v1/auth/validate_token(.:format)                                                    devise_token_auth/token_validations#validate_token
 #                            api_events GET    /api/v1/events(.:format)                                                                 api/events#index
 #                                       POST   /api/v1/events(.:format)                                                                 api/events#create

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AccountExchangesController do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     sign_in @user
 
     @account1 = @user.accounts.create(name: 'account1', value: 1000)
@@ -70,7 +70,7 @@ RSpec.describe AccountExchangesController do
   describe 'destroy' do
     it '正しいuserでなくて失敗' do
       uncorrect_user = create(:user)
-      uncorrect_user.confirm
+      # uncorrect_user.confirm
       sign_in uncorrect_user
       ax =
         @user.account_exchanges.create(
@@ -119,7 +119,7 @@ RSpec.describe AccountExchangesController do
 
       it '正しいuserでなくて失敗' do
         uncorrect_user = create(:user)
-        uncorrect_user.confirm
+        # uncorrect_user.confirm
         sign_in uncorrect_user
         ax =
           @user.account_exchanges.create(

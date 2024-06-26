@@ -28,8 +28,8 @@ user.genres.create(
     { id: 18, name: '売上金', iae: true },
     { id: 20, name: '立替金返金', iae: true },
     { id: 21, name: '本', iae: false },
-    { id: 30, name: '通信費', iae: false }
-    { id: 31, name: '交際費', iae: false }
+    { id: 30, name: '通信費', iae: false },
+    { id: 31, name: '交際費', iae: false },
   ]
 )
 
@@ -43,7 +43,6 @@ user.accounts.create(
     { id: 12, name: 'メルペイ', value: 0 },
     { id: 16, name: '楽天Pay', value: 0 },
     { id: 18, name: 'スタバカード', value: 0 },
-    { id: 19, name: '学生証', value: 102 },
   ]
 )
 

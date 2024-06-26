@@ -26,7 +26,7 @@ require 'rails_helper'
 RSpec.describe Card do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @account1 = @user.accounts.create(name: 'account1', value: 10_000)
     @account2 = @user.accounts.create(name: 'account2', value: 10_000)
     @card =
@@ -165,7 +165,7 @@ RSpec.describe Card do
 
     it '他のuserはname:account1で作成できる' do
       different_user = create(:user)
-      different_user.confirm
+      # different_user.confirm
       account = different_user.accounts.create(name: 'account',value: 1000)
       new_card =
         different_user.cards.build(
@@ -179,7 +179,7 @@ RSpec.describe Card do
 
     it '別のuserのアカウントを使用してカードを作成できない' do
       different_user = create(:user)
-      different_user.confirm
+      # different_user.confirm
       new_card =
         different_user.cards.build(
           name: 'card1',

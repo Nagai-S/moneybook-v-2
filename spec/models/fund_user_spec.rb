@@ -24,7 +24,7 @@ require 'rails_helper'
 RSpec.describe FundUser do
   before do
     @user = create(:user)
-    @user.confirm
+    # @user.confirm
     @account = @user.accounts.create(value: 10_000, name: 'account1')
     @account_for_card =
       @user.accounts.create(value: 10_000, name: 'account_for_card')
