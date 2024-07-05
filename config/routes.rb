@@ -104,6 +104,7 @@
 #                      pay_not_for_card GET    /pay_not_for_cards/:id(.:format)                                                         cards#pay_not_data
 #                         account_month GET    /account_month(.:format)                                                                 accounts#month_index
 #                           explanation GET    /explanation(.:format)                                                                   homepages#explanation
+#                  update_user_currency GET    /update_user_currency(.:format)                                                          homepages#update_currency
 #                         events_search GET    /events/search(.:format)                                                                 events#search
 #                         shortcuts_run POST   /shortcuts/run(.:format)                                                                 shortcuts#run
 #                               sitemap GET    /sitemap(.:format)                                                                       redirect(301, https://s3-ap-northeast-1.amazonaws.com/my-sitemap/sitemap.xml.gz)
@@ -159,12 +160,12 @@ Rails.application.routes.draw do
   resources :account_exchanges, only: %i[index create new edit update destroy]
   resources :shortcuts, only: %i[index show create new update destroy]
   resources :fund_users, only: %i[new create index destroy update] do
-    resources :fund_user_histories,
-              only: %i[new create index destroy edit update]
+    resources :fund_user_histories, only: %i[new create index destroy edit update]
   end
   get '/pay_not_for_cards/:id', to: 'cards#pay_not_data', as: 'pay_not_for_card'
   get '/account_month', to: 'accounts#month_index'
   get '/explanation', to: 'homepages#explanation'
+  get '/update_user_currency', to: 'homepages#update_currency'
   get '/events/search', to: 'events#search'
   post '/shortcuts/run', to: 'shortcuts#run'
 

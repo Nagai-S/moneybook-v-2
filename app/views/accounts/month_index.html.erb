@@ -30,13 +30,13 @@
             ) %>
           </td>
           <td>
-            ¥<%= each_value_for_month(prev_month_event_date(i))[:in].to_s(:delimited) %>
+            <%= current_user.income_expense_for_duration(prev_month_event_date(i).all_month)[:in].to_s(:currency, locale: current_user.currency.locale) %>
           </td>
           <td class="border-right">
-            ¥-<%= each_value_for_month(prev_month_event_date(i))[:ex].to_s(:delimited) %>
+            <%= current_user.income_expense_for_duration(prev_month_event_date(i).all_month)[:ex].to_s(:currency, locale: current_user.currency.locale) %>
           </td>
           <td>
-            ¥<%= each_value_for_month(prev_month_event_date(i))[:plus_minus].to_s(:delimited) %>
+            <%= current_user.income_expense_for_duration(prev_month_event_date(i).all_month)[:plus_minus].to_s(:currency, locale: current_user.currency.locale) %>
           </td>
         </tr>
       </tbody>

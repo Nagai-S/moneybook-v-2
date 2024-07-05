@@ -5,10 +5,10 @@
 #  id           :bigint           not null, primary key
 #  buy_date     :date
 #  buy_or_sell  :boolean          default(TRUE)
-#  commission   :integer
+#  commission   :decimal(10, 2)   default(0.0)
 #  date         :date
 #  pay_date     :date
-#  value        :integer
+#  value        :decimal(10, 2)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  account_id   :bigint

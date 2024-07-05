@@ -1,51 +1,42 @@
 <div class="table_contents">
-  <div class="table_head row">
-    <li class="col-sm-2">日付(支払日)</li>
-    <li class="col-sm-1">買or売</li>
-    <li class="col-sm-1">買付日</li>
-    <li class="col-sm-2">アカウント</li>
-    <li class="col-sm-1">手数料</li>
-    <li class="col-sm-1">金額</li>
-    <li class="col-sm-2">引き落とし日</li>
+<%= paginate @fund_user_histories, param_name: :fuh_page %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>日付(支払日)</th>
+          <th>買or売</th>
+          <th>買付日</th>
+          <th>アカウント</th>
+          <th>手数料</th>
+          <th>金額</th>
+          <th>引き落とし日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% a=0 %>
+      <% @fund_user_histories.each do |fuh| %>
+        <tr>
+          <td><%= l fuh.date unless a==fuh.date %></td>
+          <td><%= fuh.buy_or_sell_name %></td>
+          <td><%= l fuh.buy_date if fuh.buy_date %></td>
+          <td><%= fuh.payment_source_name %></td>
+          <td><%= fuh.commission.to_s(:currency, locale: fuh.fund_user.currency.locale) %></td>
+          <td><%= fuh.value.abs.to_s(:currency, locale: fuh.fund_user.currency.locale) %></td>
+          <td><%= l fuh.pay_date if fuh.pay_date %></td>
+          <td>
+            <%= link_to "削除", fund_user_fund_user_history_path(fund_user_id: fuh.fund_user_id, id: fuh.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %>
+          </td>
+          <td>
+            <%= link_to "編集", edit_fund_user_fund_user_history_path(fund_user_id: fuh.fund_user_id, id: fuh.id) %>
+          </td>
+        </tr>
+        <% a = fuh.date %>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-
-  <% a=0 %>
-  <% @fund_user_histories.each do |fund_user_history| %>
-  <div class="table_body row">
-    <li class="col-8 offset-2 mobile_date"><%= l fund_user_history.date %></li>
-    <li class="col-sm-2 offset-sm-0  pc_date"><%= l fund_user_history.date unless a == fund_user_history.date %></li>
-    <div class="col-6 col-sm-1">
-      <div class="mobile_th">購入か売却</div>
-      <li><%= fund_user_history.buy_or_sell_name %></li>
-    </div>
-    <div class="col-6 col-sm-1">
-      <div class="mobile_th">買付日</div>
-      <li><%= l fund_user_history.buy_date if fund_user_history.buy_date %></li>
-    </div>
-    
-    <div class="col-6 offset-3 col-sm-2 offset-sm-0">
-      <div class="mobile_th">アカウント</div>
-      <li><%= fund_user_history.payment_source_name %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0">
-      <div class="mobile_th">手数料</div>
-      <li>¥<%= fund_user_history.commission.to_s(:delimited) %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
-      <div class="mobile_th">金額</div>
-      <li>¥<%= fund_user_history.value.to_s(:delimited) %></li>
-    </div>
-    <div class="col-4 col-sm-2">
-      <div class="mobile_th"><%= "引き落とし日" if fund_user_history.pay_date %></div>
-      <li><%= l fund_user_history.pay_date if fund_user_history.pay_date %></li>
-    </div>
-    <li class="col-6 col-sm-1">
-      <%= link_to "削除", fund_user_fund_user_history_path(fund_user_history.fund_user.id ,fund_user_history.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
-    </li>
-    <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_fund_user_fund_user_history_path(fund_user_history.fund_user.id ,fund_user_history.id) %>
-    </li>
-  </div>
-  <% a = fund_user_history.date %>
-  <% end %>
+<%= paginate @fund_user_histories, param_name: :fuh_page %>
 </div>

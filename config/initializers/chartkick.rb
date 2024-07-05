@@ -1,7 +1,7 @@
 Chartkick.options = {
   donut: true,
   thousands: ',',
-  suffix: '円',
+  suffix: '',
   library: {
     title: {
       align: 'center',

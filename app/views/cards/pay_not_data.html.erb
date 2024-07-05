@@ -8,7 +8,7 @@
 
   <% @card.not_pay_dates.each do |date| %>
     <h2 class="credit-title">
-      引き落とし日 <%= l date %>：¥<%= @card.not_pay_value(date).to_s(:delimited) %>
+      引き落とし日 <%= l date %>：<%= @card.not_pay_value(date).to_s(:currency, locale: @card.account.currency.locale) %>
     </h2>
     <div class="table_contents row">
       <div class="table-responsive col-xs-12 col-md-6">
@@ -35,8 +35,8 @@
                   <td><%= l not_pay_event.date %></td>
                   <td><%= not_pay_event.genre_name %></td>
                   <td><%= not_pay_event.memo if not_pay_event.memo %></td>
-                  <td><%= not_pay_event.value_to_string %></td>
-                  <td><%= link_to "削除", event_path(not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= not_pay_event.iae ? '' : '-' %><%= not_pay_event.value.to_s(:currency, locale: not_pay_event.currency.locale) %></td>
+                  <td><%= link_to "削除", event_path(not_pay_event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %></td>
                   <td><%= link_to "編集", edit_event_path(not_pay_event.id) %></td>
                 </tr>
               </tbody>
@@ -54,8 +54,10 @@
           <thead>
             <tr>
               <th>日付</th>
+              <th>振替金額</th>
+              <th></th>
               <th>振替先アカウント</th>
-              <th>金額</th>
+              <th>振替先金額</th>
               <th></th>
               <th></th>
             </tr>
@@ -67,9 +69,11 @@
               <tbody>
                 <tr>
                   <td><%= l not_pay_ax.date %></td>
+                  <td><%= not_pay_ax.value.to_s(:currency, locale: not_pay_ax.source_currency.locale) %></td>
+                  <td>→</td>
                   <td><%= not_pay_ax.to_account_name %></td>
-                  <td>¥<%= not_pay_ax.value.to_s(:delimited) %></td>
-                  <td><%= link_to "削除", account_exchange_path(not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= not_pay_ax.to_value.to_s(:currency, locale: not_pay_ax.to_currency.locale) %></td>
+                  <td><%= link_to "削除", account_exchange_path(not_pay_ax.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %></td>
                   <td><%= link_to "編集", edit_account_exchange_path(not_pay_ax.id) %></td>
                 </tr>
               </tbody>
@@ -100,8 +104,8 @@
                 <tr>
                   <td><%= l not_pay_fund.date %></td>
                   <td><%= not_pay_fund.fund_user.fund.name %></td>
-                  <td>¥<%= not_pay_fund.value.to_s(:delimited) %></td>
-                  <td><%= link_to "削除", fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+                  <td><%= not_pay_fund.value.to_s(:currency, locale: not_pay_fund.fund_user.currency.locale) %></td>
+                  <td><%= link_to "削除", fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %></td>
                   <td><%= link_to "編集", edit_fund_user_fund_user_history_path(not_pay_fund.fund_user.id ,not_pay_fund.id) %></td>
                 </tr>
               </tbody>

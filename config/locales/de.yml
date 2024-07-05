@@ -1,0 +1,12 @@
+de:
+  date:
+    formats:
+      default: "%d.%m.%Y"
+  number:
+    currency:
+      format:
+        unit: "€"
+        delimiter: ","
+        separator: "."
+        precision: 2
+        format: "%u%n"

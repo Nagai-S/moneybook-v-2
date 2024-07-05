@@ -47,7 +47,7 @@ class FundUsersController < ApplicationController
   private
 
   def fund_user_params
-    params.require(:fund_user).permit(:fund_id, :average_buy_value)
+    params.require(:fund_user).permit(:fund_id, :average_buy_value, :currency_id)
   end
 
   def correct_user!

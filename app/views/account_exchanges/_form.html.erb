@@ -1,3 +1,4 @@
+<%= javascript_pack_tag 'account_exchange' %>
 <%= form_with model: @ax, local: true do |f| %>
 <div class="form_wrapper">
 
@@ -51,6 +52,15 @@
 
   <div class="row">
     <div class='<%= label_class %>'>
+      <%= f.label :value, "振替金額を入力してください" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :value, value: @ax.value, class: "form-control ax-source-value", id: "value" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class='<%= label_class %>'>
       <%= f.label :to_account, "振替先アカウントを入力してください" %>
     </div>
     <div class="<%= form_class %>">
@@ -60,10 +70,10 @@
 
   <div class="row">
     <div class='<%= label_class %>'>
-      <%= f.label :value, "振替金額を入力してください" %>
+      <%= f.label :to_alue, "振替先の金額を入力してください" %>
     </div>
     <div class="<%= form_class %>">
-      <%= f.text_field :value, value: @ax.value, class: "form-control", id: "value" %>
+      <%= f.text_field :to_value, value: @ax.to_value, class: "form-control ax-to-value", id: "value" %>
     </div>
   </div>
 

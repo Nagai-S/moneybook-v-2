@@ -32,3 +32,7 @@ set :environment, rails_env
 every 6.hours do
   rake 'daily_change:update_fund_value'
 end
+
+every 1.day, at: '9:00 am' do
+  rake 'daily_change:update_currency_exchange_value'
+end

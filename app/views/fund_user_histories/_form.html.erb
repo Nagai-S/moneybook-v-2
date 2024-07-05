@@ -77,7 +77,7 @@
           <div class="<%= form_class %>">
             <%= f.collection_select(
               :account_id,
-              current_user.accounts,
+              current_user.accounts.where(currency_id: @fund_user.currency_id),
               :id, 
               :name,
               {selected: account_id_for_fund_user_history(buy_or_sell)},
@@ -92,7 +92,7 @@
           <div class="<%= form_class %>">
             <%= f.collection_select(
               :card_id,
-              current_user.cards,
+              current_user.cards.filter { |card| card.account.currency_id == @fund_user.currency_id },
               :id,
               :name,
               {selected: card_id_for_fund_user_history},
@@ -135,6 +135,22 @@
         ) %>
       </div>
     </div>
+
+    <% if !buy_or_sell %>
+    <div class="row">
+      <div class='<%= label_class %>'>
+        <%= f.label :average_sell_value, "平均売却価額を入力してください" %>
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.text_field(
+          :average_sell_value,
+          value: @fund_user.average_sell_value,
+          class: "form-control",
+          id: "value"
+        ) %>
+      </div>
+    </div>
+    <% end %>
 
     <% if @fund_user_history.card && edit %>
     <div class="row">

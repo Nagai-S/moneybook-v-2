@@ -2,16 +2,18 @@
 #
 # Table name: accounts
 #
-#  id         :bigint           not null, primary key
-#  name       :string(255)
-#  value      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint           not null
+#  id          :bigint           not null, primary key
+#  name        :string(255)
+#  value       :decimal(10, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  currency_id :bigint           not null
+#  user_id     :bigint           not null
 #
 # Indexes
 #
-#  index_accounts_on_user_id  (user_id)
+#  index_accounts_on_currency_id  (currency_id)
+#  index_accounts_on_user_id      (user_id)
 #
 # Foreign Keys
 #
@@ -19,6 +21,7 @@
 #
 class Account < ApplicationRecord
   belongs_to :user
+  belongs_to :currency
   has_many :cards
   has_many :events
   has_many :shortcuts, dependent: :destroy
@@ -45,9 +48,6 @@ class Account < ApplicationRecord
             },
             numericality: {
               message: 'は半角数字で入力してください。',
-              only_integer: {
-                message: 'は整数で入力してください。'
-              }
             }
   
   before_destroy do
@@ -67,51 +67,47 @@ class Account < ApplicationRecord
     end
   end
 
-  def after_pay_value
-    event_in_sum = events.where(iae: true).sum(&:value)
-    event_ex_sum = events.where(iae: false).sum(&:value)
-    ax_source_sum = account_exchanges_source.sum(&:value)
-    ax_to_sum = account_exchanges_to.sum(&:value)
-    fund_user_history_buy_sum =
-      fund_user_histories.where(buy_or_sell: true).sum(&:value)
-    fund_user_history_sell_sum =
-      fund_user_histories.where(buy_or_sell: false).sum(&:value)
-    fund_user_history_sell_commission_sum =
-      fund_user_histories.where(buy_or_sell: false).sum(:commission)
-
-    return [
-      value,
-      event_in_sum,
-      event_ex_sum * (-1),
-      ax_to_sum,
-      ax_source_sum * (-1),
-      fund_user_history_sell_sum,
-      fund_user_history_buy_sum * (-1),
-      fund_user_history_sell_commission_sum * (-1),
-    ].sum
+  def scale_factor
+    return currency_id == user.currency_id ? 1 : (
+      CurrencyExchange.find_by(unit_id: currency_id, to_id: user.currency_id).value
+    )
   end
 
-  def now_value
-    event_in_sum = events.where(iae: true).select(&:payed?).sum(&:value)
-    event_ex_sum = events.where(iae: false).select(&:payed?).sum(&:value)
-    ax_source_sum = account_exchanges_source.select(&:payed?).sum(&:value)
-    ax_to_sum = account_exchanges_to.sum(&:value)
-    fund_user_history_buy_sum =
-      fund_user_histories.where(buy_or_sell: true).select(&:payed?).sum(&:value)
-    fund_user_history_sell_sum =
-      fund_user_histories.where(buy_or_sell: false).select(&:payed?).sum(&:value)
-    fund_user_history_sell_commission_sum =
-      fund_user_histories.where(buy_or_sell: false).select(&:payed?).sum(&:commission)
+  def after_pay_value(arg={scale: false})
+    event_sum = events.sum(&:value)
+    ax_source_sum = account_exchanges_source.sum(&:value)
+    ax_to_sum = account_exchanges_to.sum(&:to_value)
+    fund_user_history_sum = fund_user_histories.sum(&:value)
+    fund_user_history_commission_sum = fund_user_histories.sum(:commission)
 
-    return [
+    total_value = [
       value,
-      event_in_sum,
-      event_ex_sum * (-1),
-      ax_to_sum,
+      event_sum,
       ax_source_sum * (-1),
-      fund_user_history_sell_sum,
-      fund_user_history_buy_sum * (-1),
-      fund_user_history_sell_commission_sum * (-1),
+      ax_to_sum,
+      fund_user_history_sum * (-1),
+      fund_user_history_commission_sum,
     ].sum
+
+    return arg[:scale] ? total_value * scale_factor : total_value
+  end
+
+  def now_value(arg={scale: false})
+    event_sum = events.select(&:payed?).sum(&:value)
+    ax_source_sum = account_exchanges_source.select(&:payed?).sum(&:value)
+    ax_to_sum = account_exchanges_to.sum(&:to_value)
+    fund_user_history_sum = fund_user_histories.select(&:payed?).sum(&:value)
+    fund_user_history_commission_sum = fund_user_histories.select(&:payed?).sum(&:commission)
+
+    total_value = [
+      value,
+      event_sum,
+      ax_source_sum * (-1),
+      ax_to_sum,
+      fund_user_history_sum * (-1),
+      fund_user_history_commission_sum,
+    ].sum
+
+    return arg[:scale] ? total_value * scale_factor : total_value
   end
 end

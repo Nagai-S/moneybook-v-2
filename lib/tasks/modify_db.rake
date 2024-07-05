@@ -9,4 +9,13 @@ namespace :modify_db do
       fund.update(name: name2.delete("\n"), string_id: string_id.delete("\n"))
     end
   end
+
+  desc "modify positive and negative in events-value"
+  task modify_value_of_events: :environment do
+    Event.all.each do |event|
+      if !event.iae
+        event.update(value: -event.value)
+      end
+    end
+  end
 end

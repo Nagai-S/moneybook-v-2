@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: fund_users
+#
+#  id                 :bigint           not null, primary key
+#  average_buy_value  :decimal(10, 2)
+#  average_sell_value :decimal(10, 2)   default(0.0)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  currency_id        :bigint           not null
+#  fund_id            :bigint           not null
+#  user_id            :bigint           not null
+#
+# Indexes
+#
+#  index_fund_users_on_currency_id  (currency_id)
+#  index_fund_users_on_fund_id      (fund_id)
+#  index_fund_users_on_user_id      (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (fund_id => funds.id)
+#  fk_rails_...  (user_id => users.id)
+#
 2 # == Schema Information
 #
 # Table name: fund_users

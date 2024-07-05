@@ -19,7 +19,7 @@
               <%= @shortcut.payment_source_name %>
             </td>
             <td><%= @shortcut.genre.name %></td>
-            <td><%=link_to "削除", shortcut_path(@shortcut.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+            <td><%=link_to "削除", shortcut_path(@shortcut.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %></td>
           </tr>
         </tbody>
 

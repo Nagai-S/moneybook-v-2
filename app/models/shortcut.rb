@@ -60,6 +60,7 @@ class Shortcut < ApplicationRecord
   end
 
   def run_shortcut(memo, value)
+    signed_value = iae ? value : -value.to_f
     event = user.events.create(
       iae: iae,
       genre_id: genre_id,
@@ -67,7 +68,8 @@ class Shortcut < ApplicationRecord
       card_id: card_id,
       date: Date.today,
       memo: memo,
-      value: value,
+      value: signed_value,
+      currency_id: account.currency_id
     )
     event.after_change_action
   end

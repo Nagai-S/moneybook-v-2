@@ -28,12 +28,7 @@ class EventsController < ApplicationController
     events = search_money(events)
     events = search_date(events)
 
-    value_array = []
-    events.each do |event|
-      value_include_plus_minus = event.iae ? event.value : -event.value
-      value_array << value_include_plus_minus
-    end
-    @sum = value_array.sum
+    @sum = current_user.calculate_in_ex_for_events(events)[:plus_minus]
     @events =
       events.includes(:account, :card, :genre).page(params[:event_page]).per(80)
   end
@@ -73,6 +68,11 @@ class EventsController < ApplicationController
       card = Card.find_by(id: params[:event][:card_id])
       params[:event][:account_id] = card.account_id
     end
+    if params[:event][:iae] == 'false'
+      params[:event][:value] = -1*(params[:event][:value].to_f.abs)
+    end
+    account = current_user.accounts.find_by(id: params[:event][:account_id])
+    params[:event][:currency_id] = account.currency_id
     params.require(:event).permit(
       :date, 
       :value, 
@@ -81,6 +81,7 @@ class EventsController < ApplicationController
       :pay_date, 
       :genre_id, 
       :account_id, 
+      :currency_id,
       :card_id
     )
   end

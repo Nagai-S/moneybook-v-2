@@ -8,7 +8,7 @@
 <body>
   <h1>今月の<%= @card.name %>でのお支払いの合計金額のご案内です。</h1>
   <p>
-    今月は¥<%= @card.not_pay_value(@pay_date).to_s(:delimited) %>の利用がありました。
+    今月は<%= @card.not_pay_value(@pay_date).to_s(:currency, locale: @card.account.currency) %>の利用がありました。
   </p>
   <p>
     <%= l @pay_date%>に引き落とされます。

@@ -39,10 +39,8 @@ class CardsController < ApplicationController
         .includes(:account, :card, :genre)
         .page(params[:event_page])
         .per(30)
-    ax_array = []
-    @card.account_exchanges.each { |ax| ax_array.push(ax) }
-    @axs = Kaminari.paginate_array(ax_array).page(params[:ax_page]).per(30)
-    @fund_user_histories = @card.fund_user_histories
+    @axs = @card.account_exchanges.page(params[:ax_page]).per(30)
+    @fund_user_histories = @card.fund_user_histories.page(params[:fuh_page]).per(30)
   end
 
   def pay_not_data; end

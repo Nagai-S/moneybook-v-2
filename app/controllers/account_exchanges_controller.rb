@@ -52,13 +52,23 @@ class AccountExchangesController < ApplicationController
       card = Card.find_by(id: params[:account_exchange][:card_id])
       params[:account_exchange][:source_id] = card.account_id
     end
+
+    source_account = current_user.accounts.find_by(id: params[:account_exchange][:source_id])
+    params[:account_exchange][:source_currency_id] = source_account.currency_id
+
+    to_account = current_user.accounts.find_by(id: params[:account_exchange][:to_id])
+    params[:account_exchange][:to_currency_id] = to_account.currency_id
+
     params.require(:account_exchange).permit(
       :date, 
       :value, 
+      :to_value,
       :pay_date, 
       :to_id,
       :source_id,
-      :card_id
+      :card_id,
+      :source_currency_id,
+      :to_currency_id
     )
   end
 

@@ -17,9 +17,11 @@
 #  unconfirmed_email      :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  currency_id            :bigint           default(1), not null
 #
 # Indexes
 #
+#  index_users_on_currency_id           (currency_id)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_uid_and_provider      (uid,provider) UNIQUE
@@ -35,6 +37,7 @@ class User < ApplicationRecord
         #  :confirmable
   include DeviseTokenAuth::Concerns::User
 
+  belongs_to :currency
   has_many :events, dependent: :delete_all
   has_many :shortcuts, dependent: :delete_all
   has_many :account_exchanges, dependent: :delete_all
@@ -44,15 +47,40 @@ class User < ApplicationRecord
   has_many :fund_users, dependent: :delete_all
   has_many :funds, through: :fund_users
 
+  def scale_factor(curr)
+    return currency_id == curr.id ? 1 : (
+      CurrencyExchange.find_by(unit_id: curr.id, to_id: currency_id).value
+    )
+  end
+
+  def income_expense_for_duration(time_duration)
+    in_total = 0;
+    ex_total = 0;
+    events_for_time = events.where(date: time_duration)
+    return calculate_in_ex_for_events(events_for_time)
+  end
+
+  def calculate_in_ex_for_events(arg_events)
+    in_total = 0;
+    ex_total = 0;
+    used_currencies.each do |curr|
+      in_total += arg_events.where(iae: true, currency_id: curr.id).sum(:value) * scale_factor(curr)
+      ex_total += arg_events.where(iae: false, currency_id: curr.id).sum(:value) * scale_factor(curr)
+    end
+    return { in: in_total, ex: ex_total, plus_minus: in_total + ex_total }
+  end
+
   def total_account_value
     return_value = 0
-    accounts.each { |account| return_value += account.now_value }
+    accounts.each do |account|
+      return_value += account.now_value({scale: true})
+    end
     return return_value
   end
 
   def after_pay_value
     return_value = 0
-    accounts.each { |account| return_value += account.after_pay_value }
+    accounts.each { |account| return_value += account.after_pay_value({scale: true}) }
     return return_value
   end
 
@@ -68,13 +96,13 @@ class User < ApplicationRecord
 
   def total_fund_value
     return_value = 0
-    fund_users.each { |fund_user| return_value += fund_user.now_value }
+    fund_users.each { |fund_user| return_value += fund_user.now_value({scale: true}) }
     return return_value
   end
 
   def total_fund_gain_value
     return_value = 0
-    fund_users.each { |fund_user| return_value += fund_user.gain_value }
+    fund_users.each { |fund_user| return_value += fund_user.gain_value({scale: true}) }
     return return_value
   end
 
@@ -84,5 +112,11 @@ class User < ApplicationRecord
 
   def total_after_pay_assets
     after_pay_value + total_fund_value
+  end
+
+  def used_currencies
+    currencies = accounts.map(&:currency)
+    flatten_currencies = currencies.uniq(&:id)
+    return flatten_currencies
   end
 end

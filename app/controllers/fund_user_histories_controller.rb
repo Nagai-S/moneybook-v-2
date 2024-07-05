@@ -6,7 +6,7 @@ class FundUserHistoriesController < ApplicationController
   before_action :set_previous_url, only: %i[new edit]
 
   def index
-    @fund_user_histories = @fund_user.fund_user_histories.includes(:card, :account)
+    @fund_user_histories = @fund_user.fund_user_histories.includes(:card, :account).page(params[:fuh_page])
   end
 
   def new
@@ -17,6 +17,7 @@ class FundUserHistoriesController < ApplicationController
     @fund_user_history =
       @fund_user.fund_user_histories.build(fund_user_histories_params)
     if @fund_user_history.save
+      @fund_user.update(average_sell_value: params[:fund_user_history][:average_sell_value]) if params[:fund_user_history][:average_sell_value]
       redirect_to_previou_url
     else
       flash.now[:danger] =
@@ -34,6 +35,7 @@ class FundUserHistoriesController < ApplicationController
 
   def update
     if @fund_user_history.update(fund_user_histories_params)
+      @fund_user.update(average_sell_value: params[:fund_user_history][:average_sell_value]) if params[:fund_user_history][:average_sell_value]
       redirect_to_previou_url
     else
       flash.now[:danger] = '編集に失敗しました。'
@@ -57,6 +59,10 @@ class FundUserHistoriesController < ApplicationController
       params[:fund_user_history][:card_id] = nil
       params[:fund_user_history][:account_id] = nil
     end
+    params[:fund_user_history][:commission] = -1*(params[:fund_user_history][:commission].to_f.abs)
+    if params[:fund_user_history][:buy_or_sell] == 'false'
+      params[:fund_user_history][:value] = -1*(params[:fund_user_history][:value].to_f.abs)
+    end
     params
       .require(:fund_user_history)
       .permit(
@@ -67,7 +73,7 @@ class FundUserHistoriesController < ApplicationController
         :buy_or_sell, 
         :pay_date,
         :card_id,
-        :account_id
+        :account_id,
       )
   end
 

@@ -1,47 +1,40 @@
 <div class="table_contents">
-  <%= paginate @events, param_name: :event_page %>
-  <div class="table_head row">
-    <li class="col-sm-2">日付</li>
-    <li class="col-sm-1">ジャンル</li>
-    <li class="col-sm-2">アカウント</li>
-    <li class="col-sm-2">メモ</li>
-    <li class="col-sm-1">金額</li>
-    <li class="col-sm-2">引き落とし日</li>
+<%= paginate @events, param_name: :event_page %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>ジャンル</th>
+          <th>アカウント</th>
+          <th>メモ</th>
+          <th>金額</th>
+          <th>引き落とし日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% a=0 %>
+      <% @events.each do |event| %>
+        <tr class='<%= which_iae(event)%>'>
+          <td><%= l event.date unless a==event.date %></td>
+          <td><%= event.genre_name %></td>
+          <td><%= event.payment_source_name %></td>
+          <td><%= event.memo %></td>
+          <td><%= event.value.to_s(:currency, locale: event.currency.locale) %></td>
+          <td><%= l event.pay_date if event.pay_date %></td>
+          <td>
+            <%= link_to "削除", event_path(event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %>
+          </td>
+          <td>
+            <%= link_to "編集", edit_event_path(event.id) %>
+          </td>
+        </tr>
+        <% a = event.date %>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-
-  <% a=0 %>
-  <% @events.each do |event| %>
-  <div class="table_body row  <%= which_iae(event) %>">
-    <li class="col-8 offset-2 mobile_date"><%= l event.date %></li>
-    <li class="col-sm-2 offset-sm-0  pc_date"><%= l event.date unless a==event.date %></li>
-    <div class="col-6 col-sm-1">
-      <div class="mobile_th">ジャンル</div>
-      <li><%= event.genre_name %></li>
-    </div>
-    <div class="col-6 col-sm-2">
-      <div class="mobile_th">アカウント</div>
-      <li><%= event.payment_source_name %></li>
-    </div>
-    <div class="col-12 col-sm-2">
-      <div class="mobile_th"><%= "メモ" if event.memo? %></div>
-      <li><%= event.memo %></li>
-    </div>
-    <div class="col-4 offset-4 col-sm-1 offset-sm-0 mobile_value">
-      <div class="mobile_th">金額</div>
-      <li><%= event.value_to_string %></li>
-    </div>
-    <div class="col-4 col-sm-2">
-      <div class="mobile_th"><%= "引き落とし日" if event.pay_date %></div>
-      <li><%= l event.pay_date if event.pay_date %></li>
-    </div>
-    <li class="col-6 col-sm-1">
-      <%= link_to "削除", event_path(event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %>
-    </li>
-    <li class="col-6 col-sm-1">
-      <%= link_to "編集", edit_event_path( event.id) %>
-    </li>
-  </div>
-  <% a=event.date %>
-  <% end %>
-  <%= paginate @events, param_name: :event_page %>
+<%= paginate @events, param_name: :event_page %>
 </div>

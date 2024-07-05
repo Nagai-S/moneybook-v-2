@@ -2,27 +2,34 @@
 #
 # Table name: account_exchanges
 #
-#  id         :bigint           not null, primary key
-#  date       :date
-#  pay_date   :date
-#  value      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  card_id    :bigint
-#  source_id  :bigint
-#  to_id      :bigint
-#  user_id    :bigint           not null
+#  id                 :bigint           not null, primary key
+#  date               :date
+#  pay_date           :date
+#  to_value           :decimal(10, 2)
+#  value              :decimal(10, 2)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  card_id            :bigint
+#  source_currency_id :bigint
+#  source_id          :bigint
+#  to_currency_id     :bigint
+#  to_id              :bigint
+#  user_id            :bigint           not null
 #
 # Indexes
 #
-#  index_account_exchanges_on_card_id    (card_id)
-#  index_account_exchanges_on_source_id  (source_id)
-#  index_account_exchanges_on_to_id      (to_id)
-#  index_account_exchanges_on_user_id    (user_id)
+#  index_account_exchanges_on_card_id             (card_id)
+#  index_account_exchanges_on_source_currency_id  (source_currency_id)
+#  index_account_exchanges_on_source_id           (source_id)
+#  index_account_exchanges_on_to_currency_id      (to_currency_id)
+#  index_account_exchanges_on_to_id               (to_id)
+#  index_account_exchanges_on_user_id             (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (source_currency_id => currencies.id)
 #  fk_rails_...  (source_id => accounts.id)
+#  fk_rails_...  (to_currency_id => currencies.id)
 #  fk_rails_...  (to_id => accounts.id)
 #  fk_rails_...  (user_id => users.id)
 #
@@ -39,6 +46,12 @@ class AccountExchange < ApplicationRecord
              class_name: 'Account',
              optional: true,
              foreign_key: :to_id
+  belongs_to :source_currency,
+             class_name: 'Currency',
+             foreign_key: :source_currency_id
+  belongs_to :to_currency,
+             class_name: 'Currency',
+             foreign_key: :to_currency_id
 
   default_scope -> { order(date: :desc) }
 
@@ -49,9 +62,13 @@ class AccountExchange < ApplicationRecord
             },
             numericality: {
               message: 'は半角数字で入力してください。',
-              only_integer: {
-                message: 'は整数で入力してください。'
-              }
+            }
+  validates :to_value,
+            presence: {
+              message: 'は一桁以上入力してください。'
+            },
+            numericality: {
+              message: 'は半角数字で入力してください。',
             }
   
   validate :same_user

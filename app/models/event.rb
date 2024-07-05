@@ -2,25 +2,27 @@
 #
 # Table name: events
 #
-#  id         :bigint           not null, primary key
-#  date       :date
-#  iae        :boolean          default(FALSE)
-#  memo       :string(255)
-#  pay_date   :date
-#  value      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  account_id :bigint
-#  card_id    :bigint
-#  genre_id   :bigint
-#  user_id    :bigint           not null
+#  id          :bigint           not null, primary key
+#  date        :date
+#  iae         :boolean          default(FALSE)
+#  memo        :string(255)
+#  pay_date    :date
+#  value       :decimal(10, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  account_id  :bigint
+#  card_id     :bigint
+#  currency_id :bigint           not null
+#  genre_id    :bigint
+#  user_id     :bigint           not null
 #
 # Indexes
 #
-#  index_events_on_account_id  (account_id)
-#  index_events_on_card_id     (card_id)
-#  index_events_on_genre_id    (genre_id)
-#  index_events_on_user_id     (user_id)
+#  index_events_on_account_id   (account_id)
+#  index_events_on_card_id      (card_id)
+#  index_events_on_currency_id  (currency_id)
+#  index_events_on_genre_id     (genre_id)
+#  index_events_on_user_id      (user_id)
 #
 # Foreign Keys
 #
@@ -33,6 +35,7 @@ class Event < ApplicationRecord
   belongs_to :card, optional: true
   belongs_to :genre, optional: true
   belongs_to :account, optional: true
+  belongs_to :currency
 
   default_scope -> { order(date: :desc) }
 
@@ -44,12 +47,9 @@ class Event < ApplicationRecord
     },
     numericality: {
       message: 'は半角数字で入力してください。',
-      only_integer: {
-        message: 'は整数で入力してください。'
-      }
     }
   )
-  validate :iae_equal_to_genre_iae, :same_user
+  validate :iae_equal_to_genre_iae, :same_user, :same_currency
 
   after_save { after_change_action }
 
@@ -67,8 +67,10 @@ class Event < ApplicationRecord
     genre ? genre.name : '削除済み'
   end
 
-  def value_to_string
-    iae ? '¥' + value.to_s(:delimited) : '¥-' + value.to_s(:delimited)
+  def scale_factor
+    return currency_id == user.currency_id ? 1 : (
+      CurrencyExchange.find_by(unit_id: currency_id, to_id: user.currency_id).value
+    )
   end
 
   private
@@ -87,6 +89,12 @@ class Event < ApplicationRecord
 
     if user_ids.uniq.size != 1
       errors.add(:user_id, ' different')
+    end
+  end
+
+  def same_currency
+    if account_id != nil && account.currency_id != currency_id
+      errors.add(:currency_id, 'アカウントの通貨と異なります')
     end
   end
 

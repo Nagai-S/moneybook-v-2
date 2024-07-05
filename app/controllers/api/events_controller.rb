@@ -26,6 +26,11 @@ class Api::EventsController < Api::ApplicationController
       card = Card.find_by(id: params[:event][:card_id])
       params[:event][:account_id] = card.account_id
     end
+    if params[:event][:iae] == 'false'
+      params[:event][:value] = -1*(params[:event][:value].to_f.abs)
+    end
+    account = current_user.accounts.find_by(id: params[:event][:account_id])
+    params[:event][:currency_id] = account.currency_id
     params.require(:event).permit(
       :date, 
       :value, 
@@ -34,6 +39,7 @@ class Api::EventsController < Api::ApplicationController
       :pay_date, 
       :genre_id, 
       :account_id, 
+      :currency_id,
       :card_id
     )
   end

@@ -2,17 +2,20 @@
 #
 # Table name: fund_users
 #
-#  id                :bigint           not null, primary key
-#  average_buy_value :decimal(10, 2)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  fund_id           :bigint           not null
-#  user_id           :bigint           not null
+#  id                 :bigint           not null, primary key
+#  average_buy_value  :decimal(10, 2)
+#  average_sell_value :decimal(10, 2)   default(0.0)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  currency_id        :bigint           not null
+#  fund_id            :bigint           not null
+#  user_id            :bigint           not null
 #
 # Indexes
 #
-#  index_fund_users_on_fund_id  (fund_id)
-#  index_fund_users_on_user_id  (user_id)
+#  index_fund_users_on_currency_id  (currency_id)
+#  index_fund_users_on_fund_id      (fund_id)
+#  index_fund_users_on_user_id      (user_id)
 #
 # Foreign Keys
 #
@@ -22,6 +25,7 @@
 class FundUser < ApplicationRecord
   belongs_to :user
   belongs_to :fund
+  belongs_to :currency
   has_many :fund_user_histories, dependent: :delete_all
 
   validates(
@@ -50,38 +54,41 @@ class FundUser < ApplicationRecord
     fund.set_now_value_of_fund if fund.update_on != Date.today
   end
 
-  def total_buy_value
-    return fund_user_histories.where(buy_or_sell: true).select(&:bought?).sum(&:value)
+  def scale_factor
+    return currency_id == user.currency_id ? 1 : (
+      CurrencyExchange.find_by(unit_id: currency_id, to_id: user.currency_id).value
+    )
   end
 
-  def total_sell_value
-    return fund_user_histories.where(buy_or_sell: false).sum(&:value)
+  def total_buy_value(arg={scale: false})
+    total_value = fund_user_histories.where(buy_or_sell: true).select(&:bought?).sum(&:value)
+    return arg[:scale] ? total_value * scale_factor : total_value
   end
 
-  def now_value
-    return_value =
-      if fund.value
-        (
-          (
-            (total_buy_value - total_buy_commission).to_f * 
-            fund.value.to_f / average_buy_value.to_f
-          ) - total_sell_value
-        ).round
-      else
-        (
-          total_buy_value.to_f - total_buy_commission.to_f -
-            total_sell_value.to_f
-        ).round
-      end
-
-    return return_value
+  def total_sell_value(arg={scale: false})
+    total_value = fund_user_histories.where(buy_or_sell: false).sum(&:value)
+    return arg[:scale] ? total_value * scale_factor : total_value
   end
 
-  def total_buy_commission
-    return fund_user_histories.where(buy_or_sell: true).select(&:bought?).sum(&:commission)
+  def now_value(arg={scale: false})
+    if fund_user_histories.exists?(buy_or_sell: false)
+      total_value = fund.value ? (
+        ((total_buy_value / average_buy_value + total_sell_value / average_sell_value) * fund.value).round
+      ) : (
+        (total_buy_value + total_sell_value).round
+      )
+    else
+      total_value = fund.value ? (
+        ((total_buy_value / average_buy_value) * fund.value).round
+      ) : (
+        (total_buy_value).round
+      )
+    end
+
+    return arg[:scale] ? total_value * scale_factor : total_value
   end
 
-  def gain_value
-    return now_value - total_buy_value
+  def gain_value(arg={scale: false})
+    return now_value({scale: arg[:scale]}) - (total_buy_value({scale: arg[:scale]}) + total_sell_value({scale: arg[:scale]}))
   end
 end

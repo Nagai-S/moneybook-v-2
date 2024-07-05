@@ -6,10 +6,10 @@ class AccountsController < ApplicationController
   def index
     not_order_accounts = current_user.accounts.includes(:cards)
     @accounts =
-      not_order_accounts.sort { |a, b| (-1) * (a.now_value <=> b.now_value) }
+      not_order_accounts.sort { |a, b| (-1) * (a.now_value({scale: true}) <=> b.now_value({scale: true})) }
     not_order_fund_users = current_user.fund_users
     @fund_users =
-      not_order_fund_users.sort { |a, b| (-1) * (a.now_value <=> b.now_value) }
+      not_order_fund_users.sort { |a, b| (-1) * (a.now_value({scale: true}) <=> b.now_value({scale: true})) }
   end
 
   def month_index; end
@@ -39,6 +39,8 @@ class AccountsController < ApplicationController
         .page(params[:ax_page])
         .per(30)
     @fund_user_histories = @account.fund_user_histories.where(card_id: nil)
+      .page(params[:fuh_page])
+      .per(30)
   end
 
   def create
@@ -73,7 +75,7 @@ class AccountsController < ApplicationController
   private
 
   def accounts_params
-    params.require(:account).permit(:name, :value)
+    params.require(:account).permit(:name, :value, :currency_id)
   end
 
   def correct_user!

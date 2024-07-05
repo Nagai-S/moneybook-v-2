@@ -1,7 +1,7 @@
 <h1>投資信託</h1>
 <div class="row">
   <div class="col-10 offset-1 col-sm-8 offset-sm-4 col-md-6 offset-md-6 page_top_menu">
-    <li><%= link_to "投資信託追加", funds_index_path, class: "square" %></li>
+    <li><%= link_to "投資信託追加", funds_index_path %></li>
   </div>
 </div>
 
@@ -15,9 +15,9 @@
     "#f7fbfc",
   ],
   library: {title: {
-    text: "¥" + current_user.total_fund_value.to_s(:delimited) + "</br>" +
+    text: current_user.total_fund_value.to_s(:currency, locale: current_user.currency.locale) + "</br>" +
     "(<span class=" + loss_or_gain(current_user.total_fund_gain_value) + ">" + 
-    "¥" + plus_minus_gain_value(current_user.total_fund_gain_value) + "</span>)",
+    (current_user.total_fund_gain_value.to_s(:currency, locale: current_user.currency.locale)) + "</span>)",
   }}  
 } %>
 
@@ -30,7 +30,9 @@
           <th>投資信託名</th>
           <th>時価評価額</th>
           <th>総購入額</th>
+          <th>総売却額</th>
           <th>平均取得価額</th>
+          <th>平均売却価額</th>
           <th>評価損益</th>
         </tr>
       </thead>
@@ -40,11 +42,13 @@
       <tbody>
         <tr>
           <td><%= link_to fund_user.fund.name, fund_user_fund_user_histories_path(fund_user.id) %></td>
-          <td>¥<%= fund_user.now_value.to_s(:delimited) %></td>
-          <td>¥<%= fund_user.total_buy_value.to_s(:delimited) %></td>
-          <td>¥<%= fund_user.average_buy_value.to_s(:delimited) %></td>
-          <td class=<%= loss_or_gain(fund_user.gain_value) %>>¥<%= fund_user.gain_value.to_s(:delimited) %></td>
-          <td><%= link_to "削除", fund_user_path(fund_user.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", "turbolinks" => false} %></td>
+          <td><%= fund_user.now_value.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td><%= fund_user.total_buy_value.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td><%= fund_user.total_sell_value.abs.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td><%= fund_user.average_buy_value.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td><%= fund_user.average_sell_value.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td class=<%= loss_or_gain(fund_user.gain_value) %>><%= fund_user.gain_value.to_s(:currency, locale: fund_user.currency.locale) %></td>
+          <td><%= link_to "削除", fund_user_path(fund_user.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %></td>
         </tr>
       </tbody>
 

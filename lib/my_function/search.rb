@@ -61,8 +61,14 @@ module MyFunction
           .order(value: :desc)
           .first
           .value if current_user.events.exists?
+      min_value = current_user
+        .events
+        .reorder(nil)
+        .order(value: :desc)
+        .last
+        .value if current_user.events.exists?
       @money_or_not = params[:money_or_not]
-      @small_value = params[:money1]
+      @small_value = params[:money1] == '' ? min_value : params[:money1]
       @large_value = params[:money2] == '' ? max_value : params[:money2]
       @css_money = @money_or_not == '1' ? 'block' : 'none'
       if @money_or_not
@@ -70,8 +76,8 @@ module MyFunction
           if @money_or_not != '0'
             events.where(
               'value >= ? and value <= ?',
-              @small_value.to_i,
-              @large_value.to_i
+              @small_value.to_f,
+              @large_value.to_f
             )
           else
             events
