@@ -115,8 +115,8 @@ class User < ApplicationRecord
   end
 
   def used_currencies
-    currencies = accounts.map(&:currency)
-    flatten_currencies = currencies.uniq(&:id)
-    return flatten_currencies
+    currencies = accounts.where.not(currency_id: nil).map(&:currency)
+    uniq_currencies = currencies.uniq(&:id)
+    return uniq_currencies
   end
 end
