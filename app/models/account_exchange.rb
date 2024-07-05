@@ -46,12 +46,12 @@ class AccountExchange < ApplicationRecord
              class_name: 'Account',
              optional: true,
              foreign_key: :to_id
-  # belongs_to :source_currency,
-  #            class_name: 'Currency',
-  #            foreign_key: :source_currency_id
-  # belongs_to :to_currency,
-  #            class_name: 'Currency',
-  #            foreign_key: :to_currency_id
+  belongs_to :source_currency,
+             class_name: 'Currency',
+             foreign_key: :source_currency_id
+  belongs_to :to_currency,
+             class_name: 'Currency',
+             foreign_key: :to_currency_id
 
   default_scope -> { order(date: :desc) }
 
