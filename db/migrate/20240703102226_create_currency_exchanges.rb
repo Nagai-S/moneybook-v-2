@@ -6,5 +6,7 @@ class CreateCurrencyExchanges < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    CurrencyExchange.create(unit_id: 1, to_id: 2)
+    CurrencyExchange.create(unit_id: 2, to_id: 1)
   end
 end

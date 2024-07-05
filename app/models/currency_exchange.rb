@@ -21,15 +21,6 @@
 #
 
 class CurrencyExchange < ApplicationRecord
-  belongs_to :account,
-             class_name: 'Account',
-             optional: true,
-             foreign_key: :source_id
-  belongs_to :to_account,
-             class_name: 'Account',
-             optional: true,
-             foreign_key: :to_id
-
   belongs_to :unit, class_name: 'Currency', foreign_key: :unit_id
   belongs_to :to, class_name: 'Currency', foreign_key: :to_id
 end
