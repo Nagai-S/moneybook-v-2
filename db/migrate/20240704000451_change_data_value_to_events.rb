@@ -6,5 +6,9 @@ class ChangeDataValueToEvents < ActiveRecord::Migration[6.0]
     change_column :fund_user_histories, :commission, :decimal, precision: 10, scale: 2
     change_column :account_exchanges, :value, :decimal, precision: 10, scale: 2
     add_column :account_exchanges, :to_value, :decimal, precision: 10, scale: 2
+    AccountExchange.find_each do |ax|
+      ax.to_value = ax.value
+      ax.save!
+    end
   end
 end
