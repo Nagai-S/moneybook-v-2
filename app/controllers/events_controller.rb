@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   include MyFunction::Search
   before_action :authenticate_user!
-  before_action :correct_user!, only: %i[destroy edit update]
+  before_action :correct_user!, only: %i[destroy edit update show]
   before_action :to_explanation, only: %i[index new search]
   before_action :set_previous_url, only: %i[new edit]
 
@@ -12,6 +12,10 @@ class EventsController < ApplicationController
         .includes(:account, :card, :genre)
         .page(params[:event_page])
         .per(50)
+  end
+
+  def show
+    @event = current_user.events.find(params[:id])
   end
 
   def new
@@ -68,11 +72,30 @@ class EventsController < ApplicationController
       card = Card.find_by(id: params[:event][:card_id])
       params[:event][:account_id] = card.account_id
     end
+
     if params[:event][:iae] == 'false'
-      params[:event][:value] = -1*(params[:event][:value].to_f.abs)
+      params[:event][:value] = -1 * (params[:event][:value].to_f.abs)
     end
+
     account = current_user.accounts.find_by(id: params[:event][:account_id])
-    params[:event][:currency_id] = account.currency_id
+    params[:event][:pay_currency_id] = account.currency_id
+
+    currency = Currency.find(params[:event][:currency_id])
+    pay_currency = Currency.find(params[:event][:pay_currency_id])
+    
+    if params[:event][:pay_value]
+      params[:event][:pay_value] = params[:event][:iae] == 'true' ? (
+        params[:event][:pay_value] 
+      ) : (
+        -1 * (params[:event][:pay_value].to_f.abs)
+      )
+    elsif params[:event][:currency_id] == params[:event][:pay_currency_id].to_s
+      params[:event][:pay_value] = params[:event][:value]
+    else
+      params[:event][:pay_value] = params[:event][:value] * currency.scale_to(pay_currency)
+    end
+    
+
     params.require(:event).permit(
       :date, 
       :value, 
@@ -82,12 +105,16 @@ class EventsController < ApplicationController
       :genre_id, 
       :account_id, 
       :currency_id,
+      :pay_currency_id,
+      :pay_value,
       :card_id
     )
   end
 
   def correct_user!
     @event = Event.find_by(id: params[:id])
-    redirect_to root_path unless current_user == @event.user
+    unless @event && current_user == @event.user
+      redirect_to events_path
+    end
   end
 end

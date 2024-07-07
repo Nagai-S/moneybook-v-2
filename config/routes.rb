@@ -71,7 +71,8 @@
 #                                       POST   /events(.:format)                                                                        events#create
 #                             new_event GET    /events/new(.:format)                                                                    events#new
 #                            edit_event GET    /events/:id/edit(.:format)                                                               events#edit
-#                                 event PATCH  /events/:id(.:format)                                                                    events#update
+#                                 event GET    /events/:id(.:format)                                                                    events#show
+#                                       PATCH  /events/:id(.:format)                                                                    events#update
 #                                       PUT    /events/:id(.:format)                                                                    events#update
 #                                       DELETE /events/:id(.:format)                                                                    events#destroy
 #                     account_exchanges GET    /account_exchanges(.:format)                                                             account_exchanges#index
@@ -156,7 +157,7 @@ Rails.application.routes.draw do
   resources :accounts, only: %i[new create index destroy show update]
   resources :genres, only: %i[index create new update destroy show]
   resources :cards
-  resources :events, only: %i[index create new edit update destroy]
+  resources :events, only: %i[index create new edit update destroy show]
   resources :account_exchanges, only: %i[index create new edit update destroy]
   resources :shortcuts, only: %i[index show create new update destroy]
   resources :fund_users, only: %i[new create index destroy update] do

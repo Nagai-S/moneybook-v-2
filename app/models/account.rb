@@ -68,16 +68,14 @@ class Account < ApplicationRecord
   end
 
   def scale_factor
-    return currency_id == user.currency_id ? 1 : (
-      CurrencyExchange.find_by(unit_id: currency_id, to_id: user.currency_id).value
-    )
+    return currency_id == user.currency_id ? 1 : self.currency.scale_to(user.currency)
   end
 
   def after_pay_value(arg={scale: false})
-    event_sum = events.sum(&:value)
-    ax_source_sum = account_exchanges_source.sum(&:value)
-    ax_to_sum = account_exchanges_to.sum(&:to_value)
-    fund_user_history_sum = fund_user_histories.sum(&:value)
+    event_sum = events.sum(:pay_value)
+    ax_source_sum = account_exchanges_source.sum(:value)
+    ax_to_sum = account_exchanges_to.sum(:to_value)
+    fund_user_history_sum = fund_user_histories.sum(:value)
     fund_user_history_commission_sum = fund_user_histories.sum(:commission)
 
     total_value = [
@@ -93,7 +91,7 @@ class Account < ApplicationRecord
   end
 
   def now_value(arg={scale: false})
-    event_sum = events.select(&:payed?).sum(&:value)
+    event_sum = events.select(&:payed?).sum(&:pay_value)
     ax_source_sum = account_exchanges_source.select(&:payed?).sum(&:value)
     ax_to_sum = account_exchanges_to.sum(&:to_value)
     fund_user_history_sum = fund_user_histories.select(&:payed?).sum(&:value)

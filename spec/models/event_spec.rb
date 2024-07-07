@@ -2,30 +2,34 @@
 #
 # Table name: events
 #
-#  id          :bigint           not null, primary key
-#  date        :date
-#  iae         :boolean          default(FALSE)
-#  memo        :string(255)
-#  pay_date    :date
-#  value       :decimal(10, 2)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  account_id  :bigint
-#  card_id     :bigint
-#  currency_id :bigint           not null
-#  genre_id    :bigint
-#  user_id     :bigint           not null
+#  id              :bigint           not null, primary key
+#  date            :date
+#  iae             :boolean          default(FALSE)
+#  memo            :string(255)
+#  pay_date        :date
+#  pay_value       :decimal(10, 2)
+#  value           :decimal(10, 2)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  account_id      :bigint
+#  card_id         :bigint
+#  currency_id     :bigint           not null
+#  genre_id        :bigint
+#  pay_currency_id :bigint
+#  user_id         :bigint           not null
 #
 # Indexes
 #
-#  index_events_on_account_id   (account_id)
-#  index_events_on_card_id      (card_id)
-#  index_events_on_currency_id  (currency_id)
-#  index_events_on_genre_id     (genre_id)
-#  index_events_on_user_id      (user_id)
+#  index_events_on_account_id       (account_id)
+#  index_events_on_card_id          (card_id)
+#  index_events_on_currency_id      (currency_id)
+#  index_events_on_genre_id         (genre_id)
+#  index_events_on_pay_currency_id  (pay_currency_id)
+#  index_events_on_user_id          (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (pay_currency_id => currencies.id)
 #  fk_rails_...  (user_id => users.id)
 #
 require 'rails_helper'

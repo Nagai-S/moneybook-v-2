@@ -55,9 +55,7 @@ class FundUser < ApplicationRecord
   end
 
   def scale_factor
-    return currency_id == user.currency_id ? 1 : (
-      CurrencyExchange.find_by(unit_id: currency_id, to_id: user.currency_id).value
-    )
+    return currency_id == user.currency_id ? 1 : self.currency.scale_to(user.currency)
   end
 
   def total_buy_value(arg={scale: false})

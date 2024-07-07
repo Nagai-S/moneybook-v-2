@@ -38,20 +38,10 @@ class AccountExchange < ApplicationRecord
 
   belongs_to :user
   belongs_to :card, optional: true
-  belongs_to :account,
-             class_name: 'Account',
-             optional: true,
-             foreign_key: :source_id
-  belongs_to :to_account,
-             class_name: 'Account',
-             optional: true,
-             foreign_key: :to_id
-  belongs_to :source_currency,
-             class_name: 'Currency',
-             foreign_key: :source_currency_id
-  belongs_to :to_currency,
-             class_name: 'Currency',
-             foreign_key: :to_currency_id
+  belongs_to :account, class_name: 'Account', optional: true, foreign_key: :source_id
+  belongs_to :to_account, class_name: 'Account', optional: true, foreign_key: :to_id
+  belongs_to :source_currency, class_name: 'Currency', foreign_key: :source_currency_id
+  belongs_to :to_currency, class_name: 'Currency', foreign_key: :to_currency_id
 
   default_scope -> { order(date: :desc) }
 

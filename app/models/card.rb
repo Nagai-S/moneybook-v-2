@@ -129,7 +129,7 @@ class Card < ApplicationRecord
   end
 
   def not_pay_value(pay_date)
-    event = events.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
+    event = events.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:pay_value)
     ax = account_exchanges.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
     fund_user_history =
       fund_user_histories.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)

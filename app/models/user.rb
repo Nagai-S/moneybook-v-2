@@ -48,9 +48,7 @@ class User < ApplicationRecord
   has_many :funds, through: :fund_users
 
   def scale_factor(curr)
-    return currency_id == curr.id ? 1 : (
-      CurrencyExchange.find_by(unit_id: curr.id, to_id: currency_id).value
-    )
+    return currency_id == curr.id ? 1 : curr.scale_to(self.currency)
   end
 
   def income_expense_for_duration(time_duration)
@@ -63,9 +61,26 @@ class User < ApplicationRecord
   def calculate_in_ex_for_events(arg_events)
     in_total = 0;
     ex_total = 0;
-    used_currencies.each do |curr|
-      in_total += arg_events.where(iae: true, currency_id: curr.id).sum(:value) * scale_factor(curr)
-      ex_total += arg_events.where(iae: false, currency_id: curr.id).sum(:value) * scale_factor(curr)
+    arg_events.each do |event|
+      if currency_id == event.currency_id
+        if event.iae
+          in_total += event.value
+        else
+          ex_total += event.value
+        end
+      elsif currency_id == event.pay_currency_id
+        if event.iae
+          in_total += event.pay_value
+        else
+          ex_total += event.pay_value
+        end
+      else
+        if event.iae
+          in_total += event.pay_value * scale_factor(event.pay_currency)
+        else
+          ex_total += event.pay_value * scale_factor(event.pay_currency)
+        end
+      end
     end
     return { in: in_total, ex: ex_total, plus_minus: in_total + ex_total }
   end

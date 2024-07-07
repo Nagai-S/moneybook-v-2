@@ -69,7 +69,9 @@ class Shortcut < ApplicationRecord
       date: Date.today,
       memo: memo,
       value: signed_value,
-      currency_id: account.currency_id
+      pay_value: signed_value,
+      currency_id: account.currency_id,
+      pay_currency_id: account.currency_id
     )
     event.after_change_action
   end

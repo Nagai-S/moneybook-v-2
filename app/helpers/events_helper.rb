@@ -14,19 +14,19 @@ module EventsHelper
     end
   end
 
-  def card_id_for_event
+  def selected_card_for_event
     if @event.card
-      @event.card.id
+      @event.card
     elsif current_user.events.where.not(card_id: nil).exists?
       if current_user.events.where.not(card_id: nil).exists?
-        current_user.events.where.not(card_id: nil).first.card_id
+        current_user.events.where.not(card_id: nil).first.card
       end
     end
   end
 
-  def account_id_for_event(iae)
+  def selected_account_for_event(iae)
     if @event.account
-      @event.account.id
+      @event.account
     else
       if current_user.events.where.not(account_id: nil).where(iae: iae).exists?
         current_user
@@ -34,7 +34,17 @@ module EventsHelper
           .where.not(account_id: nil)
           .where(iae: iae)
           .first
-          .account_id
+          .account
+      end
+    end
+  end
+
+  def currency_id_for_event(iae)
+    if @event.currency_id
+      @event.currency_id
+    else
+      if current_user.events.where.not(account_id: nil).where(iae: iae).exists?
+        current_user.events.where.not(account_id: nil).where(iae: iae).first.currency_id
       end
     end
   end

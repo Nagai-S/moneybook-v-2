@@ -6,10 +6,8 @@
         <tr>
           <th>日付</th>
           <th>ジャンル</th>
-          <th>アカウント</th>
           <th>メモ</th>
           <th>金額</th>
-          <th>引き落とし日</th>
           <th></th>
           <th></th>
         </tr>
@@ -20,10 +18,11 @@
         <tr class='<%= which_iae(event)%>'>
           <td><%= l event.date unless a==event.date %></td>
           <td><%= event.genre_name %></td>
-          <td><%= event.payment_source_name %></td>
           <td><%= event.memo %></td>
           <td><%= event.value.to_s(:currency, locale: event.currency.locale) %></td>
-          <td><%= l event.pay_date if event.pay_date %></td>
+          <td>
+            <%= link_to "詳細", event_path(event.id) %>
+          </td>
           <td>
             <%= link_to "削除", event_path(event.id), method: :DELETE, data: {confirm: "削除してよろしいですか？", turbolinks: false} %>
           </td>

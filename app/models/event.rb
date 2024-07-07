@@ -2,30 +2,34 @@
 #
 # Table name: events
 #
-#  id          :bigint           not null, primary key
-#  date        :date
-#  iae         :boolean          default(FALSE)
-#  memo        :string(255)
-#  pay_date    :date
-#  value       :decimal(10, 2)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  account_id  :bigint
-#  card_id     :bigint
-#  currency_id :bigint           not null
-#  genre_id    :bigint
-#  user_id     :bigint           not null
+#  id              :bigint           not null, primary key
+#  date            :date
+#  iae             :boolean          default(FALSE)
+#  memo            :string(255)
+#  pay_date        :date
+#  pay_value       :decimal(10, 2)
+#  value           :decimal(10, 2)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  account_id      :bigint
+#  card_id         :bigint
+#  currency_id     :bigint           not null
+#  genre_id        :bigint
+#  pay_currency_id :bigint
+#  user_id         :bigint           not null
 #
 # Indexes
 #
-#  index_events_on_account_id   (account_id)
-#  index_events_on_card_id      (card_id)
-#  index_events_on_currency_id  (currency_id)
-#  index_events_on_genre_id     (genre_id)
-#  index_events_on_user_id      (user_id)
+#  index_events_on_account_id       (account_id)
+#  index_events_on_card_id          (card_id)
+#  index_events_on_currency_id      (currency_id)
+#  index_events_on_genre_id         (genre_id)
+#  index_events_on_pay_currency_id  (pay_currency_id)
+#  index_events_on_user_id          (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (pay_currency_id => currencies.id)
 #  fk_rails_...  (user_id => users.id)
 #
 class Event < ApplicationRecord
@@ -36,6 +40,7 @@ class Event < ApplicationRecord
   belongs_to :genre, optional: true
   belongs_to :account, optional: true
   belongs_to :currency
+  belongs_to :pay_currency, class_name: 'Currency', foreign_key: :pay_currency_id
 
   default_scope -> { order(date: :desc) }
 
@@ -60,6 +65,22 @@ class Event < ApplicationRecord
       account.name
     else
       '削除済み'
+    end
+  end
+
+  def account_name
+    if account
+      account.name
+    else
+      '削除済み'
+    end
+  end
+
+  def iae_name
+    if iae
+      '収入'
+    else
+      '支出'
     end
   end
 
@@ -93,7 +114,7 @@ class Event < ApplicationRecord
   end
 
   def same_currency
-    if account_id != nil && account.currency_id != currency_id
+    if account_id != nil && account.currency_id != pay_currency_id
       errors.add(:currency_id, 'アカウントの通貨と異なります')
     end
   end

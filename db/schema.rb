@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_05_023433) do
+ActiveRecord::Schema.define(version: 2024_07_06_080547) do
 
   create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -87,10 +87,13 @@ ActiveRecord::Schema.define(version: 2024_07_05_023433) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "currency_id", null: false
+    t.decimal "pay_value", precision: 10, scale: 2
+    t.bigint "pay_currency_id"
     t.index ["account_id"], name: "index_events_on_account_id"
     t.index ["card_id"], name: "index_events_on_card_id"
     t.index ["currency_id"], name: "index_events_on_currency_id"
     t.index ["genre_id"], name: "index_events_on_genre_id"
+    t.index ["pay_currency_id"], name: "index_events_on_pay_currency_id"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
@@ -189,6 +192,7 @@ ActiveRecord::Schema.define(version: 2024_07_05_023433) do
   add_foreign_key "cards", "users"
   add_foreign_key "currency_exchanges", "currencies", column: "to_id"
   add_foreign_key "currency_exchanges", "currencies", column: "unit_id"
+  add_foreign_key "events", "currencies", column: "pay_currency_id"
   add_foreign_key "events", "users"
   add_foreign_key "fund_user_histories", "fund_users"
   add_foreign_key "fund_users", "funds"

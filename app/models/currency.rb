@@ -28,4 +28,8 @@ class Currency < ApplicationRecord
               message: '「%{value}」と同じマークの通貨が存在します。',
               case_sensitive: false
             }
+  
+  def scale_to(curr)
+    return CurrencyExchange.find_by(unit_id: id, to_id: curr.id).value
+  end
 end

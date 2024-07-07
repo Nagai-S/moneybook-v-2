@@ -1,3 +1,4 @@
+<%= javascript_pack_tag 'event' %>
 <div class="tab-pane <%= active %>" id="<%= tab_id %>">
   <%= form_with model: @event, local: true do |f| %>
   <div class="form_wrapper" id="<%= backcolor %>">
@@ -46,7 +47,16 @@
       <div class="tab-pane <%= active_is_account_or_card_for_event(iae)[:account] %>" id="tab_account">
         <div class="row">
           <div class="<%= form_class %>">
-            <%= f.collection_select :account_id, current_user.accounts, :id, :name, {selected: account_id_for_event(iae)}, {class: "form-control", id: "select"} %>
+            <select class="form-control account-select" id="select" name="event[account_id]">
+              <option value="<%= selected_account_for_event(iae).id %>" data-currency="<%= selected_account_for_event(iae).currency_id %>">
+                <%= selected_account_for_event(iae).name %>
+              </option>
+              <% @current_user.accounts.where.not(id: selected_account_for_event(iae)).each do |account| %>
+                <option value="<%= account.id %>" data-currency="<%= account.currency_id %>">
+                  <%= account.name %>
+                </option>
+              <% end %>
+            </select>
           </div>
         </div>
       </div>
@@ -54,7 +64,16 @@
       <div class="tab-pane <%= active_is_account_or_card_for_event(iae)[:card] %>" id="tab_card">
         <div class="row">
           <div class="<%= form_class %>">
-            <%= f.collection_select :card_id, current_user.cards, :id, :name, {selected: card_id_for_event}, {class: "form-control", id: "select"} %>
+            <select class="form-control card-select" id="select" name="event[card_id]">
+              <option value="<%= selected_card_for_event.id %>" data-currency="<%= selected_card_for_event.account.currency_id %>">
+                <%= selected_card_for_event.name %>
+              </option>
+              <% @current_user.cards.where.not(id: selected_card_for_event).each do |card| %>
+                <option value="<%= card.id %>" data-currency="<%= card.account.currency_id %>">
+                  <%= card.name %>
+                </option>
+              <% end %>
+            </select>
           </div>
         </div>
       </div>
@@ -71,15 +90,33 @@
     </div>
 
     <div class="row">
-      <div class='<%= label_class %>'>
-        <%= f.label :value, "金額を入力してください" %>
+      <div class='text-left col-3 offset-sm-2 offset-lg-3'>
+        <%= f.label :value, "通貨" %>
       </div>
-      <div class="<%= form_class %>">
+      <div class='text-left col-9 col-sm-5 col-lg-3'>
+        <%= f.label :value, "金額" %>
+      </div>
+      <div class='col-sm-2 cos-lg-3'></div>
+      <div class="form-group col-3 offset-sm-2 offset-lg-3">
+        <%= f.collection_select :currency_id, current_user.used_currencies, :id, :mark, {selected: currency_id_for_event(iae)}, {class: "form-control currency-select", id: "select"} %>
+      </div>
+      <div class="form-group col-9 col-sm-5 col-lg-3">
         <%= f.text_field :value, value: @event.value, class: "form-control", id: "value" %>
       </div>
     </div>
 
-    <% if @event.card && edit %>
+    <% if edit && @event.currency_id != @event.pay_currency_id  %>
+    <div class="row">
+      <div class='<%= label_class %>'>
+        <%= f.label :pay_value, "引き落とし金額", class: "date_label" %>
+      </div>
+      <div class="<%= form_class %>">
+        <%= f.text_field :pay_value, value: @event.pay_value, class: "form-control", id: "value" %>
+      </div>
+    </div>
+    <% end %>
+
+    <% if @event.card && edit%>
     <div class="row">
       <div class='<%= label_class %>'>
         <%= f.label :pay_date, "引き落とし月を選択してください", class: "date_label" %>
