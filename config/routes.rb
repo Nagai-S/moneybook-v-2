@@ -165,9 +165,9 @@ Rails.application.routes.draw do
   end
   get '/pay_not_for_cards/:id', to: 'cards#pay_not_data', as: 'pay_not_for_card'
   get '/account_month', to: 'accounts#month_index'
+  get '/events_search', to: 'events#search'
   get '/explanation', to: 'homepages#explanation'
   get '/update_user_currency', to: 'homepages#update_currency'
-  get '/events/search', to: 'events#search'
   post '/shortcuts/run', to: 'shortcuts#run'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
