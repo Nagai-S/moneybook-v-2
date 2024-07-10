@@ -14,9 +14,7 @@ class EventsController < ApplicationController
         .per(50)
   end
 
-  def show
-    @event = current_user.events.find(params[:id])
-  end
+  def show; end
 
   def new
     @event = current_user.events.build
