@@ -133,7 +133,7 @@ class Card < ApplicationRecord
     ax = account_exchanges.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
     fund_user_history =
       fund_user_histories.where(pay_date: pay_date).select{ |e| !e.payed? }.sum(&:value)
-    return event + ax + fund_user_history
+    return -event + ax + fund_user_history
   end
 
   # -----------------------------------------------------------------
