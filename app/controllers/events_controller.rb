@@ -76,7 +76,7 @@ class EventsController < ApplicationController
     end
 
     account = current_user.accounts.find_by(id: params[:event][:account_id])
-    params[:event][:pay_currency_id] = account.currency_id
+    params[:event][:pay_currency_id] = account.currency_id.to_s
 
     currency = Currency.find(params[:event][:currency_id])
     pay_currency = Currency.find(params[:event][:pay_currency_id])
@@ -87,10 +87,10 @@ class EventsController < ApplicationController
       ) : (
         -1 * (params[:event][:pay_value].to_f.abs)
       )
-    elsif params[:event][:currency_id] == params[:event][:pay_currency_id].to_s
+    elsif params[:event][:currency_id] == params[:event][:pay_currency_id]
       params[:event][:pay_value] = params[:event][:value]
     else
-      params[:event][:pay_value] = params[:event][:value] * currency.scale_to(pay_currency)
+      params[:event][:pay_value] = params[:event][:value].to_f * currency.scale_to(pay_currency)
     end
     
 
