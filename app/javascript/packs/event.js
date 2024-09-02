@@ -16,4 +16,16 @@ $(function () {
     console.log(currency_id);
     $(".currency-select").val(currency_id);
   });
+
+  $(".account-tab-button").on("click", function () {
+    let currency_id = $(".account-select option:selected").data("currency");
+    console.log(currency_id);
+    $(".currency-select").val(currency_id);
+  });
+
+  $(".card-tab-button").on("click", function () {
+    let currency_id = $(".card-select option:selected").data("currency");
+    console.log(currency_id);
+    $(".currency-select").val(currency_id);
+  });
 });
