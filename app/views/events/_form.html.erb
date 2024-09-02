@@ -29,10 +29,10 @@
     <% if !iae && current_user.cards.exists? %>
     <ul class="nav nav-tabs <%= label_class %>" id="card-account">
       <li class="nav-item">
-        <a class="aoc_link nav-link <%= active_is_account_or_card_for_event(iae)[:account] %>" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
+        <a class="aoc_link nav-link <%= active_is_account_or_card_for_event(iae)[:account] %> account-tab-button" href="#tab_account" data-toggle="tab" id='account'>アカウント</a>
       </li>
       <li class="nav-item">
-        <a class="aoc_link nav-link <%= active_is_account_or_card_for_event(iae)[:card] %>" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
+        <a class="aoc_link nav-link <%= active_is_account_or_card_for_event(iae)[:card] %> card-tab-button" href="#tab_card" data-toggle="tab" id='card'>クレジットカード</a>
       </li>
     </ul>
     <% else %>
