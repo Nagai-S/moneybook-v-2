@@ -61,27 +61,19 @@ class User < ApplicationRecord
   def calculate_in_ex_for_events(arg_events)
     in_total = 0;
     ex_total = 0;
-    arg_events.each do |event|
-      if currency_id == event.currency_id
-        if event.iae
-          in_total += event.value
-        else
-          ex_total += event.value
-        end
-      elsif currency_id == event.pay_currency_id
-        if event.iae
-          in_total += event.pay_value
-        else
-          ex_total += event.pay_value
-        end
-      else
-        if event.iae
-          in_total += event.pay_value * scale_factor(event.pay_currency)
-        else
-          ex_total += event.pay_value * scale_factor(event.pay_currency)
-        end
-      end
+
+    events_with_current_currency = arg_events.where(currency_id: currency_id)
+    in_total += events_with_current_currency.where(iae: true).sum(:value)
+    ex_total += events_with_current_currency.where(iae: false).sum(:value)
+
+    used_currencies.each do |curr|
+      events_with_different_currency = arg_events
+        .where.not(currency_id: currency_id)
+        .where(pay_currency_id: curr.id)
+      in_total += events_with_different_currency.where(iae: true).sum(:pay_value) * scale_factor(curr)
+      ex_total += events_with_different_currency.where(iae: false).sum(:pay_value) * scale_factor(curr)
     end
+
     return { in: in_total, ex: ex_total, plus_minus: in_total + ex_total }
   end
 
