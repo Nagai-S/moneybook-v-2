@@ -12,7 +12,7 @@
         "#f7fbfc",
       ],
       library: {title: {
-      text: "支出" + "</br>" + current_user.income_expense_for_duration(Date.today.all_month)[:ex].to_s(:currency, locale: current_user.currency.locale)
+      text: "支出" + "</br>" + current_user.income_expense_for_duration(today(current_user).all_month)[:ex].to_s(:currency, locale: current_user.currency.locale)
     }}
     } %>
   </div>
@@ -26,7 +26,7 @@
         "#ffffcc",
       ],
       library: {title: {
-      text: "収入" + "</br>" + current_user.income_expense_for_duration(Date.today.all_month)[:in].to_s(:currency, locale: current_user.currency.locale)
+      text: "収入" + "</br>" + current_user.income_expense_for_duration(today(current_user).all_month)[:in].to_s(:currency, locale: current_user.currency.locale)
     }}
     } %>
   </div>
@@ -41,8 +41,8 @@
     card: "",
     money1: "",
     money2: "",
-    date1: Date.today,
-    date2: Date.today,
+    date1: today(current_user),
+    date2: today(current_user),
     memo: "",
     date_or_not: "0",
     money_or_not: "0",

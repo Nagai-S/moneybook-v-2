@@ -26,6 +26,8 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Shortcut < ApplicationRecord
+  include ApplicationHelper
+
   belongs_to :user
   belongs_to :card, optional: true
   belongs_to :genre
@@ -66,7 +68,7 @@ class Shortcut < ApplicationRecord
       genre_id: genre_id,
       account_id: account_id,
       card_id: card_id,
-      date: Date.today,
+      date: today(user),
       memo: memo,
       value: signed_value,
       pay_value: signed_value,

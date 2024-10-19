@@ -1,6 +1,8 @@
 # お金の変化と引き落とし日を追うアルゴリズム
 module MyFunction
   module FunctionForChange
+    include ApplicationHelper
+
     def after_change_action
       if card
         pay_day = pay_date ? MyFunction::FlexDate.new(
@@ -16,7 +18,7 @@ module MyFunction
 
     def payed?
       if pay_date
-        return pay_date <= Date.today
+        return pay_date <= today(user)
       else
         return true
       end

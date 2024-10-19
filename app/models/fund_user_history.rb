@@ -27,6 +27,7 @@
 #
 class FundUserHistory < ApplicationRecord
   include MyFunction::FunctionForChange
+  include ApplicationHelper
 
   belongs_to :account, optional: true
   belongs_to :card, optional: true
@@ -59,10 +60,14 @@ class FundUserHistory < ApplicationRecord
 
   def bought?
     if buy_or_sell && buy_date
-      buy_date <= Date.today
+      buy_date <= today(user)
     else
       true
     end
+  end
+
+  def user
+    fund_user.user
   end
             
   def buy_or_sell_name

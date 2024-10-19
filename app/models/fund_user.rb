@@ -23,6 +23,8 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class FundUser < ApplicationRecord
+  include ApplicationHelper
+
   belongs_to :user
   belongs_to :fund
   belongs_to :currency
@@ -45,13 +47,13 @@ class FundUser < ApplicationRecord
     if total_buy_value.to_i != 0
       fund_user_histories.create(
         value: total_buy_value,        
-        date: Date.today,
-        buy_date: Date.today,
+        date: today(user),
+        buy_date: today(user),
         commission: 0,
         buy_or_sell: true,        
       )
     end
-    fund.set_now_value_of_fund if fund.update_on != Date.today
+    fund.set_now_value_of_fund if fund.update_on != today(user)
   end
 
   def scale_factor

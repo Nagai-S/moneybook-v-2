@@ -34,6 +34,6 @@ class Fund < ApplicationRecord
     value_str = contents.xpath('//span[@class="value-01"]').inner_text
     value = value_str.gsub(',', '')
 
-    update(value: value, update_on: Date.today)
+    update(value: value, update_on: Time.zone.now.to_date)
   end
 end
