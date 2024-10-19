@@ -54,6 +54,15 @@ class Event < ApplicationRecord
       message: 'は半角数字で入力してください。',
     }
   )
+  validates(
+    :pay_value,
+    presence: {
+      message: 'は一桁以上入力してください。'
+    },
+    numericality: {
+      message: 'は半角数字で入力してください。',
+    }
+  )
   validate :iae_equal_to_genre_iae, :same_user, :same_currency
 
   after_save { after_change_action }
