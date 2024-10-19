@@ -1,0 +1,22 @@
+<%= form_with model: current_user, local: true do |f| %>
+<div class="form_wrapper">
+  <%= render "layouts/errors", resource: f.object %>
+
+  <div class="row">
+    <div class="<%= label_class %>">
+      <%= f.label :timezone, "タイムゾーン" %>
+    </div>
+    <div class="<%= form_class %>">
+      <%= f.text_field :timezone, value: current_user.timezone, class: "form-control", id: "user", list: 'timezone-list' %>
+    </div>
+    <datalist id='timezone-list'>
+      <% ActiveSupport::TimeZone::MAPPING.values.each do |tz| %>
+      <option value=<%= tz %>>
+      <% end %>
+    </datalist>
+  </div>
+
+  <%= f.submit "変更", class: "btn btn-primary", role: "button" %>
+</div>
+
+<% end %>

@@ -18,6 +18,9 @@
 #                                       PUT    /users(.:format)                                                                         users/registrations#update
 #                                       DELETE /users(.:format)                                                                         users/registrations#destroy
 #                                       POST   /users(.:format)                                                                         users/registrations#create
+#                             edit_user GET    /users/:id/edit(.:format)                                                                users#edit
+#                                  user PATCH  /users/:id(.:format)                                                                     users#update
+#                                       PUT    /users/:id(.:format)                                                                     users#update
 #                  new_api_user_session GET    /api/v1/auth/sign_in(.:format)                                                           devise_token_auth/sessions#new
 #                      api_user_session POST   /api/v1/auth/sign_in(.:format)                                                           devise_token_auth/sessions#create
 #              destroy_api_user_session DELETE /api/v1/auth/sign_out(.:format)                                                          devise_token_auth/sessions#destroy
@@ -104,9 +107,9 @@
 #                                       DELETE /fund_users/:id(.:format)                                                                fund_users#destroy
 #                      pay_not_for_card GET    /pay_not_for_cards/:id(.:format)                                                         cards#pay_not_data
 #                         account_month GET    /account_month(.:format)                                                                 accounts#month_index
+#                         events_search GET    /events_search(.:format)                                                                 events#search
 #                           explanation GET    /explanation(.:format)                                                                   homepages#explanation
 #                  update_user_currency GET    /update_user_currency(.:format)                                                          homepages#update_currency
-#                         events_search GET    /events/search(.:format)                                                                 events#search
 #                         shortcuts_run POST   /shortcuts/run(.:format)                                                                 shortcuts#run
 #                               sitemap GET    /sitemap(.:format)                                                                       redirect(301, https://s3-ap-northeast-1.amazonaws.com/my-sitemap/sitemap.xml.gz)
 #                                  root GET    /                                                                                        homepages#home
@@ -135,6 +138,7 @@ Rails.application.routes.draw do
   get '/funds/index', to: 'funds#index'
   get '/funds/search', to: 'funds#search'
   devise_for :users, controllers: { registrations: 'users/registrations' }
+  resources :users, only: %i[edit update]
 
   namespace :api do
     scope :v1 do

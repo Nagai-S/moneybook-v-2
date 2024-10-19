@@ -131,6 +131,7 @@
             <li><%= link_to "アプリの使い方", explanation_path %></li>
             <li><%= link_to "イベント検索", events_search_path %></li>
             <li><%= link_to "投資信託検索", funds_search_path %></li>
+            <li><%= link_to "設定", edit_user_path(id: current_user.id) %></li>
             <li><%= link_to "登録情報", edit_user_registration_path %></li>
             <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしてよろしいですか？"} %></li>
           </ul>

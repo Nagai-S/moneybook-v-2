@@ -12,6 +12,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
+#  timezone               :string(255)
 #  tokens                 :text(65535)
 #  uid                    :string(255)      default(""), not null
 #  unconfirmed_email      :string(255)
@@ -46,6 +47,8 @@ class User < ApplicationRecord
   has_many :accounts, dependent: :delete_all
   has_many :fund_users, dependent: :delete_all
   has_many :funds, through: :fund_users
+
+  validates :timezone, inclusion: { in: ActiveSupport::TimeZone::MAPPING.values }, presence: true
 
   def scale_factor(curr)
     return currency_id == curr.id ? 1 : curr.scale_to(self.currency)
