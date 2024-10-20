@@ -12,7 +12,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
-#  timezone               :string(255)
+#  timezone               :string(255)      default("Asia/Tokyo")
 #  tokens                 :text(65535)
 #  uid                    :string(255)      default(""), not null
 #  unconfirmed_email      :string(255)

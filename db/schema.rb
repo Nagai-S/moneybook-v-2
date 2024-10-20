@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_19_174227) do
+ActiveRecord::Schema.define(version: 2024_10_20_083739) do
 
   create_table "account_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 2024_10_19_174227) do
     t.string "uid", default: "", null: false
     t.text "tokens"
     t.bigint "currency_id", default: 1, null: false
-    t.string "timezone"
+    t.string "timezone", default: "Asia/Tokyo"
     t.index ["currency_id"], name: "index_users_on_currency_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
