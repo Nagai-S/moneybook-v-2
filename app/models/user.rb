@@ -57,7 +57,7 @@ class User < ApplicationRecord
   def income_expense_for_duration(time_duration)
     in_total = 0;
     ex_total = 0;
-    events_for_time = events.where(date: time_duration)
+    events_for_time = events.includes(:currency).where(date: time_duration)
     return calculate_in_ex_for_events(events_for_time)
   end
 
