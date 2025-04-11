@@ -60,7 +60,7 @@ class FundUserHistory < ApplicationRecord
 
   def bought?
     if buy_or_sell && buy_date
-      buy_date <= today(user)
+      buy_date <= Time.current.to_date
     else
       true
     end

@@ -3,7 +3,7 @@ class Api::AuthController < Api::ApplicationController
   before_action :auth_user
 
   def daily_email
-    aweek_later = Time.zone.now.to_date.next_day(7)
+    aweek_later = Time.current.to_date.next_day(7)
     Card.all.each do |card|
       pay_date =
         MyFunction::FlexDate.new(

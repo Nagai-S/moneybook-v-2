@@ -1,8 +1,4 @@
 module ApplicationHelper
-  def today(user)
-    Time.use_zone(user.timezone) { Time.zone.now }.to_date
-  end
-
   def omit_string(str)
     str.length > 10 ? str[0, 10] + '...' : str
   end
@@ -16,7 +12,7 @@ module ApplicationHelper
   end
 
   def date_for_new(object)
-    object.date ? object.date : today(current_user)
+    object.date ? object.date : Time.current.to_date
   end
 
   def loss_or_gain(value)

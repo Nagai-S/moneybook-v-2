@@ -19,8 +19,8 @@
   </div>
   <div class="date_area_<%= css_date %> date_area">
     <label>日付範囲を選択してください</label><br />
-    <%= f.date_select :date1, {start_year:Time.now.year, end_year:1970, selected: date1}, class: "form-control", id: "date_s" %>〜
-    <%= f.date_select :date2, {start_year:Time.now.year, end_year:1970, selected: date2}, class: "form-control", id: "date_s" %>
+    <%= f.date_select :date1, {start_year:Time.current.year, end_year:1970, selected: date1}, class: "form-control", id: "date_s" %>〜
+    <%= f.date_select :date2, {start_year:Time.current.year, end_year:1970, selected: date2}, class: "form-control", id: "date_s" %>
   </div>
 
   <div class="search_row row">

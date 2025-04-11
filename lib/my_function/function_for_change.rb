@@ -18,7 +18,7 @@ module MyFunction
 
     def payed?
       if pay_date
-        return pay_date <= today(user)
+        return pay_date <= Time.current.to_date
       else
         return true
       end

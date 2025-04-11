@@ -86,14 +86,14 @@ module EventsHelper
   def this_month_data_for_glaph
     ex_genres = []
     current_user.genres.where(iae: false).each do |genre|
-      events_for_genre = genre.events.where(date: today(current_user).all_month)
+      events_for_genre = genre.events.where(date: Time.current.to_date.all_month)
       value = current_user.calculate_in_ex_for_events(events_for_genre)[:ex]
       ex_genres.push([omit_string(genre.name), -value.round]) if value.abs > 0
     end
     ex_genres = ex_genres.sort { |a, b| (-1) * (a[1] <=> b[1]) }
     in_genres = []
     current_user.genres.where(iae: true).each do |genre|
-      events_for_genre = genre.events.where(date: today(current_user).all_month)
+      events_for_genre = genre.events.where(date: Time.current.to_date.all_month)
       value = current_user.calculate_in_ex_for_events(events_for_genre)[:in]
       in_genres.push([omit_string(genre.name), value.round]) if value.abs > 0
     end

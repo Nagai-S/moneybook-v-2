@@ -68,7 +68,7 @@ class Shortcut < ApplicationRecord
       genre_id: genre_id,
       account_id: account_id,
       card_id: card_id,
-      date: today(user),
+      date: Time.current.to_date,
       memo: memo,
       value: signed_value,
       pay_value: signed_value,

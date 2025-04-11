@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   protect_from_forgery unless: -> { request.format.json? }
   before_action :set_host
+  before_action :set_time_zone
   before_action :authenticate_user!,
                 only: %i[
                   after_sign_in_path_for
@@ -65,5 +66,11 @@ class ApplicationController < ActionController::Base
 
   def set_host
     Rails.application.routes.default_url_options[:host] = request.host_with_port
+  end
+
+  def set_time_zone
+    if user_signed_in?
+      Time.zone = current_user.timezone
+    end
   end
 end

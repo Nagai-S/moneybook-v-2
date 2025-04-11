@@ -47,13 +47,13 @@ class FundUser < ApplicationRecord
     if total_buy_value.to_i != 0
       fund_user_histories.create(
         value: total_buy_value,        
-        date: today(user),
-        buy_date: today(user),
+        date: Time.current.to_date,
+        buy_date: Time.current.to_date,
         commission: 0,
         buy_or_sell: true,        
       )
     end
-    fund.set_now_value_of_fund if fund.update_on != today(user)
+    fund.set_now_value_of_fund if fund.update_on != Time.current.to_date
   end
 
   def scale_factor

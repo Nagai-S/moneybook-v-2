@@ -1,6 +1,6 @@
 module FundUserHistoriesHelper
   def buy_date_for_new
-    @fund_user_history.buy_date ? @fund_user_history.buy_date : today(current_user)
+    @fund_user_history.buy_date ? @fund_user_history.buy_date : Time.current.to_date
   end
   
   def active_is_buy_or_sell
